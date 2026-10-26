@@ -21,7 +21,7 @@ def included(path):
     if rel.parts[0]=='resources':return False
     if str(rel) in {'config/chat.json','config/voice.json','config/runtime.json','config/secrets.json'}:return False
     if any(str(rel).startswith(prefix) for prefix in ['plugins/singing/models/','plugins/singing/seed-vc-main/','plugins/singing/converted','plugins/singing/vevo2/models/','plugins/singing/vevo2/Amphion/']):return False
-    if str(rel)=='docs/assets/whalenest-hero.png':return True
+    if str(rel) in {'docs/assets/whalenest-hero.png','docs/assets/workspace-preview.png','web/assets/whale-workroom.png','web/assets/whale-clock.png','web/assets/whale-tokens.png','web/icons/icon-192.png','web/icons/icon-512.png','web/icons/apple-touch-icon.png'}:return True
     if path.suffix.lower() in {'.deb','.pyc','.partial','.pth','.ckpt','.safetensors','.bin','.db','.sqlite3','.wav','.mp3','.png','.jpg','.jpeg','.webp','.gif'}:return False
     if rel.name.startswith('.') and rel.name not in {'.gitignore','.gitattributes'}:return False
     return rel.name!='MANIFEST.sha256'

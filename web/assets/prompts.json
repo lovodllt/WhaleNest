@@ -1,0 +1,24 @@
+{
+  "generation_method": "Codex built-in imagegen",
+  "character_reference": "DeepSeek娘/设定集",
+  "assets": [
+    {
+      "file": "whale-workroom.png",
+      "role": "海边工作台背景；手机端作为独立插画展示",
+      "transparent_background": false,
+      "prompt": "Use case: identity-preserve. Transform the attached character reference sheet into a polished wide 16:9 illustration for the hero background of 大肥鱼's personal configuration website. Use the reference only as character identity, NOT a sheet layout. Preserve long wavy deep blue hair fading to cyan, blue eyes, whale-shaped ears, navy whale tail, white frilled maid headband, navy blue and white maid dress with small blue ribbons. Adult anime whale girl, cheerful gentle slightly cheeky personality. Scene: her cozy sky-blue workstation by a circular window overlooking a pale blue sea, sitting on the RIGHT THIRD of the frame, leaning her cheek on one hand, waving with the other, tiny plush blue whale on desk, a few floating ocean bubble and star motifs. Editorial anime illustration with crisp outlines, soft pastel cell shading, clean high detail, cute but not overly busy. The LEFT HALF must be light pale sky blue spacious negative space with only very faint cloud and sea details, suitable for dark blue website text. Right edge full illustrated character, no text, no typography, no UI, no cards, no watermark. Palette: deep cornflower blue, icy sky blue, creamy white, small butter-yellow accents. Aspect ratio landscape 16:9."
+    },
+    {
+      "file": "whale-tokens.png",
+      "role": "插件背包、侧栏和首页的 token 贴纸",
+      "transparent_background": true,
+      "prompt": "Use case: identity-preserve. Turn the reference character into ONE separate transparent die-cut sticker illustration for a cute whale-girl web dashboard. Preserve blue wavy hair, blue eyes, whale ears and navy whale tail, white frilled maid headband, navy and white maid outfit, blue bows. Exaggerated adorable chibi proportions, large head tiny body. The chibi whale girl hugs a small open tin full of glowing golden token-shaped stars, looks up hopefully with pouting cheeks, joyful cheeky expression. Thick clean navy linework, flat pastel blue cel shading, small yellow stars, chunky white die-cut border following silhouette. Full character centered, no cropped tail, no text, no watermark, true transparent background. Square composition."
+    },
+    {
+      "file": "whale-clock.png",
+      "role": "定时任务页和首页的闹钟贴纸",
+      "transparent_background": true,
+      "prompt": "Use case: identity-preserve. Turn the reference character into ONE separate transparent die-cut sticker illustration for the scheduling area of a cute whale-girl web dashboard. Preserve blue wavy hair, blue eyes, whale ears and navy whale tail, white frilled maid headband, navy and white maid outfit, blue bows. Adorable chibi proportions, large head tiny body, cheerful wink, holding a small butter-yellow alarm clock in both hands, sitting on a fluffy stylized cloud, one miniature sparkle beside her. Thick clean navy linework, pastel blue cel shading, chunky white die-cut border following silhouette. Full character centered, no cropped edges, no text, no watermark, true transparent background. Square composition."
+    }
+  ]
+}

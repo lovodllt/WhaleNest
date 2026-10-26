@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "鲸栖 WhaleNest",
-  "short_name": "鲸栖",
-  "description": "本机 DSH 微信陪伴工作台",
+  "name": "大肥鱼",
+  "short_name": "大肥鱼",
+  "description": "大肥鱼的私有手机控制台",
   "lang": "zh-CN",
   "start_url": "/",
   "scope": "/",
@@ -11,9 +11,15 @@
   "theme_color": "#3262cf",
   "icons": [
     {
-      "src": "/icons/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]

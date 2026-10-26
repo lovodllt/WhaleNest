@@ -13,9 +13,9 @@
 - 微软语音与 GPT-SoVITS 的发送路由通过模拟接口检查，没有生成／播放声音或发送微信。
 - 资源校验、路径边界、角色图片导入、CSRF／跨域拒绝和默认配置的针对性检查通过。
 - Python、JavaScript、Shell 和 JSON 配置检查通过。
-- 鲸栖工作台整合为聊天、图片、声音三组能力；浏览器确认侧栏、分区导航与声音统一配置面板正常，默认页面不展示保留中的能力。
+- 发布版保留原有角色工作台布局，恢复海边背景、token 和闹钟三张 DS 娘插画；默认界面不展示保留中的能力。
 - 五项针对性测试通过，新增检查覆盖公开配置字段与能力列表的隐藏规则；README 本地链接和文档插图路径检查通过。
-- README 由本机 DSH（deepseek-v4-flash）润色后核对能力边界；原创文档插图使用 Codex 内置 imagegen 生成。
+- README 简介由本机 DSH（deepseek-v4-flash）参与润色，整体参考 ModSearch、dsh-mnemon 的公开 README 重写；文档封面使用 Codex 内置 imagegen，附带 DS 娘设定集和既有前端插画作为参考。
 
 每次执行 `scripts/release.py` 都会从干净文件建立独立副本，在含空格和中文的路径下初始化，随后校验 ZIP、TAR 和逐文件 SHA256。结果写入包内 `ARCHIVE_CHECK.json` 和发布目录的“打包校验.json”。
 

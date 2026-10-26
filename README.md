@@ -1,100 +1,175 @@
-# 鲸栖 WhaleNest
+<p align="center">
+  <img src="docs/assets/whalenest-hero.png" width="100%" alt="蓝色鲸鱼娘大肥鱼的海边工作台" />
+</p>
 
-鲸栖是一个跑在本机 DSH 上的微信陪伴工作台。它把微信接入、角色工作台、记忆和定时任务收进同一个入口，默认角色是大肥鱼。想添置声音或素材时，再按需打开对应能力。当前为 0.1.0 预发布版本。
+<h1 align="center">鲸栖 · WhaleNest</h1>
 
-![鲸栖：给本机 AI 留一个小窝](docs/assets/whalenest-hero.png)
+<p align="center"><strong>让本机 DSH 里的 AI，成为微信里能聊天、发图、说话的小伙伴。</strong></p>
 
-## 功能一览
+<p align="center">
+  <a href="docs/QUICKSTART.md">快速开始</a> ·
+  <a href="docs/MANUAL.md">手动安装</a> ·
+  <a href="docs/FEATURES.md">功能配置</a> ·
+  <a href="docs/RESOURCES.md">资源下载</a> ·
+  <a href="AGENTS.md">Agent 指引</a>
+</p>
 
-微信接入、消息排队、网页控制台和定时任务统一内置；其他能力在同一个工作台配置，所需插件与模型按需安装。
+鲸栖是基于本机 DeepSeek Harness（DSH）的微信 AI 陪伴项目，默认角色是蓝色鲸鱼娘“大肥鱼”。它把微信接入、角色工作台、记忆和定时任务放在同一套程序中，也支持按需接入联网、图片、语音和唱歌能力。
 
-| 类别 | 基础内置 | 可选 / 按需 |
-| --- | --- | --- |
-| 聊天与记忆 | 微信消息接入、接收排队、回复发送、唤醒与自然参与、网页控制台 | 记忆存储与作用域管理（dsh-mnemon）、联网查询（ModSearch） |
-| 图片与素材 | 资源管理与手动导入 | 多模态识图、本机 Codex 生图、角色图与表情包 |
-| 声音 | 微信语音接收与发送通道 | Edge 在线 TTS（默认引擎）、GPT-SoVITS 本地音色、Seed-VC 换声及已准备片段点唱 |
-| 任务与管理 | 定时任务、资源中心、启动停止与诊断 | 手机浏览器访问；Tailscale 私有远程连接 |
+你可以在网页里调整聊天规则、管理人设与角色素材、查看记忆和安排提醒，也可以通过手机管理电脑上的服务。人设、设定集和大型模型由使用者自行导入或下载，功能按需要开启。
 
-## 安装与启动
+> 当前为 **0.1.0 预发布版**。支持 Linux，以及 Windows 的 Docker Desktop＋WSL2 方案；Linux 已完成独立环境检查与构建，Windows 尚待实体设备验证。详见 [验证记录](docs/VERIFICATION.md)。
 
-### 平台与依赖
+## 功能
 
-| 平台 | 首版运行方式 |
+- **微信聊天**：私聊回复、群聊唤醒、引用回复、上下文接续与消息排队。自然参与按会话开启，不必句句回应。
+- **角色与记忆**：自定义人设，自动提炼值得记住的内容；性格偏好和私聊记忆分开管理，可查看、纠正、置顶或忘记。
+- **图片与表情**：接收图片和表情包，使用多模态模型识图；通过本机 Codex 生图，按人物设定集保持形象，并管理自己的表情素材。
+- **声音**：接收微信语音，使用微软在线 TTS 或本地 GPT-SoVITS 回复；唱歌支持发送已经准备好的换声片段。
+- **联网与任务**：聊天时按需要查询公开资料；内置一次、每日和每周提醒，以及已接入的重置预告监测。
+- **可视化配置**：保留蓝色鲸鱼娘角色工作台，提供功能开关、依赖检查、素材导入与下载、记忆手账和任务列表；可选 Tailscale 手机私有访问。
+
+基础聊天、消息队列、控制台和定时任务统一内置；可选插件与重型模型按需安装，配置入口集中在工作台中。
+
+## 工作台预览
+
+![大肥鱼角色工作台](docs/assets/workspace-preview.png)
+
+## 安装
+
+### 环境要求
+
+| 项目 | 要求 |
 | --- | --- |
-| Linux x86_64 | 直接安装 |
-| Windows | Docker Desktop + WSL2 Ubuntu，在 WSL 内安装与启动 |
+| 系统 | Linux x86_64；Windows 使用 Docker Desktop＋WSL2＋Ubuntu |
+| Python | 推荐 3.12，需安装 venv |
+| Node.js | 24，含 npm |
+| 模型宿主 | 本机 DSH `0.2.1-rc.2`，配置自己的模型服务 |
+| 微信环境 | Docker Engine／Docker Desktop、Docker Compose v2 |
 
-Windows 首版在 WSL Ubuntu 中执行同一组 bash 命令，不承诺原生 Windows 运行。
+主程序和 DSH 在宿主机或 WSL 中运行，Docker 运行固定版本的 Linux 微信 **4.1.13.26** 与 Webox。主聊天模型统一经过本机 DSH；安装器会检查所需插件。
 
-需要预先准备：
+### 一键配置
 
-- Python 3.12
-- Node.js 24
-- 本机 DSH 0.2.1-rc.2
-- Docker Compose
-
-鲸栖必须使用本机 DSH，不提供绕过 DSH 的主模型直连 API。请在宿主机或 WSL 内运行 DSH 和主程序；Docker 内只运行固定版本微信 4.1.13.26 与 Webox。
-
-### 一键安装与启停
-
-在项目根目录执行：
+解压或克隆项目，在根目录运行：
 
 ```bash
 bash install.sh
 ```
 
-安装脚本会检查依赖与 DSH，并引导完成配置。它不会自动安装 Docker、WSL 或 DSH；缺少的部分请先按文档补齐。
+向导会检查环境，创建本机配置，安装专用 DSH 插件，下载并校验微信安装包，再构建和启动服务。首次使用需要自行完成微信登录与主人绑定；操作步骤见 [一键配置教程](docs/QUICKSTART.md)。
 
-启动与停止：
+Windows 先在 Docker Desktop 中启用 WSL 集成，再进入 Ubuntu 运行同一命令；也可使用项目内的 `install.ps1`。逐项安装依赖、配置自启和排查错误，见 [手动安装教程](docs/MANUAL.md)。
+
+### 启动与停止
 
 ```bash
 bash start.sh
 bash stop.sh
 ```
 
-打开 [鲸栖工作台](http://127.0.0.1:8877/) 和 [微信登录画面](http://127.0.0.1:6860/vnc.html)。按向导配置自己的模型服务，登录微信并绑定主人后开始聊天。详细步骤见 [快速开始](docs/QUICKSTART.md)。
+- [角色工作台](http://127.0.0.1:8877/)：配置功能、素材、记忆和任务
+- [微信登录画面](http://127.0.0.1:6860/vnc.html?autoconnect=1&resize=scale)：登录自己的微信账号
 
-## 版本状态
+`stop.sh` 停止本项目的主程序并保留数据；微信容器需要单独停止时运行 `docker compose stop`。
 
-0.1.0 的验证范围如下：Linux 已完成独立安装与构建检查；Windows 尚未进行实体设备端到端验证，具体见 [验证记录](docs/VERIFICATION.md)。当前仍有未覆盖的验证项目，请以记录为准。
+## 在微信里使用
 
-## 角色、素材与下载
+私聊可直接聊天，群聊通过当前微信昵称或“D老师”唤醒；唤醒词放在句中也可以。自然参与需要在对应群聊配置中开启，并以最近10分钟内出现过唤醒词为前提。
 
-人设、角色图、表情包、语音和唱歌权重、音源均不随项目打包。前端默认提供管理、手动导入和可选下载；原始链接完整保留在 [资源与下载](docs/RESOURCES.md)。
+```text
+D老师 /help
+D老师 /task 明天9点提醒我喝水
+D老师 /task 每天21点提醒我休息
+D老师 /list_task
+D老师 /imageGen 画一张蓝色鲸鱼娘求投喂 token 的表情包
+```
 
-资源目录与程序目录分离，升级时不会覆盖你补充的设定和素材。下载完成后会校验文件，但不会自动加载模型；是否启用由你决定。
+语音、联网和图片功能开启后，可在聊天中提出对应请求。识图需要配置支持图片输入的模型；生图需要安装并登录本机 Codex；唱歌需要先准备音源与可发送的片段。具体配置见 [功能教程](docs/FEATURES.md)。
 
-README 中的插图是文档配图，与第三方角色设定无关。角色素材的使用请遵循各自来源的许可。
+## 交给 Agent 安装
 
-## 能力边界
+把项目目录交给 Agent，并发送：
 
-生图使用现有本机 Codex 链路，并非已经支持通用生图 API；识图依赖你配置的多模态模型。默认语音是 Edge 在线 TTS，无需本地语音模型，但使用时要联网；GPT-SoVITS 和 Seed-VC 是可选方案。唱歌会发送你自己准备的片段，不承诺凭任意歌名实时生成。
+> 请先阅读当前项目的 AGENTS.md 和 docs/QUICKSTART.md，检查本机环境，再按文档配置鲸栖。需要登录或输入密钥时提示我本人操作；不要读取其他实例的私有配置，也不要自行发送微信测试消息。完成后告诉我工作台地址、已启用功能和仍缺少的依赖。
 
-## 给 Agent 的指引
+[AGENTS.md](AGENTS.md) 说明了程序结构、配置入口、验证与发布约定。初次检查可以运行 `python3 scripts/manage.py check`；手动安装与详细参数以项目文档为准。
 
-接手项目时，请先读 [AGENTS.md](AGENTS.md)。
+## 可选资源与下载
 
-项目尚未配置时，先运行环境检查 `python3 scripts/manage.py check`，再按文档安装；不要跳过检查直接改运行环境。
+**人设、原始图片设定集、聊天表情包、语音和唱歌模型权重不内置于源码压缩包或基础镜像。** 下表提供原始来源，使用者可以自行下载；软件“资源与人设”页面提供可选的一键下载或导入入口。自带的声音样本、歌曲和私人素材不公开。
 
-不要读取密钥，不要复用维护者的私有数据，不要自动发送测试消息。需要测试时使用独立数据目录，避免接触真实的聊天、记忆和登录态。
+| 资源 | 原始来源／手动下载入口 | 用途 |
+| --- | --- | --- |
+| 大肥鱼人设 | [dafeiyu-persona](https://github.com/ERUIHNIYHBKBNF/dafeiyu-persona) | 可选的初始人设；不包含维护者的私有教导与权限规则 |
+| AI娘图片与文字设定 | [ai-chan-sheets](https://github.com/lmy414/ai-chan-sheets) | 角色形象与生图参考，按人物导入 |
+| 表情包参考资源 | [deepseek-chan-meme-pack](https://github.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack) | 可选表情包来源，也支持用户自行导入 |
+| GPT-SoVITS | [程序仓库](https://github.com/RVC-Boss/GPT-SoVITS)、[模型权重](https://huggingface.co/lj1995/GPT-SoVITS) | 可选本地语音与音色模仿 |
+| Seed-VC | [程序仓库](https://github.com/Plachtaa/seed-vc)、[模型权重](https://huggingface.co/Plachta/Seed-VC) | 唱歌换声首选方案，按需安装 |
+| Vevo2／Amphion | [程序仓库](https://github.com/open-mmlab/Amphion)、[模型权重](https://huggingface.co/RMSnow/Vevo2) | 保留的实验对比方案，默认不启用 |
+| BigVGAN | [程序仓库](https://github.com/NVIDIA/BigVGAN)、[44kHz 模型](https://huggingface.co/nvidia/bigvgan_v2_44khz_128band_512x) | 唱歌方案的声码器依赖 |
+| Whisper | [程序仓库](https://github.com/openai/whisper)、[small 模型](https://huggingface.co/openai/whisper-small)、[medium 模型](https://huggingface.co/openai/whisper-medium) | 换声方案使用的编码器；按所选方案下载 |
+| CAMPPlus | [模型来源](https://huggingface.co/funasr/campplus) | Seed-VC 的说话人特征依赖 |
+| RMVPE | [当前模型来源](https://huggingface.co/lj1995/VoiceConversionWebUI) | 唱歌音高提取依赖 |
+| Demucs | [程序与模型说明](https://github.com/facebookresearch/demucs) | 可选的人声、伴奏分离 |
 
-## 文档入口
+微软在线语音通过 [edge-tts](https://github.com/rany2/edge-tts) 接入，不需要下载本地语音模型，但使用时需要联网；不将其描述为离线模型或微软官方 SDK。
 
-- [快速开始](docs/QUICKSTART.md)：环境准备、安装与首次配置。
-- [手动安装](docs/MANUAL.md)：Linux 与 Windows/WSL2 的详细步骤。
-- [功能说明](docs/FEATURES.md)：能力范围、可选组件与使用方式。
-- [资源与下载](docs/RESOURCES.md)：人设、素材、模型和原始来源。
-- [验证记录](docs/VERIFICATION.md)：已检查项目与尚未覆盖的范围。
-- [AGENTS.md](AGENTS.md)：Agent 协作、环境检查和测试约定。
+资源中心默认提供人设、角色与模型管理界面，不要求先下载资源才显示入口。下载前显示来源、版本、大小、用途及许可；下载完成后校验文件并放入对应目录，下载失败可重试，也支持已下载文件的手动导入。模型下载与启用分开，不因下载而自动加载模型占用显存。前端自带大肥鱼界面插画；聊天使用的人设与生图参考集由使用者另行导入。
+
+角色设定集按人物分目录，人物名作为目录名。文件名含“设定集”的图片优先作为形象依据，其他图片用于固定形象和扩展风格。模型只下载所选方案需要的文件，不将整个模型仓库全部拉取。资源目录与程序目录分离，升级不覆盖用户补充的设定和素材。
+
+下载来源不等于任意再分发或商用授权。角色图片、程序代码和模型权重分别遵守各自来源的许可；例如 ai-chan-sheets 的补全内容与参考原图授权范围不同，Vevo2 权重也与 Amphion 程序代码的许可不同。资源管理保留这些区别；上游要求登录或授权的下载转至其官方流程，不代填账户信息。
+
 
 ## 数据与配置
 
-主人绑定、聊天数据库、长期记忆、声音样本、登录态和密钥保存在自己的运行目录，不进入发布包。使用在线模型、检索或在线语音时，相关输入会交给你所配置的服务处理。每位使用者自行绑定设备、主人身份和微信账号；导出的备份属于私人数据，请与公开分发内容分开保管。
+源码包不包含聊天记录、长期记忆、好友与群标识、主人绑定、密钥、微信登录状态、私人图片、声音样本或歌曲。它们保存在使用者自己的配置和数据目录中，升级前可以自行备份。
+
+界面与 README 附带依据 DS 娘设定生成的配图，原始角色设定集仍需单独下载。使用在线模型、检索或在线语音时，相应输入会交给所配置的服务处理。
 
 ## 鸣谢
 
-感谢以下项目与贡献者。它们在本项目中分别承担运行依赖、可选资源或实现参考，不能一概视为必需依赖。
+感谢以下开源项目及其贡献者。以下区分实际依赖、可选资源和实现参考，不将仅参考过的项目描述为运行依赖。
 
-感谢 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 提供本机会话、工具调用与插件宿主；[Webox](https://github.com/netcat-ai/webox) 提供 Docker 内微信与消息接口；[dsh-mnemon](https://github.com/omdsh-dev/dsh-mnemon) 提供记忆存储与 Runtime Source；[ModSearch](https://github.com/liustack/modsearch) 提供简单公开联网查询；[edge-tts](https://github.com/rany2/edge-tts) 提供微软 Edge 在线语音的接入。声音方案中的 [GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) 与 [Seed-VC](https://github.com/Plachtaa/seed-vc) 为可选依赖；人设来源 [dafeiyu-persona](https://github.com/ERUIHNIYHBKBNF/dafeiyu-persona) 和角色设定来源 [ai-chan-sheets](https://github.com/lmy414/ai-chan-sheets) 也一并致谢。
+### 核心接入与运行依赖
 
-其他依赖、可选资源与实现参考见 [docs/ACKNOWLEDGEMENTS.md](docs/ACKNOWLEDGEMENTS.md)；第三方许可、版权与修改说明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。本项目原创代码许可证待定，本文不赋予新的再分发许可；第三方代码、角色素材与模型权重分别遵守各自来源的许可。
+| 项目 | 本项目中的用途 |
+| --- | --- |
+| [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | 本机模型会话、工具调用与插件宿主 |
+| [Webox](https://github.com/netcat-ai/webox) | Docker 内 Linux 微信及消息接口；本项目维护额外适配与辅助程序 |
+| [dsh-mnemon](https://github.com/omdsh-dev/dsh-mnemon) | Mnemon 记忆存储和 Runtime Source；本项目另做作用域、提炼与管理界面 |
+| [modsearch](https://github.com/liustack/modsearch) | 简单公开联网查询 |
+| [dsh-kaomoji](https://github.com/TianJie52009/dsh-kaomoji) | 颜文字插件 |
+| [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) | 微信界面文字和目标定位辅助 |
+| [FFmpeg](https://github.com/FFmpeg/FFmpeg) | 媒体处理；具体构建所包含的组件另行列明 |
+| [Tailscale](https://github.com/tailscale/tailscale) | 可选的手机私有远程连接 |
+
+### 可选语音、唱歌与角色资源
+
+| 项目 | 本项目中的用途 |
+| --- | --- |
+| [edge-tts](https://github.com/rany2/edge-tts) | 微软在线语音接入与音色参数调整 |
+| [GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) | 保留的本地语音与音色模仿方案 |
+| [Seed-VC](https://github.com/Plachtaa/seed-vc) | 当前首选唱歌换声方案 |
+| [Amphion](https://github.com/open-mmlab/Amphion) | Vevo2 实验换声方案 |
+| [Demucs](https://github.com/facebookresearch/demucs) | 人声与伴奏分离 |
+| [BigVGAN](https://github.com/NVIDIA/BigVGAN) | 声码器 |
+| [Whisper](https://github.com/openai/whisper) | 换声编码器相关组件 |
+| [dafeiyu-persona](https://github.com/ERUIHNIYHBKBNF/dafeiyu-persona) | 可选人设来源，仅提供下载入口 |
+| [ai-chan-sheets](https://github.com/lmy414/ai-chan-sheets) | 可选角色补全设定来源；原始角色形象归 ZipZipPipe，见原仓库授权说明 |
+| [deepseek-chan-meme-pack](https://github.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack) | 可选表情包来源，仅提供来源与导入入口 |
+
+### 实现参考与上游来源
+
+- [Kirara AI](https://github.com/lss233/kirara-ai)：参考消息触发、会话作用域和多模态工作流设计；本项目不以 Kirara 作为运行框架。
+- [export-wechat-emoji](https://github.com/liusheng22/export-wechat-emoji)：参考表情图片缓存和复用方式。
+- [wechat-emoticon](https://github.com/spacelan/wechat-emoticon)：参考表情消息中的 MD5、CDN 元数据提取思路。
+- [wx-cli](https://github.com/jackwener/wx-cli)：Webox 的部分微信数据库解析代码注明来自该项目，保留上游 Apache-2.0 来源说明。2026-10-26 核对时该仓库返回 HTTP 451；不提供替代下载地址，该项列入正式发布前核查。
+
+主要上游来源的核对记录见 [docs/upstream-sources.json](docs/upstream-sources.json)，第三方许可处理见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。正式发布时随实际分发内容补齐对应许可证全文、版权声明、修改说明和依赖版本。
+
+
+## 许可证
+
+本项目原创代码的许可证待维护者确定，当前预发布包不新增再分发授权。第三方代码、角色素材和模型权重分别遵守各自许可，详见 [LICENSE-STATUS.md](LICENSE-STATUS.md) 和 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

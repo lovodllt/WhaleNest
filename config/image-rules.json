@@ -1,0 +1,31 @@
+{
+  "default_categories": [
+    "由使用者配置的角色表情包",
+    "由使用者配置的角色日常"
+  ],
+  "priority": [
+    "用户当前明确需求",
+    "已导入角色参考",
+    "通用构图质量"
+  ],
+  "brief_requirements": [
+    "主体",
+    "动作表情",
+    "场景",
+    "构图与画幅",
+    "文字",
+    "避免事项"
+  ],
+  "playful": false,
+  "autonomous": false,
+  "autonomous_cooldown_minutes": 360,
+  "playful_probability": 0,
+  "reference_priority": [
+    "文件名含设定集",
+    "其他角色参考"
+  ],
+  "invocation": {
+    "group": "唤醒词＋/imageGen",
+    "private": "/imageGen；主人可按意思请求"
+  }
+}

@@ -1,0 +1,26 @@
+name: dafeiyu
+services:
+  wechat:
+    container_name: dafeiyu-wechat
+    build:
+      context: ./vendor/webox
+    image: dafeiyu-wechat:0.1.0
+    environment:
+      TZ: Asia/Shanghai
+      WEBOX_UID: ${DAFEIYU_UID:-1000}
+    volumes:
+      - ./data/wechat:/webox/state
+    ports:
+      - "127.0.0.1:48080:8080"
+      - "127.0.0.1:6860:6080"
+    shm_size: 1gb
+    mem_limit: 3g
+    pids_limit: 512
+    cap_add:
+      - SYS_PTRACE
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "2"

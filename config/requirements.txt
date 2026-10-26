@@ -1,0 +1,4 @@
+PyYAML==6.0.3
+qrcode==8.2
+Pillow==11.3.0
+sqlcipher3-binary==0.6.0; platform_system == "Linux"

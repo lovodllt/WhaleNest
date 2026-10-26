@@ -1,0 +1,12 @@
+{
+  "window_size": [980, 710],
+  "template_dir": "ui_templates",
+  "threshold": 0.9,
+  "scales": [1.0],
+  "controls": {
+    "editor": {"names": ["输入"], "role": "text"},
+    "voice_start": {"names": ["发语音"], "role": "push button"},
+    "voice_send": {"names": ["发送语音"], "role": "push button"},
+    "voice_cancel": {"names": ["取消"], "role": "push button"}
+  }
+}

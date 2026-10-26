@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "checked_date": "2026-10-26",
+  "status": "release_preparation",
+  "note": "主要上游来源核对；不替代最终依赖锁文件或许可证全文。observed_revision 为核对时上游版本，不表示已在本项目验证。",
+  "sources": [
+    {
+      "repository": "netcat-ai/webox",
+      "url": "https://github.com/netcat-ai/webox",
+      "relationship": "modified_runtime",
+      "usage": "微信接入；本项目有本地适配和辅助程序",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "local_base_commit": "8ca042cd79221d05f6a74cb48064c7ba14220dc9"
+    },
+    {
+      "repository": "deepseek-ai/deepseek-harness",
+      "url": "https://github.com/deepseek-ai/deepseek-harness",
+      "relationship": "runtime",
+      "usage": "本机模型会话、工具调用与插件宿主",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "master"
+    },
+    {
+      "repository": "omdsh-dev/dsh-mnemon",
+      "url": "https://github.com/omdsh-dev/dsh-mnemon",
+      "relationship": "runtime",
+      "usage": "人物记忆存储及 Runtime Source",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "liustack/modsearch",
+      "url": "https://github.com/liustack/modsearch",
+      "relationship": "runtime",
+      "usage": "联网查询",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "TianJie52009/dsh-kaomoji",
+      "url": "https://github.com/TianJie52009/dsh-kaomoji",
+      "relationship": "runtime",
+      "usage": "颜文字",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "jackwener/wx-cli",
+      "url": "https://github.com/jackwener/wx-cli",
+      "relationship": "upstream",
+      "usage": "Webox 部分数据库解析代码的注明来源；HTTP 451，待发布核查",
+      "upstream_license_id": null,
+      "check_status": "access_restricted",
+      "local_notice_license": "Apache-2.0",
+      "access_status": 451
+    },
+    {
+      "repository": "rany2/edge-tts",
+      "url": "https://github.com/rany2/edge-tts",
+      "relationship": "optional",
+      "usage": "当前微软在线语音路线",
+      "upstream_license_id": "NOASSERTION",
+      "check_status": "reachable",
+      "default_branch": "master"
+    },
+    {
+      "repository": "RVC-Boss/GPT-SoVITS",
+      "url": "https://github.com/RVC-Boss/GPT-SoVITS",
+      "relationship": "optional",
+      "usage": "保留的本地语音与音色模仿",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "Plachtaa/seed-vc",
+      "url": "https://github.com/Plachtaa/seed-vc",
+      "relationship": "optional",
+      "usage": "首选唱歌换声路线",
+      "upstream_license_id": "GPL-3.0",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "open-mmlab/Amphion",
+      "url": "https://github.com/open-mmlab/Amphion",
+      "relationship": "optional",
+      "usage": "Vevo2 实验对比",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "facebookresearch/demucs",
+      "url": "https://github.com/facebookresearch/demucs",
+      "relationship": "optional",
+      "usage": "人声与伴奏分离",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "NVIDIA/BigVGAN",
+      "url": "https://github.com/NVIDIA/BigVGAN",
+      "relationship": "optional",
+      "usage": "唱歌声码器",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "openai/whisper",
+      "url": "https://github.com/openai/whisper",
+      "relationship": "optional",
+      "usage": "换声编码器",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "tailscale/tailscale",
+      "url": "https://github.com/tailscale/tailscale",
+      "relationship": "optional",
+      "usage": "手机私有远程访问",
+      "upstream_license_id": "BSD-3-Clause",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "FFmpeg/FFmpeg",
+      "url": "https://github.com/FFmpeg/FFmpeg",
+      "relationship": "runtime",
+      "usage": "音频媒体处理",
+      "upstream_license_id": "NOASSERTION",
+      "check_status": "reachable",
+      "default_branch": "master"
+    },
+    {
+      "repository": "tesseract-ocr/tesseract",
+      "url": "https://github.com/tesseract-ocr/tesseract",
+      "relationship": "runtime",
+      "usage": "微信界面文字定位",
+      "upstream_license_id": "Apache-2.0",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "lmy414/ai-chan-sheets",
+      "url": "https://github.com/lmy414/ai-chan-sheets",
+      "relationship": "resource",
+      "usage": "可选角色设定，仅链接与用户下载",
+      "upstream_license_id": "NOASSERTION",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "ERUIHNIYHBKBNF/dafeiyu-persona",
+      "url": "https://github.com/ERUIHNIYHBKBNF/dafeiyu-persona",
+      "relationship": "resource",
+      "usage": "可选人设，仅链接与用户下载",
+      "upstream_license_id": "MIT",
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "the-beating-light-of-the-nail/deepseek-chan-meme-pack",
+      "url": "https://github.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack",
+      "relationship": "resource",
+      "usage": "可选表情素材来源",
+      "upstream_license_id": null,
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "lss233/kirara-ai",
+      "url": "https://github.com/lss233/kirara-ai",
+      "relationship": "reference",
+      "usage": "消息触发、作用域和工作流设计参考",
+      "upstream_license_id": "AGPL-3.0",
+      "check_status": "reachable",
+      "default_branch": "master"
+    },
+    {
+      "repository": "liusheng22/export-wechat-emoji",
+      "url": "https://github.com/liusheng22/export-wechat-emoji",
+      "relationship": "reference",
+      "usage": "表情图片缓存思路参考",
+      "upstream_license_id": null,
+      "check_status": "reachable",
+      "default_branch": "main"
+    },
+    {
+      "repository": "spacelan/wechat-emoticon",
+      "url": "https://github.com/spacelan/wechat-emoticon",
+      "relationship": "reference",
+      "usage": "表情消息元数据思路参考",
+      "upstream_license_id": null,
+      "check_status": "reachable",
+      "default_branch": "master"
+    }
+  ],
+  "model_sources": [
+    {
+      "repository": "lj1995/GPT-SoVITS",
+      "url": "https://huggingface.co/lj1995/GPT-SoVITS",
+      "observed_revision": "8f8857563c040d542de108a2c18b0425abd6c9c5",
+      "source_license": "mit",
+      "usage": "可选本地语音",
+      "included_in_release": false,
+      "compatibility_tested_at_revision": false
+    },
+    {
+      "repository": "Plachta/Seed-VC",
+      "url": "https://huggingface.co/Plachta/Seed-VC",
+      "observed_revision": "257283f9f41585055e8f858fba4fd044e5caed6e",
+      "source_license": "gpl-3.0",
+      "usage": "首选唱歌换声",
+      "included_in_release": false,
+      "compatibility_tested_at_revision": false
+    },
+    {
+      "repository": "RMSnow/Vevo2",
+      "url": "https://huggingface.co/RMSnow/Vevo2",
+      "observed_revision": "2674843cbaa50aa89ee7ccaf5bb15d6ccf46c6c8",
+      "source_license": "cc-by-nc-nd-4.0",
+      "usage": "实验对比换声",
+      "included_in_release": false,
+      "compatibility_tested_at_revision": false
+    },
+    {
+      "repository": "nvidia/bigvgan_v2_44khz_128band_512x",
+      "url": "https://huggingface.co/nvidia/bigvgan_v2_44khz_128band_512x",
+      "observed_revision": "95a9d1dcb12906c03edd938d77b9333d6ded7dfb",
+      "source_license": "mit",
+      "usage": "唱歌声码器",
+      "included_in_release": false,
+      "compatibility_tested_at_revision": false
+    },
+    {
+      "repository": "openai/whisper-small",
+      "url": "https://huggingface.co/openai/whisper-small",
+      "observed_revision": "973afd24965f72e36ca33b3055d56a652f456b4d",
+      "source_license": "apache-2.0",
+      "usage": "Seed-VC 编码器",
+      "included_in_release": false,
+      "compatibility_tested_at_revision": false
+    },
+    {
+      "repository": "openai/whisper-medium",
+      "url": "https://huggingface.co/openai/whisper-medium",
+      "observed_revision": "abdf7c39ab9d0397620ccaea8974cc764cd0953e",
+      "source_license": "apache-2.0",
+      "usage": "Vevo2 编码器",
+      "included_in_release": false,
+      "compatibility_tested_at_revision": false
+    },
+    {
+      "repository": "funasr/campplus",
+      "url": "https://huggingface.co/funasr/campplus",
+      "observed_revision": "e4b6ede7ce16997aff4ae69fbca1f0175e2afede",
+      "source_license": "apache-2.0",
+      "usage": "说话人特征",
+      "included_in_release": false,
+      "compatibility_tested_at_revision": false
+    },
+    {
+      "repository": "lj1995/VoiceConversionWebUI",
+      "url": "https://huggingface.co/lj1995/VoiceConversionWebUI",
+      "observed_revision": "e6d0c1a17da07c33557852f9dfa2bd44cc75737d",
+      "source_license": "mit",
+      "usage": "RMVPE 音高提取",
+      "included_in_release": false,
+      "compatibility_tested_at_revision": false
+    }
+  ]
+}

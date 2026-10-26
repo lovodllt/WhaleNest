@@ -1,0 +1,1100 @@
+[
+  {
+    "id": "persona-dafeiyu",
+    "name": "大肥鱼人设（可选）",
+    "kind": "persona",
+    "source": "https://github.com/ERUIHNIYHBKBNF/dafeiyu-persona",
+    "license": "MIT",
+    "revision": "5b08af8353fcfcc1378ea73f33686d669d61703f",
+    "detail": "下载后可选择导入；已有自定义人设不会覆盖",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/ERUIHNIYHBKBNF/dafeiyu-persona/5b08af8353fcfcc1378ea73f33686d669d61703f/LICENSE",
+        "target": "resources/downloads/persona/LICENSE",
+        "size": 1056,
+        "git_blob_sha1": "14fac913ccf80234b1848540089a3bbcb6e5283d"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ERUIHNIYHBKBNF/dafeiyu-persona/5b08af8353fcfcc1378ea73f33686d669d61703f/README.md",
+        "target": "resources/downloads/persona/README.md",
+        "size": 1635,
+        "git_blob_sha1": "a251dea21c36e6ab194fd58996d58d8c76ab035b"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ERUIHNIYHBKBNF/dafeiyu-persona/5b08af8353fcfcc1378ea73f33686d669d61703f/dafeiyu/SKILL.md",
+        "target": "resources/downloads/persona/dafeiyu/SKILL.md",
+        "size": 5160,
+        "git_blob_sha1": "e8e08cc3ea4c04a7c049caf7e0a1bdaf51417a32"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ERUIHNIYHBKBNF/dafeiyu-persona/5b08af8353fcfcc1378ea73f33686d669d61703f/dafeiyu/references/lines.md",
+        "target": "resources/downloads/persona/dafeiyu/references/lines.md",
+        "size": 2577,
+        "git_blob_sha1": "92bbcfe7654c51a9dd005cb424445cd6891d229d"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ERUIHNIYHBKBNF/dafeiyu-persona/5b08af8353fcfcc1378ea73f33686d669d61703f/dafeiyu/references/lore.md",
+        "target": "resources/downloads/persona/dafeiyu/references/lore.md",
+        "size": 2471,
+        "git_blob_sha1": "961516d106f3b8c739790c4549a11276e54575b1"
+      }
+    ]
+  },
+  {
+    "id": "character-deepseek",
+    "name": "DeepSeek娘设定图",
+    "kind": "character",
+    "source": "https://github.com/lmy414/ai-chan-sheets",
+    "license": "补全内容 CC BY-NC-SA 4.0；原图权利另见上游",
+    "revision": "51c15559ac7ebc6bbfb22e1769ba46716f976d5d",
+    "detail": "下载总览设定图；角色资料可继续补充，不附本项目私人故事",
+    "character": {
+      "id": "deepseek",
+      "name": "DeepSeek娘",
+      "aliases": [
+        "ds",
+        "DeepSeek娘"
+      ]
+    },
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/LICENSE",
+        "target": "resources/sources/ai-chan-sheets/LICENSE",
+        "size": 757,
+        "git_blob_sha1": "1af3129be25cd53e21801e23e0733faaa1805505"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E7%89%88%E6%9D%83%E4%B8%8E%E6%8E%88%E6%9D%83.md",
+        "target": "resources/sources/ai-chan-sheets/版权与授权.md",
+        "size": 490,
+        "git_blob_sha1": "20238ef5d607958ecc078a087c2cf143175519b4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E8%AE%BE%E5%AE%9A%E5%9B%BE/03_DeepSeek%E5%A8%98_%E9%B2%B8%E9%B1%BC%E5%A8%98/%E4%BE%BF%E4%BA%8E%E6%9F%A5%E7%9C%8B/%E6%A8%AA%E7%89%88%E5%AE%8C%E6%95%B4%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E5%85%A8%E6%9D%BF%E6%80%BB%E8%A7%88_%E6%9F%A5%E7%9C%8B%E7%94%A8.jpg",
+        "target": "resources/characters/DeepSeek娘/images/设定集.jpg",
+        "size": 1502586,
+        "git_blob_sha1": "2ec75cadf2e255aba0c790f3f0cdbdbb7b594403"
+      }
+    ]
+  },
+  {
+    "id": "character-gpt",
+    "name": "GPT娘设定图",
+    "kind": "character",
+    "source": "https://github.com/lmy414/ai-chan-sheets",
+    "license": "补全内容 CC BY-NC-SA 4.0；原图权利另见上游",
+    "revision": "51c15559ac7ebc6bbfb22e1769ba46716f976d5d",
+    "detail": "下载总览设定图；角色资料可继续补充，不附本项目私人故事",
+    "character": {
+      "id": "gpt",
+      "name": "GPT娘",
+      "aliases": [
+        "GPT",
+        "GPT娘"
+      ]
+    },
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/LICENSE",
+        "target": "resources/sources/ai-chan-sheets/LICENSE",
+        "size": 757,
+        "git_blob_sha1": "1af3129be25cd53e21801e23e0733faaa1805505"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E7%89%88%E6%9D%83%E4%B8%8E%E6%8E%88%E6%9D%83.md",
+        "target": "resources/sources/ai-chan-sheets/版权与授权.md",
+        "size": 490,
+        "git_blob_sha1": "20238ef5d607958ecc078a087c2cf143175519b4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E8%AE%BE%E5%AE%9A%E5%9B%BE/02_GPT%E5%A8%98_%E7%99%BD%E9%BE%99%E5%A8%98/%E4%BE%BF%E4%BA%8E%E6%9F%A5%E7%9C%8B/%E6%A8%AA%E7%89%88%E5%AE%8C%E6%95%B4%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E5%85%A8%E6%9D%BF%E6%80%BB%E8%A7%88_%E6%9F%A5%E7%9C%8B%E7%94%A8.jpg",
+        "target": "resources/characters/GPT娘/images/设定集.jpg",
+        "size": 994431,
+        "git_blob_sha1": "dfc9c7b2359ed7357b9925c9c9e952c1e87bbfab"
+      }
+    ]
+  },
+  {
+    "id": "character-claude",
+    "name": "Claude娘设定图",
+    "kind": "character",
+    "source": "https://github.com/lmy414/ai-chan-sheets",
+    "license": "补全内容 CC BY-NC-SA 4.0；原图权利另见上游",
+    "revision": "51c15559ac7ebc6bbfb22e1769ba46716f976d5d",
+    "detail": "下载总览设定图；角色资料可继续补充，不附本项目私人故事",
+    "character": {
+      "id": "claude",
+      "name": "Claude娘",
+      "aliases": [
+        "Claude",
+        "Claude娘"
+      ]
+    },
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/LICENSE",
+        "target": "resources/sources/ai-chan-sheets/LICENSE",
+        "size": 757,
+        "git_blob_sha1": "1af3129be25cd53e21801e23e0733faaa1805505"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E7%89%88%E6%9D%83%E4%B8%8E%E6%8E%88%E6%9D%83.md",
+        "target": "resources/sources/ai-chan-sheets/版权与授权.md",
+        "size": 490,
+        "git_blob_sha1": "20238ef5d607958ecc078a087c2cf143175519b4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E8%AE%BE%E5%AE%9A%E5%9B%BE/11_Claude%E5%A8%98_Anthropic/%E4%BE%BF%E4%BA%8E%E6%9F%A5%E7%9C%8B/%E6%A8%AA%E7%89%88%E5%AE%8C%E6%95%B4%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E5%85%A8%E6%9D%BF%E6%80%BB%E8%A7%88_%E6%9F%A5%E7%9C%8B%E7%94%A8.jpg",
+        "target": "resources/characters/Claude娘/images/设定集.jpg",
+        "size": 2147694,
+        "git_blob_sha1": "39d51ec6918af8ceee70c52ab1b9a2a813a7a38f"
+      }
+    ]
+  },
+  {
+    "id": "character-grok",
+    "name": "Grok娘设定图",
+    "kind": "character",
+    "source": "https://github.com/lmy414/ai-chan-sheets",
+    "license": "补全内容 CC BY-NC-SA 4.0；原图权利另见上游",
+    "revision": "51c15559ac7ebc6bbfb22e1769ba46716f976d5d",
+    "detail": "下载总览设定图；角色资料可继续补充，不附本项目私人故事",
+    "character": {
+      "id": "grok",
+      "name": "Grok娘",
+      "aliases": [
+        "Grok",
+        "Grok娘"
+      ]
+    },
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/LICENSE",
+        "target": "resources/sources/ai-chan-sheets/LICENSE",
+        "size": 757,
+        "git_blob_sha1": "1af3129be25cd53e21801e23e0733faaa1805505"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E7%89%88%E6%9D%83%E4%B8%8E%E6%8E%88%E6%9D%83.md",
+        "target": "resources/sources/ai-chan-sheets/版权与授权.md",
+        "size": 490,
+        "git_blob_sha1": "20238ef5d607958ecc078a087c2cf143175519b4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E8%AE%BE%E5%AE%9A%E5%9B%BE/09_Grok%E5%A8%98_xAI/%E4%BE%BF%E4%BA%8E%E6%9F%A5%E7%9C%8B/%E6%A8%AA%E7%89%88%E5%AE%8C%E6%95%B4%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E5%85%A8%E6%9D%BF%E6%80%BB%E8%A7%88_%E6%9F%A5%E7%9C%8B%E7%94%A8.jpg",
+        "target": "resources/characters/Grok娘/images/设定集.jpg",
+        "size": 1225593,
+        "git_blob_sha1": "f721a78a7379b9e5c4281b020966da3cc538f021"
+      }
+    ]
+  },
+  {
+    "id": "character-gemini",
+    "name": "Gemini娘设定图",
+    "kind": "character",
+    "source": "https://github.com/lmy414/ai-chan-sheets",
+    "license": "补全内容 CC BY-NC-SA 4.0；原图权利另见上游",
+    "revision": "51c15559ac7ebc6bbfb22e1769ba46716f976d5d",
+    "detail": "下载总览设定图；角色资料可继续补充，不附本项目私人故事",
+    "character": {
+      "id": "gemini",
+      "name": "Gemini娘",
+      "aliases": [
+        "Gemini",
+        "Gemini娘"
+      ]
+    },
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/LICENSE",
+        "target": "resources/sources/ai-chan-sheets/LICENSE",
+        "size": 757,
+        "git_blob_sha1": "1af3129be25cd53e21801e23e0733faaa1805505"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E7%89%88%E6%9D%83%E4%B8%8E%E6%8E%88%E6%9D%83.md",
+        "target": "resources/sources/ai-chan-sheets/版权与授权.md",
+        "size": 490,
+        "git_blob_sha1": "20238ef5d607958ecc078a087c2cf143175519b4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/lmy414/ai-chan-sheets/51c15559ac7ebc6bbfb22e1769ba46716f976d5d/%E8%AE%BE%E5%AE%9A%E5%9B%BE/10_Gemini%E5%A8%98/%E4%BE%BF%E4%BA%8E%E6%9F%A5%E7%9C%8B/%E6%A8%AA%E7%89%88%E5%AE%8C%E6%95%B4%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E5%85%A8%E6%9D%BF%E6%80%BB%E8%A7%88_%E6%9F%A5%E7%9C%8B%E7%94%A8.jpg",
+        "target": "resources/characters/Gemini娘/images/设定集.jpg",
+        "size": 1030375,
+        "git_blob_sha1": "9add35ecfbcd6277debce08a7703681307d76370"
+      }
+    ]
+  },
+  {
+    "id": "meme-previews",
+    "name": "表情包预览素材",
+    "kind": "stickers",
+    "source": "https://github.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack",
+    "license": "见上游说明；未声明统一许可证",
+    "revision": "c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6",
+    "detail": "上游公开的 WebP 预览，下载到独立目录，需用户自行收录",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/README.zh-CN.md",
+        "target": "resources/downloads/memes/README.zh-CN.md",
+        "size": 16219,
+        "git_blob_sha1": "dbc9899438ebf22f0b54501cc5dd883f106358a9"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/007.webp",
+        "target": "resources/downloads/memes/previews/007.webp",
+        "size": 16306,
+        "git_blob_sha1": "1520f5f4e09115091e64f9f138351429e0f22b40"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/010.webp",
+        "target": "resources/downloads/memes/previews/010.webp",
+        "size": 33116,
+        "git_blob_sha1": "999d39357d6162a72eecac0a7721b5dbf14a3034"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/022.webp",
+        "target": "resources/downloads/memes/previews/022.webp",
+        "size": 33090,
+        "git_blob_sha1": "65485bf934784cf0da97f5ed7f70ee14ac956c30"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/035.webp",
+        "target": "resources/downloads/memes/previews/035.webp",
+        "size": 57716,
+        "git_blob_sha1": "afca73cfc8f05b4d1c1b84bab541d8cc97f46ce9"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/037.webp",
+        "target": "resources/downloads/memes/previews/037.webp",
+        "size": 44676,
+        "git_blob_sha1": "5799616d18a319355cd5c12ddaba77f75261f09d"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/040.webp",
+        "target": "resources/downloads/memes/previews/040.webp",
+        "size": 48096,
+        "git_blob_sha1": "59a269aca0a856b66f5dcbe6f40923f38434e934"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/044.webp",
+        "target": "resources/downloads/memes/previews/044.webp",
+        "size": 46684,
+        "git_blob_sha1": "69d47922f0f3265d0508f6d2eaebb287c2df146e"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/050.webp",
+        "target": "resources/downloads/memes/previews/050.webp",
+        "size": 37800,
+        "git_blob_sha1": "59e3df03695f635801b20f673266ba19e12383f4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/052.webp",
+        "target": "resources/downloads/memes/previews/052.webp",
+        "size": 45736,
+        "git_blob_sha1": "c461594fc51676cd56a1f90196dd359324002631"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/056.webp",
+        "target": "resources/downloads/memes/previews/056.webp",
+        "size": 28080,
+        "git_blob_sha1": "540ca5563c610173fcb748920b9fc43027f7af61"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/058.webp",
+        "target": "resources/downloads/memes/previews/058.webp",
+        "size": 21022,
+        "git_blob_sha1": "2e114939d6a8fc892561a3e55209c6880bc08168"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/070.webp",
+        "target": "resources/downloads/memes/previews/070.webp",
+        "size": 37164,
+        "git_blob_sha1": "7153a018badf07a457eb3171079e6084eb1f1f9b"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/071.webp",
+        "target": "resources/downloads/memes/previews/071.webp",
+        "size": 34958,
+        "git_blob_sha1": "68d1fe92e775a2f16ab40dacd958c50a02855c17"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/077.webp",
+        "target": "resources/downloads/memes/previews/077.webp",
+        "size": 28922,
+        "git_blob_sha1": "9eeeeb793c7aaba1d20fc3c8688e2deaaa916aa2"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/081.webp",
+        "target": "resources/downloads/memes/previews/081.webp",
+        "size": 66620,
+        "git_blob_sha1": "968adc872298a3e8ac5549ddeef56d15171fef5e"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/083.webp",
+        "target": "resources/downloads/memes/previews/083.webp",
+        "size": 26060,
+        "git_blob_sha1": "a1a24640900889e5f298d0bedc8e786109483cd1"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/085.webp",
+        "target": "resources/downloads/memes/previews/085.webp",
+        "size": 46126,
+        "git_blob_sha1": "8bc91f32a2752511f83107a069aff64c92d92013"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/087.webp",
+        "target": "resources/downloads/memes/previews/087.webp",
+        "size": 8810,
+        "git_blob_sha1": "3878ce6bf7204b60b901344cb019b312abefdb61"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/097.webp",
+        "target": "resources/downloads/memes/previews/097.webp",
+        "size": 33740,
+        "git_blob_sha1": "372200cc25aba3be1879f288c0ea6563a5577684"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/the-beating-light-of-the-nail/deepseek-chan-meme-pack/c82a0fb1c8958c2f0d6ea7fa7c12128027cfd7c6/previews/123.webp",
+        "target": "resources/downloads/memes/previews/123.webp",
+        "size": 32686,
+        "git_blob_sha1": "4e2024b1cbc567429e2ca09e11438493477f5dd2"
+      }
+    ]
+  },
+  {
+    "id": "seed-vc-source",
+    "name": "Seed-VC 程序",
+    "kind": "engine",
+    "source": "https://github.com/Plachtaa/seed-vc",
+    "license": "GPL-3.0",
+    "revision": "51383efd921027683c89e5348211d93ff12ac2a8",
+    "detail": "仅下载程序，不执行或安装 Python 依赖；安装见唱歌教程",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/LICENSE",
+        "target": "plugins/singing/seed-vc-main/LICENSE",
+        "size": 35148,
+        "git_blob_sha1": "e72bfddabc15be5718a7cc061ac10e47741d8219"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/README-ZH.md",
+        "target": "plugins/singing/seed-vc-main/README-ZH.md",
+        "size": 13953,
+        "git_blob_sha1": "debe14f819034bb44946f44922a11eec280c8b2c"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/app.py",
+        "target": "plugins/singing/seed-vc-main/app.py",
+        "size": 12561,
+        "git_blob_sha1": "9e31acf55c1ca5134d90c5aeef42c74d4b178fcb"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/app_svc.py",
+        "target": "plugins/singing/seed-vc-main/app_svc.py",
+        "size": 22776,
+        "git_blob_sha1": "c34d8bc3e832c8869691ef17adc042680a879fb1"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/app_vc.py",
+        "target": "plugins/singing/seed-vc-main/app_vc.py",
+        "size": 19814,
+        "git_blob_sha1": "92e82d6181e8a5362407612f571a8679e6720876"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/app_vc_v2.py",
+        "target": "plugins/singing/seed-vc-main/app_vc_v2.py",
+        "size": 4996,
+        "git_blob_sha1": "4922d93f41da860d5b538d135a2104d9e150afec"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/baselines/cosyvoice.py",
+        "target": "plugins/singing/seed-vc-main/baselines/cosyvoice.py",
+        "size": 960,
+        "git_blob_sha1": "6e4e1f8abccd3389cedb31c5d4e74f8232ec8287"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/baselines/dnsmos/dnsmos_computor.py",
+        "target": "plugins/singing/seed-vc-main/baselines/dnsmos/dnsmos_computor.py",
+        "size": 5030,
+        "git_blob_sha1": "625bd84e25bfb56f4c375624ebb5cabefe0c3f32"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/baselines/openvoice.py",
+        "target": "plugins/singing/seed-vc-main/baselines/openvoice.py",
+        "size": 1185,
+        "git_blob_sha1": "4ed4d8009bd4d0ddca830135f4afa278cca4ad40"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/conda-nix-vc-py310.yaml",
+        "target": "plugins/singing/seed-vc-main/conda-nix-vc-py310.yaml",
+        "size": 382,
+        "git_blob_sha1": "bd59a8ce7f84966e9fd47360fb7af36cc63e3b27"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/configs/astral_quantization/default_2048.yml",
+        "target": "plugins/singing/seed-vc-main/configs/astral_quantization/default_2048.yml",
+        "size": 1039,
+        "git_blob_sha1": "8045f2dfdbfa7e31223cf2e086921e0063944410"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/configs/astral_quantization/default_32.yml",
+        "target": "plugins/singing/seed-vc-main/configs/astral_quantization/default_32.yml",
+        "size": 929,
+        "git_blob_sha1": "7da34ff4a34c6ae5e84b866fdff2d8d4c0a5865c"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/configs/config.json",
+        "target": "plugins/singing/seed-vc-main/configs/config.json",
+        "size": 441,
+        "git_blob_sha1": "e74f0b4898f6e47e1d198b62cdba989784ce2bb0"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/configs/hifigan.yml",
+        "target": "plugins/singing/seed-vc-main/configs/hifigan.yml",
+        "size": 646,
+        "git_blob_sha1": "6faee66d988dc54bcc5f747d048c5f7e2a8b759b"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/configs/presets/config_dit_mel_seed_uvit_whisper_base_f0_44k.yml",
+        "target": "plugins/singing/seed-vc-main/configs/presets/config_dit_mel_seed_uvit_whisper_base_f0_44k.yml",
+        "size": 2331,
+        "git_blob_sha1": "150560475fd7dedad8da76e87480dd36c85ee07f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/configs/presets/config_dit_mel_seed_uvit_whisper_small_wavenet.yml",
+        "target": "plugins/singing/seed-vc-main/configs/presets/config_dit_mel_seed_uvit_whisper_small_wavenet.yml",
+        "size": 2197,
+        "git_blob_sha1": "7fc8ec4cb659e9d4856e7b9fa1621ba20796fb08"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/configs/presets/config_dit_mel_seed_uvit_xlsr_tiny.yml",
+        "target": "plugins/singing/seed-vc-main/configs/presets/config_dit_mel_seed_uvit_xlsr_tiny.yml",
+        "size": 1994,
+        "git_blob_sha1": "d1870d89bb8979fca9e89a29a4c5ebb96a9eceb6"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/configs/v2/vc_wrapper.yaml",
+        "target": "plugins/singing/seed-vc-main/configs/v2/vc_wrapper.yaml",
+        "size": 2895,
+        "git_blob_sha1": "9d254d516f969f3fff27f8477fc5026074a2a59e"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/data/ft_dataset.py",
+        "target": "plugins/singing/seed-vc-main/data/ft_dataset.py",
+        "size": 4104,
+        "git_blob_sha1": "fac88657935006e79fa7b95b4fde4fff191f5b93"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/eval.py",
+        "target": "plugins/singing/seed-vc-main/eval.py",
+        "size": 24375,
+        "git_blob_sha1": "117ca7c77aaa35de4593e344599334ef1ea5a3f6"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/hf_utils.py",
+        "target": "plugins/singing/seed-vc-main/hf_utils.py",
+        "size": 501,
+        "git_blob_sha1": "4bd88fa6be55f3eaf4d2cd434bb8757a61cdab5f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/inference.py",
+        "target": "plugins/singing/seed-vc-main/inference.py",
+        "size": 19553,
+        "git_blob_sha1": "84d673b64db2b5349039ff96702533f4be0a4e25"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/inference_v2.py",
+        "target": "plugins/singing/seed-vc-main/inference_v2.py",
+        "size": 5728,
+        "git_blob_sha1": "51c02ecc3512fc20b41ba850b8ee6dc437071daf"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/astral_quantization/bsq.py",
+        "target": "plugins/singing/seed-vc-main/modules/astral_quantization/bsq.py",
+        "size": 18438,
+        "git_blob_sha1": "239d0caaf370afc77ba62961563903ad675b6d98"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/astral_quantization/convnext.py",
+        "target": "plugins/singing/seed-vc-main/modules/astral_quantization/convnext.py",
+        "size": 8195,
+        "git_blob_sha1": "dc7ac97c993ba9b5811f5f57185f5ed5e84547ed"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/astral_quantization/default_model.py",
+        "target": "plugins/singing/seed-vc-main/modules/astral_quantization/default_model.py",
+        "size": 3254,
+        "git_blob_sha1": "259515557fc42c36007099c29e71138c2ddae93a"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/astral_quantization/transformer.py",
+        "target": "plugins/singing/seed-vc-main/modules/astral_quantization/transformer.py",
+        "size": 9582,
+        "git_blob_sha1": "015ec417d02e3442d8ea120c3802807c73e89bb4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/audio.py",
+        "target": "plugins/singing/seed-vc-main/modules/audio.py",
+        "size": 2411,
+        "git_blob_sha1": "abe783b0e0af630319700c931eb51d2ce375282b"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/activations.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/activations.py",
+        "size": 4504,
+        "git_blob_sha1": "61f2808a5466b3cf4d041059700993af5527dd29"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/alias_free_activation/cuda/__init__.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/alias_free_activation/cuda/__init__.py",
+        "size": 0,
+        "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/alias_free_activation/cuda/activation1d.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/alias_free_activation/cuda/activation1d.py",
+        "size": 2515,
+        "git_blob_sha1": "01a25ffc04edbdfe17859653690e3005d441712f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/alias_free_activation/cuda/load.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/alias_free_activation/cuda/load.py",
+        "size": 2594,
+        "git_blob_sha1": "ca5d01de398249e75e9e2298958764acb436edba"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/alias_free_activation/torch/__init__.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/alias_free_activation/torch/__init__.py",
+        "size": 200,
+        "git_blob_sha1": "8f756ed83f87f9839e457b240f60469bc187707d"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/alias_free_activation/torch/act.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/alias_free_activation/torch/act.py",
+        "size": 825,
+        "git_blob_sha1": "a6693aac602d7b331d6149522685dd512a26d277"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/alias_free_activation/torch/filter.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/alias_free_activation/torch/filter.py",
+        "size": 3401,
+        "git_blob_sha1": "0fa35b0d5ddf8d6cb04cd9d47364ca033cebcd32"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/alias_free_activation/torch/resample.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/alias_free_activation/torch/resample.py",
+        "size": 1831,
+        "git_blob_sha1": "a35380f5a2b0767069d8e3a64e01e090299ee2ab"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/bigvgan.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/bigvgan.py",
+        "size": 17589,
+        "git_blob_sha1": "65f0cc4fefdf9e038beed968325da324e67fb565"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/config.json",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/config.json",
+        "size": 1405,
+        "git_blob_sha1": "635bd8975629bd6d4b51c409986944a281cfe7be"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/env.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/env.py",
+        "size": 510,
+        "git_blob_sha1": "b8be238d4db710c8c9a338d336baea0138f18d1f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/meldataset.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/meldataset.py",
+        "size": 11420,
+        "git_blob_sha1": "5e89d7384755e725c946aff3884834e15e295a16"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/bigvgan/utils.py",
+        "target": "plugins/singing/seed-vc-main/modules/bigvgan/utils.py",
+        "size": 2564,
+        "git_blob_sha1": "da98a24cf1447778305563f8e909f30b06e06b26"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/campplus/DTDNN.py",
+        "target": "plugins/singing/seed-vc-main/modules/campplus/DTDNN.py",
+        "size": 5350,
+        "git_blob_sha1": "490b584e3fd3d2e37c6be382d9853c28eea8f6ce"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/campplus/classifier.py",
+        "target": "plugins/singing/seed-vc-main/modules/campplus/classifier.py",
+        "size": 1798,
+        "git_blob_sha1": "5c709e7da673ac43fdc41c4d5babdde26368f6a4"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/campplus/layers.py",
+        "target": "plugins/singing/seed-vc-main/modules/campplus/layers.py",
+        "size": 9622,
+        "git_blob_sha1": "97945979ff7ac8ede4f1f53ff3b4d999fc4829d2"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/commons.py",
+        "target": "plugins/singing/seed-vc-main/modules/commons.py",
+        "size": 15134,
+        "git_blob_sha1": "4af3fecc7fda93d647f49723e1089a791ec52ed2"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/diffusion_transformer.py",
+        "target": "plugins/singing/seed-vc-main/modules/diffusion_transformer.py",
+        "size": 22431,
+        "git_blob_sha1": "0de2aa00b7378423a25e4fcbff6ad0561ee6092c"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/encodec.py",
+        "target": "plugins/singing/seed-vc-main/modules/encodec.py",
+        "size": 12030,
+        "git_blob_sha1": "9feeadd935dabd6642af6b1844494a51967292c3"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/flow_matching.py",
+        "target": "plugins/singing/seed-vc-main/modules/flow_matching.py",
+        "size": 6585,
+        "git_blob_sha1": "9b250a24d4eed7867ec6b4b08afa70bd1b4a7eb3"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/hifigan/f0_predictor.py",
+        "target": "plugins/singing/seed-vc-main/modules/hifigan/f0_predictor.py",
+        "size": 1976,
+        "git_blob_sha1": "36b85f4ed90c3a412cb179f49ccb471132a86550"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/hifigan/generator.py",
+        "target": "plugins/singing/seed-vc-main/modules/hifigan/generator.py",
+        "size": 16809,
+        "git_blob_sha1": "867894cee55a0746b93c1ba070871b7e5e5eba2b"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/length_regulator.py",
+        "target": "plugins/singing/seed-vc-main/modules/length_regulator.py",
+        "size": 6071,
+        "git_blob_sha1": "a896c6ced97e409ba657f60af59a2f82e1688e65"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/__init__.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/__init__.py",
+        "size": 0,
+        "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/api.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/api.py",
+        "size": 7121,
+        "git_blob_sha1": "424bb4d8a262f71e7692528f0a05e06ca5f7f982"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/attentions.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/attentions.py",
+        "size": 16352,
+        "git_blob_sha1": "355115743ff9f5899adfc44c5075053c81066ba1"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/checkpoints_v2/converter/config.json",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/checkpoints_v2/converter/config.json",
+        "size": 838,
+        "git_blob_sha1": "3e33566b0d976167bd5f15801ef7005d59143e2f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/commons.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/commons.py",
+        "size": 4956,
+        "git_blob_sha1": "d3fa07f65b1681e1f469b04b2fe689b7c174eaaa"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/mel_processing.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/mel_processing.py",
+        "size": 6106,
+        "git_blob_sha1": "d47446966952228b6ca24569d3b0aef93c749ad9"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/models.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/models.py",
+        "size": 16768,
+        "git_blob_sha1": "1558bb3a3ac9fadc600948d04f97946502b16e7c"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/modules.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/modules.py",
+        "size": 18975,
+        "git_blob_sha1": "5af5d1152aa1790850f16155c323556c17bf9900"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/openvoice_app.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/openvoice_app.py",
+        "size": 11608,
+        "git_blob_sha1": "744a7678cc2498987d90d639b63fd1c3a7bca5c7"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/se_extractor.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/se_extractor.py",
+        "size": 5163,
+        "git_blob_sha1": "d08717984508c893dd88eeccc02b325ca4ea0a6e"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/transforms.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/transforms.py",
+        "size": 7253,
+        "git_blob_sha1": "a11f799e023864ff7082c1f49c0cc18351a13b47"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/openvoice/utils.py",
+        "target": "plugins/singing/seed-vc-main/modules/openvoice/utils.py",
+        "size": 5776,
+        "git_blob_sha1": "4e80909d6a03976400322cc0219d1871e9f84bfa"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/rmvpe.py",
+        "target": "plugins/singing/seed-vc-main/modules/rmvpe.py",
+        "size": 22660,
+        "git_blob_sha1": "8d7811b2f98f2bf6e25f71ad3a3444e6999d9d4a"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/v2/ar.py",
+        "target": "plugins/singing/seed-vc-main/modules/v2/ar.py",
+        "size": 28320,
+        "git_blob_sha1": "0611a459c74d1260442855499b03a6885bb4fb04"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/v2/cfm.py",
+        "target": "plugins/singing/seed-vc-main/modules/v2/cfm.py",
+        "size": 8183,
+        "git_blob_sha1": "929d557b99aaabec19012c810e833aaa922470d5"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/v2/dit_model.py",
+        "target": "plugins/singing/seed-vc-main/modules/v2/dit_model.py",
+        "size": 9158,
+        "git_blob_sha1": "4374ac86a4d4d0869788cdd16087115c4418ba5f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/v2/dit_wrapper.py",
+        "target": "plugins/singing/seed-vc-main/modules/v2/dit_wrapper.py",
+        "size": 5682,
+        "git_blob_sha1": "3ac611ab9e33114df905a80e3f847e7ab198c72a"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/v2/length_regulator.py",
+        "target": "plugins/singing/seed-vc-main/modules/v2/length_regulator.py",
+        "size": 3964,
+        "git_blob_sha1": "c8fba22ed62e367ef3abe88b5a04c5ee40658349"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/v2/model.py",
+        "target": "plugins/singing/seed-vc-main/modules/v2/model.py",
+        "size": 11954,
+        "git_blob_sha1": "c1453ef438c8ef3a22b8ab151db36aa75c93f0ff"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/v2/vc_wrapper.py",
+        "target": "plugins/singing/seed-vc-main/modules/v2/vc_wrapper.py",
+        "size": 34025,
+        "git_blob_sha1": "26e2dd0c5ecbbb0e8c19cea2c8472450148eb97e"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/modules/wavenet.py",
+        "target": "plugins/singing/seed-vc-main/modules/wavenet.py",
+        "size": 6457,
+        "git_blob_sha1": "2d2c3b862593e2c0f78b2f8cb2d38c4cbbe573eb"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/optimizers.py",
+        "target": "plugins/singing/seed-vc-main/optimizers.py",
+        "size": 3782,
+        "git_blob_sha1": "d97b8a7bfbb6f6f226db8bae2e474b44e24e0d1a"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/real-time-gui.py",
+        "target": "plugins/singing/seed-vc-main/real-time-gui.py",
+        "size": 53066,
+        "git_blob_sha1": "38ad345f08d4aabe174c2239c71302c3dca4d45f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/requirements-mac.txt",
+        "target": "plugins/singing/seed-vc-main/requirements-mac.txt",
+        "size": 631,
+        "git_blob_sha1": "1d841d79c0b9eacf0386d75cbe9cc8a843db1f35"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/requirements.txt",
+        "target": "plugins/singing/seed-vc-main/requirements.txt",
+        "size": 613,
+        "git_blob_sha1": "399c6649b58b757c3096351ef79a0cfa218390e8"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/seed_vc_wrapper.py",
+        "target": "plugins/singing/seed-vc-main/seed_vc_wrapper.py",
+        "size": 21811,
+        "git_blob_sha1": "c40d12094dacb210d8ce4875d8eb1affeb069b04"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/train.py",
+        "target": "plugins/singing/seed-vc-main/train.py",
+        "size": 19029,
+        "git_blob_sha1": "cd5f365c51f5ca124f803896c324d97a3db246cd"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/Plachtaa/seed-vc/51383efd921027683c89e5348211d93ff12ac2a8/train_v2.py",
+        "target": "plugins/singing/seed-vc-main/train_v2.py",
+        "size": 13648,
+        "git_blob_sha1": "a1bb437b3652ed05f71cb3a190469047eec383ba"
+      }
+    ]
+  },
+  {
+    "id": "model-plachta-seed-vc",
+    "name": "Plachta/Seed-VC 模型文件",
+    "kind": "model",
+    "source": "https://huggingface.co/Plachta/Seed-VC",
+    "license": "gpl-3.0",
+    "revision": "257283f9f41585055e8f858fba4fd044e5caed6e",
+    "detail": "按需下载已列明文件，不自动加载模型；使用前按插件教程配置",
+    "files": [
+      {
+        "url": "https://huggingface.co/Plachta/Seed-VC/resolve/257283f9f41585055e8f858fba4fd044e5caed6e/DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema_v2.pth",
+        "target": "plugins/singing/models/Seed-VC/DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema_v2.pth",
+        "size": 820865494,
+        "sha256": "42aef93ffe65857c840d270252fa040f7ba04514945ec460f3ac1ac2a96de684"
+      },
+      {
+        "url": "https://huggingface.co/Plachta/Seed-VC/resolve/257283f9f41585055e8f858fba4fd044e5caed6e/config_dit_mel_seed_uvit_whisper_base_f0_44k.yml",
+        "target": "plugins/singing/models/Seed-VC/config_dit_mel_seed_uvit_whisper_base_f0_44k.yml",
+        "size": 2408,
+        "git_blob_sha1": "3c05377ba4553af5ee4b17b09a712d943277e4e3"
+      }
+    ]
+  },
+  {
+    "id": "model-lj1995-voiceconversionwebui",
+    "name": "lj1995/VoiceConversionWebUI 模型文件",
+    "kind": "model",
+    "source": "https://huggingface.co/lj1995/VoiceConversionWebUI",
+    "license": "mit",
+    "revision": "e6d0c1a17da07c33557852f9dfa2bd44cc75737d",
+    "detail": "按需下载已列明文件，不自动加载模型；使用前按插件教程配置",
+    "files": [
+      {
+        "url": "https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/e6d0c1a17da07c33557852f9dfa2bd44cc75737d/rmvpe.pt",
+        "target": "plugins/singing/models/VoiceConversionWebUI/rmvpe.pt",
+        "size": 181184272,
+        "sha256": "6d62215f4306e3ca278246188607209f09af3dc77ed4232efdd069798c4ec193"
+      }
+    ]
+  },
+  {
+    "id": "model-funasr-campplus",
+    "name": "funasr/campplus 模型文件",
+    "kind": "model",
+    "source": "https://huggingface.co/funasr/campplus",
+    "license": "apache-2.0",
+    "revision": "e4b6ede7ce16997aff4ae69fbca1f0175e2afede",
+    "detail": "按需下载已列明文件，不自动加载模型；使用前按插件教程配置",
+    "files": [
+      {
+        "url": "https://huggingface.co/funasr/campplus/resolve/e4b6ede7ce16997aff4ae69fbca1f0175e2afede/campplus_cn_common.bin",
+        "target": "plugins/singing/models/campplus/campplus_cn_common.bin",
+        "size": 28036335,
+        "sha256": "3388cf5fd3493c9ac9c69851d8e7a8badcfb4f3dc631020c4961371646d5ada8"
+      }
+    ]
+  },
+  {
+    "id": "model-nvidia-bigvgan_v2_44khz_128band_512x",
+    "name": "nvidia/bigvgan_v2_44khz_128band_512x 模型文件",
+    "kind": "model",
+    "source": "https://huggingface.co/nvidia/bigvgan_v2_44khz_128band_512x",
+    "license": "mit",
+    "revision": "95a9d1dcb12906c03edd938d77b9333d6ded7dfb",
+    "detail": "按需下载已列明文件，不自动加载模型；使用前按插件教程配置",
+    "files": [
+      {
+        "url": "https://huggingface.co/nvidia/bigvgan_v2_44khz_128band_512x/resolve/95a9d1dcb12906c03edd938d77b9333d6ded7dfb/config.json",
+        "target": "plugins/singing/models/bigvgan_v2_44khz_128band_512x/config.json",
+        "size": 1403,
+        "git_blob_sha1": "624a661dcef98677775b0b16d36dc9adb02a74bd"
+      },
+      {
+        "url": "https://huggingface.co/nvidia/bigvgan_v2_44khz_128band_512x/resolve/95a9d1dcb12906c03edd938d77b9333d6ded7dfb/bigvgan_generator.pt",
+        "target": "plugins/singing/models/bigvgan_v2_44khz_128band_512x/bigvgan_generator.pt",
+        "size": 489041291,
+        "sha256": "d9fe7ec6bd0b44ed9d66973d5012d8181c1570b01e5c72df51973e241dccd357"
+      }
+    ]
+  },
+  {
+    "id": "model-openai-whisper-small",
+    "name": "openai/whisper-small 模型文件",
+    "kind": "model",
+    "source": "https://huggingface.co/openai/whisper-small",
+    "license": "apache-2.0",
+    "revision": "973afd24965f72e36ca33b3055d56a652f456b4d",
+    "detail": "按需下载已列明文件，不自动加载模型；使用前按插件教程配置",
+    "files": [
+      {
+        "url": "https://huggingface.co/openai/whisper-small/resolve/973afd24965f72e36ca33b3055d56a652f456b4d/config.json",
+        "target": "plugins/singing/models/whisper-small/config.json",
+        "size": 1967,
+        "git_blob_sha1": "113bb3efe3a7396f2ea629eef12637bd8085238d"
+      },
+      {
+        "url": "https://huggingface.co/openai/whisper-small/resolve/973afd24965f72e36ca33b3055d56a652f456b4d/preprocessor_config.json",
+        "target": "plugins/singing/models/whisper-small/preprocessor_config.json",
+        "size": 184990,
+        "git_blob_sha1": "c2048dfa9fd94a052e62e908d2c4dfb18534b4d2"
+      },
+      {
+        "url": "https://huggingface.co/openai/whisper-small/resolve/973afd24965f72e36ca33b3055d56a652f456b4d/model.safetensors",
+        "target": "plugins/singing/models/whisper-small/model.safetensors",
+        "size": 966995080,
+        "sha256": "1d7734884874f1a1513ed9aa760a4f8e97aaa02fd6d93a3a85d27b2ae9ca596b"
+      }
+    ]
+  },
+  {
+    "id": "model-lj1995-gpt-sovits",
+    "name": "lj1995/GPT-SoVITS 模型文件",
+    "kind": "model",
+    "source": "https://huggingface.co/lj1995/GPT-SoVITS",
+    "license": "mit",
+    "revision": "8f8857563c040d542de108a2c18b0425abd6c9c5",
+    "detail": "按需下载已列明文件，不自动加载模型；使用前按插件教程配置",
+    "files": [
+      {
+        "url": "https://huggingface.co/lj1995/GPT-SoVITS/resolve/8f8857563c040d542de108a2c18b0425abd6c9c5/s1v3.ckpt",
+        "target": "resources/models/gpt-sovits/s1v3.ckpt",
+        "size": 155284856,
+        "sha256": "87133414860ea14ff6620c483a3db5ed07b44be42e2c3fcdad65523a729a745a"
+      },
+      {
+        "url": "https://huggingface.co/lj1995/GPT-SoVITS/resolve/8f8857563c040d542de108a2c18b0425abd6c9c5/v2Pro/s2Gv2ProPlus.pth",
+        "target": "resources/models/gpt-sovits/v2Pro/s2Gv2ProPlus.pth",
+        "size": 200125741,
+        "sha256": "d42a22bbbf65fb2bbdd45ad6a66841156977db45c7aabe0a6992ff378d9c7d3b"
+      },
+      {
+        "url": "https://huggingface.co/lj1995/GPT-SoVITS/resolve/8f8857563c040d542de108a2c18b0425abd6c9c5/sv/pretrained_eres2netv2w24s4ep4.ckpt",
+        "target": "resources/models/gpt-sovits/sv/pretrained_eres2netv2w24s4ep4.ckpt",
+        "size": 107528697,
+        "sha256": "4f5a0bf73c61eb41b174e1bb54e7ee3c83233892be8e0af1f187024e8e581a35"
+      },
+      {
+        "url": "https://huggingface.co/lj1995/GPT-SoVITS/resolve/8f8857563c040d542de108a2c18b0425abd6c9c5/chinese-roberta-wwm-ext-large/config.json",
+        "target": "resources/models/gpt-sovits/chinese-roberta-wwm-ext-large/config.json",
+        "size": 963,
+        "git_blob_sha1": "3ae58d7f0734373bb28d3b6b9d6858b34f600b4a"
+      },
+      {
+        "url": "https://huggingface.co/lj1995/GPT-SoVITS/resolve/8f8857563c040d542de108a2c18b0425abd6c9c5/chinese-roberta-wwm-ext-large/pytorch_model.bin",
+        "target": "resources/models/gpt-sovits/chinese-roberta-wwm-ext-large/pytorch_model.bin",
+        "size": 651225145,
+        "sha256": "e53a693acc59ace251d143d068096ae0d7b79e4b1b503fa84c9dcf576448c1d8"
+      },
+      {
+        "url": "https://huggingface.co/lj1995/GPT-SoVITS/resolve/8f8857563c040d542de108a2c18b0425abd6c9c5/chinese-roberta-wwm-ext-large/tokenizer.json",
+        "target": "resources/models/gpt-sovits/chinese-roberta-wwm-ext-large/tokenizer.json",
+        "size": 268962,
+        "git_blob_sha1": "9e77beb20869ea3b7850166fbc8cc7734662a017"
+      },
+      {
+        "url": "https://huggingface.co/lj1995/GPT-SoVITS/resolve/8f8857563c040d542de108a2c18b0425abd6c9c5/chinese-hubert-base/config.json",
+        "target": "resources/models/gpt-sovits/chinese-hubert-base/config.json",
+        "size": 1449,
+        "git_blob_sha1": "0bb839d4b0cd2ad41cb13c6500fd660800aaefdf"
+      },
+      {
+        "url": "https://huggingface.co/lj1995/GPT-SoVITS/resolve/8f8857563c040d542de108a2c18b0425abd6c9c5/chinese-hubert-base/preprocessor_config.json",
+        "target": "resources/models/gpt-sovits/chinese-hubert-base/preprocessor_config.json",
+        "size": 212,
+        "git_blob_sha1": "409547bbb99588f69a603019a707505610fa38d3"
+      },
+      {
+        "url": "https://huggingface.co/lj1995/GPT-SoVITS/resolve/8f8857563c040d542de108a2c18b0425abd6c9c5/chinese-hubert-base/pytorch_model.bin",
+        "target": "resources/models/gpt-sovits/chinese-hubert-base/pytorch_model.bin",
+        "size": 188811417,
+        "sha256": "24164f129c66499d1346e2aa55f183250c223161ec2770c0da3d3b08cf432d3c"
+      }
+    ]
+  },
+  {
+    "id": "model-rmsnow-vevo2",
+    "name": "RMSnow/Vevo2 模型文件",
+    "kind": "model",
+    "source": "https://huggingface.co/RMSnow/Vevo2",
+    "license": "cc-by-nc-nd-4.0",
+    "revision": "2674843cbaa50aa89ee7ccaf5bb15d6ccf46c6c8",
+    "detail": "按需下载已列明文件，不自动加载模型；使用前按插件教程配置",
+    "files": [
+      {
+        "url": "https://huggingface.co/RMSnow/Vevo2/resolve/2674843cbaa50aa89ee7ccaf5bb15d6ccf46c6c8/acoustic_modeling/fm_emilia101k_singnet7k_repa/config.json",
+        "target": "plugins/singing/models/Vevo2/acoustic_modeling/fm_emilia101k_singnet7k_repa/config.json",
+        "size": 2290,
+        "git_blob_sha1": "40c40dee7aca81af867cee0207b478c5145415ef"
+      },
+      {
+        "url": "https://huggingface.co/RMSnow/Vevo2/resolve/2674843cbaa50aa89ee7ccaf5bb15d6ccf46c6c8/acoustic_modeling/fm_emilia101k_singnet7k_repa/model.safetensors",
+        "target": "plugins/singing/models/Vevo2/acoustic_modeling/fm_emilia101k_singnet7k_repa/model.safetensors",
+        "size": 1451496488,
+        "sha256": "ef3733b3f92cf8f38e32f6d161f58751247b199cffc15cc1562e76c1289a7186"
+      },
+      {
+        "url": "https://huggingface.co/RMSnow/Vevo2/resolve/2674843cbaa50aa89ee7ccaf5bb15d6ccf46c6c8/acoustic_modeling/fm_emilia101k_singnet7k_repa/whisper_stats.pt",
+        "target": "plugins/singing/models/Vevo2/acoustic_modeling/fm_emilia101k_singnet7k_repa/whisper_stats.pt",
+        "size": 9215,
+        "sha256": "6117052b3e23e9075a79cc208ecc24328ae2f71a7dd4c9793db7c90a88b4a519"
+      },
+      {
+        "url": "https://huggingface.co/RMSnow/Vevo2/resolve/2674843cbaa50aa89ee7ccaf5bb15d6ccf46c6c8/tokenizer/contentstyle_fvq16384_12.5hz/model.safetensors",
+        "target": "plugins/singing/models/Vevo2/tokenizer/contentstyle_fvq16384_12.5hz/model.safetensors",
+        "size": 244781696,
+        "sha256": "bebdcea39e2d0134dbcce193aed0e7b0d393a866346317cd196389e40e9151b0"
+      },
+      {
+        "url": "https://huggingface.co/RMSnow/Vevo2/resolve/2674843cbaa50aa89ee7ccaf5bb15d6ccf46c6c8/vocoder/config.json",
+        "target": "plugins/singing/models/Vevo2/vocoder/config.json",
+        "size": 2069,
+        "git_blob_sha1": "2beafccbdfaaeb295d36caaf87211cc9cc02f5eb"
+      },
+      {
+        "url": "https://huggingface.co/RMSnow/Vevo2/resolve/2674843cbaa50aa89ee7ccaf5bb15d6ccf46c6c8/vocoder/model.safetensors",
+        "target": "plugins/singing/models/Vevo2/vocoder/model.safetensors",
+        "size": 1020206416,
+        "sha256": "5b5d1a46b19351c9a71bd8a5a59dd16be0be2ddefe70d3a0b4915d9a425e56d3"
+      }
+    ]
+  },
+  {
+    "id": "model-openai-whisper-medium",
+    "name": "openai/whisper-medium 模型文件",
+    "kind": "model",
+    "source": "https://huggingface.co/openai/whisper-medium",
+    "license": "apache-2.0",
+    "revision": "abdf7c39ab9d0397620ccaea8974cc764cd0953e",
+    "detail": "按需下载已列明文件，不自动加载模型；使用前按插件教程配置",
+    "files": [
+      {
+        "url": "https://huggingface.co/openai/whisper-medium/resolve/abdf7c39ab9d0397620ccaea8974cc764cd0953e/config.json",
+        "target": "plugins/singing/models/whisper-medium/config.json",
+        "size": 1991,
+        "git_blob_sha1": "eda91ab1edc34a7c54512ed7a53e643b202387af"
+      },
+      {
+        "url": "https://huggingface.co/openai/whisper-medium/resolve/abdf7c39ab9d0397620ccaea8974cc764cd0953e/preprocessor_config.json",
+        "target": "plugins/singing/models/whisper-medium/preprocessor_config.json",
+        "size": 184990,
+        "git_blob_sha1": "c2048dfa9fd94a052e62e908d2c4dfb18534b4d2"
+      },
+      {
+        "url": "https://huggingface.co/openai/whisper-medium/resolve/abdf7c39ab9d0397620ccaea8974cc764cd0953e/model.safetensors",
+        "target": "plugins/singing/models/whisper-medium/model.safetensors",
+        "size": 3055544304,
+        "sha256": "62f73550fa6db24b0c6f6c5962bd0dae80fa644e93cde9cd9c3792971b47fd28"
+      }
+    ]
+  }
+]

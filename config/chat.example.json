@@ -1,0 +1,59 @@
+{
+  "timezone": "Asia/Shanghai",
+  "defaults": {
+    "private_reply": true,
+    "group_mention_reply": true,
+    "natural_reply": false,
+    "auto_stickers": false,
+    "sticker_interval_seconds": 120
+  },
+  "chats": {},
+  "help_approved": true,
+  "owner_control": {
+    "enabled": false
+  },
+  "moments_handoff": {
+    "enabled": false,
+    "interval_minutes": 360,
+    "hours": [
+      "09:00",
+      "23:00"
+    ]
+  },
+  "outgoing_mentions": false,
+  "outgoing_pats": false,
+  "prefer_quote": true,
+  "fast_ui_send": true,
+  "reply_paused": true,
+  "message_batch_seconds": 1,
+  "pat_settle_seconds": 2,
+  "voice_reply": {
+    "enabled": false,
+    "spontaneous": false,
+    "spontaneous_interval_minutes": 30,
+    "provider": "edge"
+  },
+  "singing": {
+    "enabled": false,
+    "songs": {},
+    "default_song": ""
+  },
+  "owner_agent": {
+    "enabled": false
+  },
+  "memory": {
+    "enabled": false,
+    "impression_days": 90,
+    "log_days": 7,
+    "queue_days": 7,
+    "max_attempts": 3
+  },
+  "plugins": {
+    "web": false,
+    "image": false
+  },
+  "image": {
+    "daily_limit": 10,
+    "owner_exempt": false
+  }
+}

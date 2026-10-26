@@ -1,0 +1,3 @@
+- insert:
+    - id: daily-tools
+      name: ./daily_tools.mjs

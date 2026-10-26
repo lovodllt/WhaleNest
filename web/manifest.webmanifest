@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "鲸栖 WhaleNest",
+  "short_name": "鲸栖",
+  "description": "本机 DSH 微信陪伴工作台",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f1f6fd",
+  "theme_color": "#3262cf",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+.main[data-page="resources"] .card{background:rgba(255,255,255,.9);border:1px solid #dceafa;border-radius:22px;box-shadow:0 7px 24px #5186be0b}
+.main[data-page="resources"] textarea{box-sizing:border-box;border:1px solid #cddff1;border-radius:15px;background:#fbfdff;padding:15px;font:inherit;line-height:1.65;resize:vertical;color:#29466a;min-height:145px}
+.main[data-page="resources"] input{font:inherit;color:#466181;max-width:100%}
+.main[data-page="resources"] input:not([type="file"]){padding:10px 12px;border:1px solid #cddff1;border-radius:12px;margin-right:8px;background:#fbfdff}
+.main[data-page="resources"] input::file-selector-button{border:1px solid #cddff1;border-radius:10px;background:#f1f7ff;padding:9px 12px;color:#3c6094;cursor:pointer;margin-right:10px}
+.resource-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.resource-grid .card{margin:0!important;overflow-wrap:anywhere}
+.resource-grid .section-head h3{font-size:17px;line-height:1.5}
+.main[data-page="resources"] a{color:#3969b7}
+@media(max-width:760px){.resource-grid{grid-template-columns:1fr}.main[data-page="resources"] input:not([type="file"]){width:100%;margin:0 0 10px}}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>大肥鱼 · 微软语音调音台</title>
+<style>
+  :root{font:16px/1.65 system-ui,sans-serif;color:#203447;background:#f0f6fb}
+  body{max-width:660px;margin:44px auto;padding:0 20px}h1{font-size:28px;margin-bottom:4px}
+  .muted{color:#65798b}.card{background:white;border:1px solid #dbe6ef;border-radius:20px;padding:26px;margin:24px 0}
+  label{display:block;font-weight:600;margin:18px 0 8px}select,textarea{box-sizing:border-box;width:100%;padding:12px;border:1px solid #bdccda;border-radius:10px;background:white;color:inherit;font:inherit}
+  textarea{resize:vertical;min-height:110px}input[type=range]{width:100%;accent-color:#2773a8}output{float:right;color:#2773a8}
+  button{border:0;border-radius:10px;padding:12px 18px;font:inherit;cursor:pointer;background:#e8f0f7;color:#204763}
+  button.primary{background:#2773a8;color:white}button:disabled{opacity:.55;cursor:wait}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 12px}
+  audio{width:100%;margin:12px 0}#status{min-height:27px}#download{color:#2773a8}pre{font-size:14px;white-space:pre-wrap;background:#f3f7fa;border-radius:10px;padding:14px}
+  @media(max-width:480px){body{margin-top:22px}.card{padding:18px}h1{font-size:24px}}
+</style>
+<h1>🐳 给大肥鱼挑个声音</h1>
+<div class="muted">先选声线，再小幅调语速和音高。试听满意后保存，或者把下面的参数发给主人助手。</div>
+<div class="card">
+  <label for="voice">声音</label><select id="voice"></select>
+  <label for="text">试听内容</label><textarea id="text" maxlength="500">主人，你终于来啦！我才没有一直等你呢。今天也要记得投喂大肥鱼哦。</textarea>
+  <label for="rate">语速 <output id="rateValue"></output></label><input id="rate" type="range" min="-50" max="100" value="0">
+  <label for="pitch">音高 <output id="pitchValue"></output></label><input id="pitch" type="range" min="-30" max="30" value="0">
+  <label for="volume">音量 <output id="volumeValue"></output></label><input id="volume" type="range" min="-50" max="100" value="0">
+  <div class="actions"><button class="primary" id="preview">生成试听</button><button id="save">保存为默认</button><button id="copy">复制参数</button></div>
+  <div id="status" class="muted" role="status" aria-live="polite">正在读取声音列表…</div>
+  <audio id="audio" controls preload="auto" hidden></audio>
+  <a id="download" download="大肥鱼-试听.wav" hidden>下载试听音频</a><pre id="parameters"></pre>
+</div>
+<div class="muted">这是当前 Edge TTS 的实际声音，支持声线、语速、音高和音量；暂不支持单独设置“撒娇”等情绪。此页面只调合成声源，微信自动发送语音尚未启用。</div>
+<script>
+const $ = id => document.getElementById(id);
+const names = {Xiaoxiao:'晓晓',Xiaoyi:'晓伊',Yunjian:'云健',Yunxi:'云希',Yunxia:'云夏',Yunyang:'云扬',Xiaobei:'晓北',Xiaoni:'晓妮',HiuGaai:'晓佳',HiuMaan:'晓曼',WanLung:'云龙',HsiaoChen:'晓臻',HsiaoYu:'晓雨',YunJhe:'云哲'};
+function profile(){return {voice:$('voice').value,rate:+$('rate').value,pitch:+$('pitch').value,volume:+$('volume').value};}
+function update(){for(const key of ['rate','pitch','volume'])$(''+key+'Value').textContent=(+$(''+key).value>=0?'+':'')+$(''+key).value+(key==='pitch'?' Hz':'%');$('parameters').textContent=JSON.stringify(profile(),null,2);}
+async function request(path,data){const response=await fetch(path,data?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}:{});if(!response.ok){let detail=await response.json();throw Error(typeof detail.detail==='string'?detail.detail:'参数有误，请检查后重试');}return response;}
+async function init(){try{const [catalog,saved]=await Promise.all([(await request('/voices')).json(),(await request('/config')).json()]);for(const item of catalog){const option=document.createElement('option');option.value=item.voice;const short=item.voice.split('-').at(-1).replace('Neural','');option.textContent=`${names[short]||short} · ${item.gender==='Female'?'女声':'男声'} · ${item.voice}`;$('voice').append(option);}for(const [key,value]of Object.entries(saved))$(key).value=value;update();$('status').textContent='先用原始音高试听，再慢慢调整';}catch(error){$('status').textContent=error.message;}}
+for(const key of ['voice','rate','pitch','volume'])$(key).addEventListener('input',update);
+$('audio').oncanplay=()=>{$('status').textContent=`试听已就绪（${$('audio').duration.toFixed(1)} 秒），点击播放即可`;};
+$('audio').onplaying=()=>{$('status').textContent='正在播放；若听不到声音，请检查浏览器和设备音量，或下载试听';};
+$('audio').onerror=()=>{$('status').textContent='浏览器无法播放此音频，请使用下方“下载试听音频”打开';};
+$('preview').onclick=async()=>{const buttons=document.querySelectorAll('button');buttons.forEach(button=>button.disabled=true);$('audio').pause();$('audio').hidden=true;$('download').hidden=true;$('status').textContent='正在请大肥鱼开口…';try{const result=await(await request('/preview',{...profile(),text:$('text').value})).json();const audioUrl=result.url+'?t='+Date.now();$('status').textContent='音频已生成，正在载入播放器…';$('audio').src=audioUrl;$('audio').muted=false;$('audio').volume=1;$('audio').hidden=false;$('audio').load();$('download').href=audioUrl;$('download').hidden=false;}catch(error){$('status').textContent=error.message;}finally{buttons.forEach(button=>button.disabled=false);}};
+$('save').onclick=async()=>{try{await request('/config',profile());$('status').textContent='已保存为默认合成参数';}catch(error){$('status').textContent=error.message;}};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('parameters').textContent);$('status').textContent='参数已复制，直接发给我即可';}catch{ $('status').textContent='请直接选中下方参数复制'; }};
+init();
+</script>
+</html>

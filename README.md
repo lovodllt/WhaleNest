@@ -7,6 +7,7 @@
 <p align="center"><strong>让本机 DSH 里的 AI，成为微信里能聊天、发图、说话的小伙伴。</strong></p>
 
 <p align="center">
+  <a href="https://github.com/lovodllt/WhaleNest">GitHub</a> ·
   <a href="docs/QUICKSTART.md">快速开始</a> ·
   <a href="docs/MANUAL.md">手动安装</a> ·
   <a href="docs/FEATURES.md">功能配置</a> ·
@@ -51,7 +52,16 @@
 
 ### 一键配置
 
-解压或克隆项目，在根目录运行：
+克隆仓库并进入项目目录：
+
+```bash
+git clone https://github.com/lovodllt/WhaleNest.git
+cd WhaleNest
+```
+
+也可以[下载源码 ZIP](https://github.com/lovodllt/WhaleNest/archive/refs/heads/main.zip)，解压后进入项目根目录。
+
+确认上述依赖已安装，再运行一键配置：
 
 ```bash
 bash install.sh
@@ -87,13 +97,13 @@ D老师 /imageGen 画一张蓝色鲸鱼娘求投喂 token 的表情包
 
 语音、联网和图片功能开启后，可在聊天中提出对应请求。识图需要配置支持图片输入的模型；生图需要安装并登录本机 Codex；唱歌需要先准备音源与可发送的片段。具体配置见 [功能教程](docs/FEATURES.md)。
 
-## 交给 Agent 安装
-
-把项目目录交给 Agent，并发送：
+## 如果你是 Agent
 
 > 请先阅读当前项目的 AGENTS.md 和 docs/QUICKSTART.md，检查本机环境，再按文档配置鲸栖。需要登录或输入密钥时提示我本人操作；不要读取其他实例的私有配置，也不要自行发送微信测试消息。完成后告诉我工作台地址、已启用功能和仍缺少的依赖。
 
 [AGENTS.md](AGENTS.md) 说明了程序结构、配置入口、验证与发布约定。初次检查可以运行 `python3 scripts/manage.py check`；手动安装与详细参数以项目文档为准。
+
+在远程 Agent 中接手时，项目地址为 `https://github.com/lovodllt/WhaleNest`。请先克隆仓库，再在实际运行 DSH 的电脑或 WSL 环境中执行配置。
 
 ## 可选资源与下载
 
@@ -118,9 +128,6 @@ D老师 /imageGen 画一张蓝色鲸鱼娘求投喂 token 的表情包
 资源中心默认提供人设、角色与模型管理界面，不要求先下载资源才显示入口。下载前显示来源、版本、大小、用途及许可；下载完成后校验文件并放入对应目录，下载失败可重试，也支持已下载文件的手动导入。模型下载与启用分开，不因下载而自动加载模型占用显存。前端自带大肥鱼界面插画；聊天使用的人设与生图参考集由使用者另行导入。
 
 角色设定集按人物分目录，人物名作为目录名。文件名含“设定集”的图片优先作为形象依据，其他图片用于固定形象和扩展风格。模型只下载所选方案需要的文件，不将整个模型仓库全部拉取。资源目录与程序目录分离，升级不覆盖用户补充的设定和素材。
-
-下载来源不等于任意再分发或商用授权。角色图片、程序代码和模型权重分别遵守各自来源的许可；例如 ai-chan-sheets 的补全内容与参考原图授权范围不同，Vevo2 权重也与 Amphion 程序代码的许可不同。资源管理保留这些区别；上游要求登录或授权的下载转至其官方流程，不代填账户信息。
-
 
 ## 数据与配置
 
@@ -169,6 +176,12 @@ D老师 /imageGen 画一张蓝色鲸鱼娘求投喂 token 的表情包
 
 主要上游来源的核对记录见 [docs/upstream-sources.json](docs/upstream-sources.json)，第三方许可处理见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。正式发布时随实际分发内容补齐对应许可证全文、版权声明、修改说明和依赖版本。
 
+
+## 反馈与更新
+
+遇到问题或有功能建议，欢迎到 [GitHub Issues](https://github.com/lovodllt/WhaleNest/issues) 反馈。请附上系统、DSH 版本、出错步骤和经过脱敏的错误信息。
+
+升级、备份和故障处理见 [手动安装教程](docs/MANUAL.md)。更新程序前先保留自己的配置、聊天数据和素材；模型与素材无需每次重新下载。
 
 ## 许可证
 

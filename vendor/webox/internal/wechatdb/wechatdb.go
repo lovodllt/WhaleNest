@@ -608,21 +608,28 @@ func scanKeys(dbDir string) ([]keyEntry, error) {
 	type rawKey struct{ key, salt string }
 	var rawKeys []rawKey
 	seen := make(map[rawKey]struct{})
+	var processStats []string
 	readableProcesses, scannedRegions, scannedBytes := 0, 0, 0
 	for _, pid := range pids {
 		regions, err := parseMaps(pid)
 		if err != nil {
+			processStats = append(processStats, fmt.Sprintf("pid=%d maps_unreadable", pid))
 			continue
 		}
 		memory, err := os.Open(fmt.Sprintf("/proc/%d/mem", pid))
 		if err != nil {
+			processStats = append(processStats, fmt.Sprintf("pid=%d memory_unreadable", pid))
 			continue
 		}
 		readableProcesses++
 		scannedRegions += len(regions)
+		processBytes, processCandidates, mappedBytes := 0, 0, int64(0)
 		for _, region := range regions {
+			mappedBytes += region[1] - region[0]
 			read, matches := scanRegion(memory, region[0], region[1])
 			scannedBytes += read
+			processBytes += read
+			processCandidates += len(matches)
 			for _, match := range matches {
 				candidate := rawKey{key: match[0], salt: match[1]}
 				if _, exists := seen[candidate]; !exists {
@@ -632,6 +639,7 @@ func scanKeys(dbDir string) ([]keyEntry, error) {
 			}
 		}
 		_ = memory.Close()
+		processStats = append(processStats, fmt.Sprintf("pid=%d bytes=%d mapped=%d candidates=%d", pid, processBytes, mappedBytes, processCandidates))
 	}
 	var entries []keyEntry
 	used := make(map[string]struct{})
@@ -647,10 +655,14 @@ func scanKeys(dbDir string) ([]keyEntry, error) {
 			entries = append(entries, keyEntry{dbName: dbName, key: raw.key})
 		}
 	}
+	maskedCandidates := 0
+	if len(entries) == 0 {
+		entries, maskedCandidates = scanMaskedKeys(dbDir, pids, salts)
+	}
 	if len(entries) == 0 {
 		return nil, fmt.Errorf(
-			"未从内存提取到有效 Message Key: readable_processes=%d, scanned_regions=%d, scanned_bytes=%d, key_candidates=%d, database_salts=%d",
-			readableProcesses, scannedRegions, scannedBytes, len(rawKeys), len(salts),
+			"未从内存提取到有效 Message Key: readable_processes=%d, scanned_regions=%d, scanned_bytes=%d, key_candidates=%d, masked_candidates=%d, database_salts=%d; processes=[%s]",
+			readableProcesses, scannedRegions, scannedBytes, len(rawKeys), maskedCandidates, len(salts), strings.Join(processStats, "; "),
 		)
 	}
 	return entries, nil

@@ -96,6 +96,10 @@ DAFEIYU_REGISTRY_MIRROR=mirror.gcr.io .venv/bin/python scripts/manage.py build
 
 “没有收到消息”先区分：微信未登录、DSH 模型配置错误、插件缺少、暂停回复、没有匹配唤醒条件。查看控制台状态及 `data/logs/bridge.log`、`data/chat/dsh-diagnostics.log`。不要把微信未登录误判为模型断连，也不要通过重复重建容器处理模型配置问题。
 
+微信已显示聊天列表而 `/healthz` 为 `ready:false` 时，检查 `docker compose logs --tail=30 wechat`。Webox 需要自动提取本地数据库密钥；`readable_processes` 和 `scanned_bytes` 只说明读过相关进程，不能证明持有数据库的主进程已被读全。失败日志的 `processes` 按 PID 提供读取量、映射量和明文候选数，可与微信主进程核对；不包含密钥、账号或聊天内容。
+
+明文密钥扫描没有命中时，程序再尝试读取 WCDB 混淆的密钥缓冲区，候选必须通过对应数据库的只读打开验证才使用；`masked_candidates` 是这条路径检查的缓冲区数量，不等于验证成功的密钥数。此兼容补丁已通过临时加密数据库检查，Windows＋WSL2 的实际故障现场仍需更新后验证。补丁位于容器内，须按升级步骤重建镜像；保留 `data/wechat/`，不要为了排查删除微信数据或把其他账号的 `wechat.key` 复制过来。
+
 若仅想先配置控制台，不启动微信容器：
 
 ```bash

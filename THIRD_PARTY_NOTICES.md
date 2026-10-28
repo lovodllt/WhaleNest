@@ -11,6 +11,7 @@
 - Seed-VC：本机代码许可为 GPL-3.0。唱歌插件保留其来源和许可，不把第三方代码改标为本项目原创代码的许可证。
 - edge-tts、FFmpeg 及其他依赖以实际分发版本的随附许可证为准，不仅依据 GitHub 自动识别结果判断。
 - Kirara、export-wechat-emoji 与 wechat-emoticon 作为实现参考列明，不表示已复制这些项目的源代码；若后续引入代码，应另核对与保留对应声明。
+- WCDB 密钥缓冲区的公开技术说明参考 ChisBread/wechat-ai（GPL-3.0）与 TANGandXUE/wcdb-key-tool（MIT）。本项目的 Go 扫描和验证实现独立编写，没有引入这两个项目的源文件、程序或依赖，不将其许可改标为本项目许可。
 
 ## 模型与素材
 

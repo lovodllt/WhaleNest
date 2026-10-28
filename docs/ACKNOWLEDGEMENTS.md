@@ -36,5 +36,6 @@
 - [export-wechat-emoji](https://github.com/liusheng22/export-wechat-emoji)：参考表情图片缓存和复用方式。
 - [wechat-emoticon](https://github.com/spacelan/wechat-emoticon)：参考表情消息中的 MD5、CDN 元数据提取思路。
 - [wx-cli](https://github.com/jackwener/wx-cli)：Webox 的部分微信数据库解析代码注明来自该项目，保留上游 Apache-2.0 来源说明。2026-10-26 核对时该仓库返回 HTTP 451；不提供替代下载地址，该项列入正式发布前核查。
+- [wechat-ai](https://github.com/ChisBread/wechat-ai)、[wcdb-key-tool](https://github.com/TANGandXUE/wcdb-key-tool)：参考 WCDB 混淆密钥的公开技术说明，Go 兼容实现独立编写，候选使用现有 SQLCipher 驱动验证；两者不是运行依赖。
 
 主要上游来源的核对记录见 [来源核对记录](upstream-sources.json)，第三方许可处理见 [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md)。正式发布时随实际分发内容补齐对应许可证全文、版权声明、修改说明和依赖版本。

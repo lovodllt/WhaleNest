@@ -9,6 +9,7 @@ import sys
 import time
 
 from ui_accessible import connect, find_controls, header_matches, ACC, COMP, PROPS, VISIBLE, dbus
+from ui_locator import message_point
 
 
 def command(*args):
@@ -88,10 +89,12 @@ def main():
         rows = voices(title)
         if request['offset'] >= len(rows):
             raise RuntimeError('Requested voice is not visible')
-        seconds, (x,y,width,height) = rows[-1-request['offset']]
+        seconds, bounds = rows[-1-request['offset']]
         if seconds != request['seconds']:
             raise RuntimeError('Voice duration does not match')
-        command('xdotool','mousemove',str(x+width-100 if request['outgoing'] else x+100),str(y+height-25),'click','3')
+        win = window(request['remark'])
+        x,y = message_point(int(win),bounds,request['outgoing'])
+        command('xdotool','mousemove',str(x),str(y),'click','3')
         time.sleep(.1)
         choices = [c for c in find_controls('语音转文字') if c['Visible'] and c['Role']=='menu item']
         if len(choices) != 1:

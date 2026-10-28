@@ -6,6 +6,15 @@ import os
 from pathlib import Path
 import subprocess
 
+LAYOUT = Path('/webox/state/weagent/ui_layout.json')
+
+def merge_layout(defaults, current):
+    merged = defaults | current
+    for key in defaults.keys() & current.keys():
+        if isinstance(defaults[key], dict) and isinstance(current[key], dict):
+            merged[key] = merge_layout(defaults[key], current[key])
+    return merged
+
 
 def window_geometry(window):
     output = subprocess.check_output(['xdotool', 'getwindowgeometry', '--shell', str(window)], text=True, timeout=3)
@@ -20,7 +29,7 @@ def capture_window(window):
         '-frames:v', '1', '-threads', '1', '-f', 'image2pipe', '-vcodec', 'png', 'pipe:1'], timeout=8)
 
 
-def find_control(window, layout_path, key):
+def find_control(window, layout_path, key, roi=None):
     layout_path = Path(layout_path)
     layout = json.loads(layout_path.read_text())
     result = {'matched': False, 'window': window, 'control': key, 'method': None, 'bbox': None}
@@ -55,8 +64,16 @@ def find_control(window, layout_path, key):
                 if visible:
                     x, y, w, h = visible[0]['Extents']
                     return result | {'matched': True, 'method': 'accessible', 'bbox': [x-wx, y-wy, w, h], 'reason': 'matched'}
-    filename, roi = control.get('template'), control.get('roi')
-    if not filename or roi is None:
+    filename = control.get('template')
+    if roi is None:
+        roi = control.get('roi')
+        if roi is None and 'region' in control:
+            left, top, right, bottom = control['region']
+            if not 0 <= left < right <= 1 or not 0 <= top < bottom <= 1:
+                raise ValueError('Template region must use normalized window bounds')
+            x, y = round(left*width), round(top*height)
+            roi = [x, y, round(right*width)-x, round(bottom*height)-y]
+    if not filename:
         return result | {'reason': 'no_control_or_template_configured'}
     if Path(filename).name != filename:
         raise ValueError('Template must name a file inside template_dir')
@@ -75,6 +92,31 @@ def find_control(window, layout_path, key):
     return result | match | {'method': 'template'}
 
 
+def message_point(window, extents, outgoing=False, layout_path=LAYOUT):
+    wx, wy, width, height = window_geometry(window)
+    x, y, w, h = extents
+    left, top = max(0, x-wx), max(0, y-wy)
+    right, bottom = min(width, x+w-wx), min(height, y+h-wy)
+    if right <= left or bottom <= top:
+        raise RuntimeError('Message is not visible')
+    key = 'bubble_outgoing' if outgoing else 'bubble_incoming'
+    result = find_control(window, layout_path, key, [left, top, right-left, bottom-top])
+    if not result['matched']:
+        raise RuntimeError('Message bubble template did not uniquely match the intended row')
+    bx, by, bw, bh = result['bbox']
+    return wx+bx+round(bw*(0.2 if outgoing else 0.8)), wy+by+bh//2
+
+
+def click_control(window, key, layout_path=LAYOUT):
+    result = find_control(window, layout_path, key)
+    if not result['matched']:
+        raise RuntimeError('Control did not uniquely match: '+key)
+    x, y, width, height = result['bbox']
+    subprocess.run(['xdotool', 'mousemove', '--window', str(window), str(x+width//2),
+                    str(y+height//2), 'click', '1'], check=True, timeout=3)
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--window', type=lambda value: int(value, 0), required=True)
@@ -83,12 +125,9 @@ def main():
     parser.add_argument('key')
     args = parser.parse_args()
     try:
-        result = find_control(args.window, args.layout, args.key)
-        if result['matched'] and args.action == 'click':
-            x, y, width, height = result['bbox']
-            subprocess.run(['xdotool', 'mousemove', '--window', str(args.window),
-                            str(x+width//2), str(y+height//2), 'click', '1'], check=True, timeout=3)
-    except (OSError, ValueError, ImportError, subprocess.SubprocessError) as error:
+        result = (click_control(args.window, args.key, args.layout) if args.action == 'click'
+                  else find_control(args.window, args.layout, args.key))
+    except (OSError, ValueError, RuntimeError, ImportError, subprocess.SubprocessError) as error:
         print(json.dumps({'matched': False, 'window': args.window, 'bbox': None, 'error': str(error)}))
         return 2
     print(json.dumps(result, ensure_ascii=False))

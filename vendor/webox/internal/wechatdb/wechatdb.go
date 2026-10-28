@@ -460,6 +460,24 @@ func (store *Store) AccountInfoFor(username string) (AccountInfo, error) {
 	return accountInfoFromDB(db, username)
 }
 
+func (store *Store) ContactAvatarURL(username string) (string, error) {
+	db, found, err := store.database("contact/contact.db")
+	if err != nil {
+		return "", err
+	}
+	if !found {
+		return "", errors.New("contact database not found")
+	}
+	var small, big sql.NullString
+	if err := db.QueryRow("SELECT small_head_url,big_head_url FROM contact WHERE username=? AND delete_flag=0 LIMIT 1", username).Scan(&small, &big); err != nil {
+		return "", err
+	}
+	if value := strings.TrimSpace(small.String); value != "" {
+		return value, nil
+	}
+	return strings.TrimSpace(big.String), nil
+}
+
 func accountInfoFromDB(db *sql.DB, username string) (AccountInfo, error) {
 	var accountID string
 	var alias, nickname, bigHeadURL, smallHeadURL sql.NullString

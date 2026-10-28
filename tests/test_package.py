@@ -3,6 +3,7 @@ import hashlib
 import io
 import json
 from pathlib import Path
+import runpy
 import sys
 import tempfile
 from types import SimpleNamespace
@@ -49,6 +50,12 @@ class PackageTests(unittest.TestCase):
             for file in resource['files']:
                 self.assertIn(resource['revision'],file['url']);self.assertGreaterEqual(file['size'],0)
                 self.assertTrue(file.get('sha256') or file.get('git_blob_sha1'))
+
+    def test_release_includes_generic_ui_templates(self):
+        included=runpy.run_path(str(ROOT/'scripts/release.py'))['included']
+        templates=list((ROOT/'vendor/webox/docker/helpers/ui_templates').glob('*.png'))
+        self.assertEqual(len(templates),7)
+        self.assertTrue(all(included(path) for path in templates))
 
     def test_public_console_omits_dormant_capabilities(self):
         settings=json.loads((ROOT/'config/chat.example.json').read_text())

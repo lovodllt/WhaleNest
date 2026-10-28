@@ -98,6 +98,11 @@ func (service *Service) Send(ctx context.Context, target string, items []Item) (
 		}
 		locate := nativeLocateScript(recipient.SearchTerm, anchor.Text.Content)
 		locate += `; xdotool mousemove --window "$win" 310 "$((bubble_y-16))" click 3; sleep 0.2; xdotool key --clearmodifiers Up Down Return; sleep 0.3`
+		if os.Getenv("WEBOX_DETACHED_CHAT") == "1" {
+			locate = openChatScript(search) + `; python3 /webox/state/weagent/ui_quote_reply.py mention "$win" ` +
+				shellQuoteSingle(base64.StdEncoding.EncodeToString([]byte(anchor.Text.Content))) + " " +
+				shellQuoteSingle(base64.StdEncoding.EncodeToString([]byte(prepared[0].Mention)))
+		}
 		script = strings.Replace(script, openChatScript(search), locate, 1)
 	}
 	if service.pending != nil {

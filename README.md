@@ -181,7 +181,16 @@ D老师 /imageGen 画一张蓝色鲸鱼娘求投喂 token 的表情包
 
 遇到问题或有功能建议，欢迎到 [GitHub Issues](https://github.com/lovodllt/WhaleNest/issues) 反馈。请附上系统、DSH 版本、出错步骤和经过脱敏的错误信息。
 
-升级、备份和故障处理见 [手动安装教程](docs/MANUAL.md)。更新程序前先保留自己的配置、聊天数据和素材；模型与素材无需每次重新下载。
+已通过 Git 安装的用户可在原目录升级，配置、记忆、任务、素材和模型继续保留。本次包含容器内的界面适配，需要重建镜像：
+
+```bash
+bash stop.sh
+git pull --ff-only
+.venv/bin/python scripts/manage.py build
+bash start.sh
+```
+
+更新前先备份私人配置与数据；使用自启服务或 ZIP 安装时，按 [升级与备份](docs/MANUAL.md#升级与备份) 操作。无需重新运行配置向导或下载已有模型，微信可能仍需手机确认登录。
 
 ## 许可证
 

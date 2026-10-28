@@ -2,11 +2,15 @@
   "window_size": [980, 710],
   "template_dir": "ui_templates",
   "threshold": 0.9,
-  "scales": [1.0],
+  "scales": [0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2],
   "controls": {
     "editor": {"names": ["输入"], "role": "text"},
-    "voice_start": {"names": ["发语音"], "role": "push button"},
-    "voice_send": {"names": ["发送语音"], "role": "push button"},
-    "voice_cancel": {"names": ["取消"], "role": "push button"}
+    "voice_start": {"names": ["发语音"], "role": "push button", "template": "voice_start.png", "region": [0.5, 0.75, 1, 1]},
+    "voice_send": {"names": ["发送语音"], "role": "push button", "template": "voice_send.png", "region": [0.5, 0.75, 1, 1]},
+    "voice_cancel": {"names": ["取消"], "role": "push button", "template": "voice_cancel.png", "region": [0.5, 0.75, 1, 1]},
+    "quote_menu": {"names": ["引用"], "role": "menu item", "template": "quote_menu.png", "region": [0, 0, 1, 1]},
+    "quote_cancel": {"names": ["删除引用消息"], "role": "push button", "template": "quote_cancel.png", "region": [0, 0.65, 1, 0.95]},
+    "bubble_incoming": {"template": "bubble_incoming.png", "threshold": 0.9},
+    "bubble_outgoing": {"template": "bubble_outgoing.png", "threshold": 0.9}
   }
 }

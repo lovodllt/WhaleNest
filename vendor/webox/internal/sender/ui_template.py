@@ -35,6 +35,14 @@ def locate(image, template, roi=None, threshold=0.9, scales=(1.0,)):
     if best is None:
         return {'matched': False, 'bbox': None, 'score': None, 'reason': 'no_usable_scale_in_roi'}
     matched = best['score'] >= threshold
+    if matched:
+        bx, by, bw, bh = best['bbox']
+        sample = cv2.resize(template, (bw, bh), interpolation=cv2.INTER_AREA if best['scale'] < 1 else cv2.INTER_CUBIC)
+        scores = cv2.matchTemplate(area, sample, cv2.TM_CCOEFF_NORMED)
+        px, py = bx-x, by-y
+        scores[max(0, py-bh):py+bh, max(0, px-bw):px+bw] = -1
+        if cv2.minMaxLoc(scores)[1] >= threshold:
+            return {'matched': False, 'bbox': None, 'score': round(best['score'], 6), 'reason': 'ambiguous_matches'}
     return {'matched': matched, 'bbox': best['bbox'] if matched else None,
             'score': round(best['score'], 6), 'scale': best['scale'],
             'reason': 'matched' if matched else 'below_threshold'}

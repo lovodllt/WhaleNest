@@ -147,12 +147,30 @@ export QT_XCB_GL_INTEGRATION=xcb_egl
 export QT_LINUX_ACCESSIBILITY_ALWAYS_ON=1
 export WEBOX_SKIP_POSTLOGIN_ESCAPE=1
 gosu webox mkdir -p "$WEBOX_WEAGENT_STATE_DIR"
-for helper in native-reply ui_accessible.py ui_locator.py ui_template.py ui_quote_reply.py ui_voice_text.py ui_ready.py native-media; do
+for helper in native-reply ui_accessible.py ui_locator.py ui_template.py ui_avatar.py ui_quote_reply.py ui_voice_text.py ui_ready.py native-media; do
   gosu webox cp "${WEBOX_ROOT}/weagent/bin/$helper" "${WEBOX_WEAGENT_STATE_DIR}/$helper"
 done
-if [ ! -f "${WEBOX_WEAGENT_STATE_DIR}/ui_layout.json" ]; then
-  gosu webox cp "${WEBOX_ROOT}/weagent/bin/ui_layout.json" "${WEBOX_WEAGENT_STATE_DIR}/ui_layout.json"
-fi
+gosu webox python3 - "${WEBOX_ROOT}/weagent/bin" "${WEBOX_WEAGENT_STATE_DIR}/ui_layout.json" <<'PY'
+import json
+from pathlib import Path
+import sys
+sys.path.insert(0, sys.argv[1])
+from ui_locator import merge_layout
+path = Path(sys.argv[2])
+defaults = json.loads((Path(sys.argv[1]) / 'ui_layout.json').read_text())
+current = json.loads(path.read_text()) if path.exists() else {}
+merged = merge_layout(defaults, current)
+if not path.exists() or merged != current:
+    temporary = path.with_suffix('.json.tmp')
+    temporary.write_text(json.dumps(merged, ensure_ascii=False, indent=2)+'\n')
+    temporary.replace(path)
+PY
+gosu webox mkdir -p "${WEBOX_WEAGENT_STATE_DIR}/ui_templates"
+for template in "${WEBOX_ROOT}"/weagent/bin/ui_templates/*.png; do
+  [ -f "$template" ] || continue
+  target="${WEBOX_WEAGENT_STATE_DIR}/ui_templates/$(basename "$template")"
+  [ -e "$target" ] || gosu webox cp "$template" "$target"
+done
 start_agent
 start_wechat
 wait_critical

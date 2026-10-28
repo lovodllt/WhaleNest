@@ -6,6 +6,7 @@ import sys
 import time
 
 from ui_accessible import find_controls, connect, ACC, PROPS
+from ui_locator import message_point, click_control
 
 
 def click(control):
@@ -60,24 +61,48 @@ def preview_matches(title,text):
     return False
 
 
-def prepare(title,text):
+def prepare(window,title,text):
     cancel(title)
     rows = named(text,'list item',title)
     if len(rows)!=1:
         raise RuntimeError('Original message is not uniquely visible; ordinary reply required')
-    x,y,width,height = rows[0]['Extents']
-    subprocess.run(['xdotool','mousemove',str(x+100),str(y+height-25),'click','3'],check=True)
+    x,y = message_point(window,rows[0]['Extents'])
+    subprocess.run(['xdotool','mousemove',str(x),str(y),'click','3'],check=True)
     time.sleep(.1)
     choices = named('引用','menu item')
-    if len(choices)!=1:
-        editors = named('输入','text',title)
-        if len(editors)==1:
-            click(editors[0])
-        raise RuntimeError('Named quote menu is unavailable')
-    click(choices[0])
+    if len(choices)>1:
+        raise RuntimeError('Ambiguous quote menu')
+    if not choices:
+        try:
+            click_control(window,'quote_menu')
+        except RuntimeError:
+            editors = named('输入','text',title)
+            if len(editors)==1:
+                click(editors[0])
+            raise RuntimeError('Named quote menu and its template are unavailable')
+    else:
+        click(choices[0])
     if not named('删除引用消息','push button',title) or not preview_matches(title,text):
         cancel(title)
         raise RuntimeError('Quote preview does not match the requested message')
+
+
+def mention(window,title,text,username):
+    try:
+        from ui_avatar import avatar_point
+        rows = named(text,'list item',title)
+        if len(rows)!=1:
+            raise RuntimeError('Target message is not uniquely visible')
+        x,y = avatar_point(window,rows[0]['Extents'],username)
+        subprocess.run(['xdotool','mousemove',str(x),str(y),'click','3'],check=True)
+        time.sleep(.1)
+        choices = named('@TA','menu item')
+        if len(choices)!=1:
+            subprocess.run(['xdotool','key','Escape'],check=True)
+            raise RuntimeError('Mention menu is unavailable')
+        click(choices[0])
+    except Exception as error:
+        raise RuntimeError('native mention requires the owner or requester avatar match: '+type(error).__name__) from error
 
 
 if __name__=='__main__':
@@ -87,7 +112,9 @@ if __name__=='__main__':
         if action!='cleanup':
             title = subprocess.check_output(['xdotool','getwindowname',sys.argv[2]],text=True,timeout=3).strip()
             if action=='prepare':
-                prepare(title,base64.b64decode(sys.argv[3]).decode())
+                prepare(int(sys.argv[2]),title,base64.b64decode(sys.argv[3]).decode())
+            elif action=='mention':
+                mention(int(sys.argv[2]),title,base64.b64decode(sys.argv[3]).decode(),base64.b64decode(sys.argv[4]).decode())
             elif action=='cancel':
                 cancel(title)
             else:

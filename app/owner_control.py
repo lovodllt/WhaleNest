@@ -1,4 +1,4 @@
-"""Owner-private requests to send a short message to an existing group."""
+"""Owner-private requests to send a short message to an existing contact."""
 import json
 import re
 import time
@@ -50,12 +50,12 @@ def take_request(answer):
     return answer, request
 
 
-def prepare(request, binding, settings):
+def prepare(request, binding, settings, allow_private=False):
     if not isinstance(request, dict) or not isinstance(request.get('text', ''), str):
         raise ValueError('没理清要发的话，主人再说一下吧🐟')
     room = request.get('room')
-    if not isinstance(room, str) or not room.endswith('@chatroom') or room not in binding['rooms']:
-        raise ValueError('这个群还没认准，告诉本鱼群名吧🐟')
+    if not isinstance(room, str) or room not in binding['rooms'] or not allow_private and not room.endswith('@chatroom'):
+        raise ValueError('这个联系人还没认准，再查一下吧🐟')
     song = request.get('song')
     if song is not None:
         if not isinstance(song, str) or song not in settings.get('singing',{}).get('songs',{}):
@@ -78,9 +78,9 @@ def prepare(request, binding, settings):
 
 def enqueue(db, event_id, request, owner):
     now = int(time.time()*1000)
-    current = {'_room': request['room'], '会话类型': '群聊', '点名': True, '主人': False,
+    current = {'_room': request['room'], '会话类型': '群聊' if request['room'].endswith('@chatroom') else '私聊', '点名': True, '主人': False,
                '消息时间': now, '发言': request['text'],
-               '_owner_send': {'origin': event_id, 'owner': owner, 'voice': request.get('voice',False), 'song':request.get('song')},
+               '_owner_send': {'origin': event_id, 'owner': owner, 'room': request['room'], 'voice': request.get('voice',False), 'song':request.get('song')},
                '_source': {'type': 'owner_control'}}
     db.execute('INSERT OR IGNORE INTO inbox(id,prompt,time) VALUES(?,?,?)',
                ('owner-send-'+event_id, json.dumps(current, ensure_ascii=False), now))
@@ -88,11 +88,13 @@ def enqueue(db, event_id, request, owner):
 
 def finish(db, request, outcome):
     now = int(time.time()*1000)
-    text = {'sent': '群里的歌声送到啦🐟' if request.get('song') else '群语音发好啦🐟' if request.get('voice') else '群消息发好啦🐟',
-            'text': '语音没发成，已改发文字啦🐟', 'failed': '没发出去，群消息还没送达🐟',
-            'unknown': '群消息没确认，先不重复发啦🐟'}[outcome]
+    group = request.get('room', '@chatroom').endswith('@chatroom')
+    prefix = '群' if group else '私聊'
+    text = {'sent': ('群里的' if group else '')+'歌声送到啦🐟' if request.get('song') else prefix+'语音发好啦🐟' if request.get('voice') else prefix+'消息发好啦🐟',
+            'text': '语音没发成，已改发文字啦🐟', 'failed': '没发出去，消息还没送达🐟',
+            'unknown': '消息没确认，先不重复发啦🐟'}[outcome]
     if request.get('song') and outcome != 'sent':
-        text = '群里的歌声没确认，先不重复发啦🐟' if outcome == 'unknown' else '歌声没发出去，等会儿再试🐟'
+        text = ('群里的' if group else '')+'歌声没确认，先不重复发啦🐟' if outcome == 'unknown' else '歌声没发出去，等会儿再试🐟'
     current = {'_room': request['owner'], '会话类型': '私聊', '点名': True, '主人': True,
                '消息时间': now, '发言': text, '_owner_receipt': True,
                '_source': {'type': 'owner_control'}}

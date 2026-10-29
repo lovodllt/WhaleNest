@@ -559,6 +559,12 @@ def process_one(db, api, binding, chat_factory=DshChat, settings=None, chats=Non
             row = db.execute('SELECT asset_id FROM message_assets WHERE room=? AND msgid=?',(target,quote_ref)).fetchone()
             if row:
                 asset_id = row[0]
+            elif current['引用消息']['类型'] == 'image':
+                try:
+                    asset_id = chat_media.capture(db,api,target,{'roomid':target,'msgid':quote_ref,'msgtype':'image'})
+                except (OSError,ValueError,RuntimeError):
+                    asset_id = None
+            if asset_id:
                 current['素材ID'] = asset_id
                 current['引用消息']['附件已读取'] = True
                 current['附件状态'] = '本次附带的图片正是被引用的原图片或表情，用它回答本次提问'

@@ -48,6 +48,23 @@ type v2ImageCandidate struct {
 	modTime int64
 }
 
+func (store *Store) ImageLocation(roomID, messageID string) (int64, int64, error) {
+	shards, err := findMessageShards(store, roomID)
+	if err != nil {
+		return 0, 0, err
+	}
+	for _, shard := range shards {
+		var localID, created int64
+		query := fmt.Sprintf("SELECT local_id,create_time FROM [%s] WHERE server_id=? AND local_type %% 4294967296=3 LIMIT 1", shard.table)
+		err := shard.db.QueryRow(query, messageID).Scan(&localID, &created)
+		if errors.Is(err, sql.ErrNoRows) {
+			continue
+		}
+		return localID, created, err
+	}
+	return 0, 0, errors.New("image message was not found in this conversation")
+}
+
 func (store *Store) ReadImage(roomID string, localID, createTime int64, messageMD5 string) (*MediaFile, error) {
 	if roomID == "" || localID <= 0 || createTime <= 0 {
 		return nil, errors.New("invalid WeChat image message location")

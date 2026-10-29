@@ -6,7 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 	"syscall"
 	"time"
 
@@ -48,6 +50,14 @@ func run() error {
 	if err := syscall.Flock(int(lock.Fd()), syscall.LOCK_EX); err != nil {
 		return err
 	}
+	previous, _ := exec.Command("xdotool", "getactivewindow").Output()
+	defer func() {
+		if window := strings.TrimSpace(string(previous)); window != "" {
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+			defer cancel()
+			_ = exec.CommandContext(ctx, "xdotool", "windowactivate", window).Run()
+		}
+	}()
 	state := wechat.New(configuration.StateDir)
 	ready, err := state.InitializeIfReady()
 	if err != nil {

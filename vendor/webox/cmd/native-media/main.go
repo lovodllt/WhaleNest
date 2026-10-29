@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"time"
 
@@ -20,25 +21,38 @@ func main() {
 	}
 }
 
-func run() error {
-	var request struct {
-		wecom.Message
-		Action   string `json:"action"`
-		Username string `json:"username"`
+type mediaRequest struct {
+	wecom.Message
+	Action   string `json:"action"`
+	Username string `json:"username"`
+}
+
+func readRequest(input io.Reader) (mediaRequest, error) {
+	var request mediaRequest
+	if err := json.NewDecoder(input).Decode(&request); err != nil {
+		return request, err
 	}
-	if err := json.NewDecoder(os.Stdin).Decode(&request); err != nil {
+	if request.Action == wecom.ActionSend {
+		request.Action = ""
+	}
+	if request.Action != "" && request.Action != "contact_avatar" {
+		return request, errors.New("unsupported media action")
+	}
+	if request.Action == "contact_avatar" && (request.Username == "" || len(request.Username) > 200) {
+		return request, errors.New("a contact username is required")
+	}
+	if request.Action == "" && (request.RoomID == "" || request.MsgID == "" || request.Image == nil && request.MsgType != wecom.MessageTypeImage) {
+		return request, errors.New("image message, roomid and msgid required")
+	}
+	return request, nil
+}
+
+func run() error {
+	request, err := readRequest(os.Stdin)
+	if err != nil {
 		return err
 	}
 	message := request.Message
-	if request.Action != "" && request.Action != "contact_avatar" {
-		return errors.New("unsupported media action")
-	}
-	if request.Action == "contact_avatar" && (request.Username == "" || len(request.Username) > 200) {
-		return errors.New("a contact username is required")
-	}
-	if request.Action == "" && (message.Image == nil || message.RoomID == "" || message.Sequence <= 0 || message.MsgTime <= 0 || message.MsgID == "") {
-		return errors.New("image message, roomid, msgid, localid and msgtime required")
-	}
 	raw, err := os.ReadFile("/webox/state/weagent/wechat.key")
 	if err != nil {
 		return err
@@ -62,7 +76,18 @@ func run() error {
 		}
 		return json.NewEncoder(os.Stdout).Encode(map[string]any{"ret": 0, "username": request.Username, "account": fmt.Sprintf("%x", sha256.Sum256([]byte(key.DBDir))), "avatar_url": url})
 	}
-	image, err := store.ReadImage(message.RoomID, message.Sequence, time.UnixMilli(message.MsgTime).Unix(), message.Image.MD5Sum)
+	if message.Sequence <= 0 || message.MsgTime <= 0 {
+		localID, created, err := store.ImageLocation(message.RoomID, message.MsgID)
+		if err != nil {
+			return err
+		}
+		message.Sequence, message.MsgTime = localID, created*1000
+	}
+	md5 := ""
+	if message.Image != nil {
+		md5 = message.Image.MD5Sum
+	}
+	image, err := store.ReadImage(message.RoomID, message.Sequence, time.UnixMilli(message.MsgTime).Unix(), md5)
 	if err != nil {
 		return err
 	}

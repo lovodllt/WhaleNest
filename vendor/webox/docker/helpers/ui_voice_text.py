@@ -85,23 +85,31 @@ def main():
     request = json.load(sys.stdin)
     with open('/webox/state/weagent/ui-send.lock','a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
-        title = open_chat(request['remark'])
-        rows = voices(title)
-        if request['offset'] >= len(rows):
-            raise RuntimeError('Requested voice is not visible')
-        seconds, bounds = rows[-1-request['offset']]
-        if seconds != request['seconds']:
-            raise RuntimeError('Voice duration does not match')
-        win = window(request['remark'])
-        x,y = message_point(int(win),bounds,request['outgoing'])
-        command('xdotool','mousemove',str(x),str(y),'click','3')
-        time.sleep(.1)
-        choices = [c for c in find_controls('语音转文字') if c['Visible'] and c['Role']=='menu item']
-        if len(choices) != 1:
-            command('xdotool','key','Escape')
-            raise RuntimeError('Voice conversion menu is unavailable')
-        x,y,width,height = choices[0]['Extents']
-        command('xdotool','mousemove',str(x+width//2),str(y+height//2),'click','1')
+        previous = subprocess.run(['xdotool','getactivewindow'],capture_output=True,text=True,timeout=3).stdout.strip()
+        try:
+            title = open_chat(request['remark'])
+            rows = voices(title)
+            if request['offset'] >= len(rows):
+                raise RuntimeError('Requested voice is not visible')
+            seconds, bounds = rows[-1-request['offset']]
+            if seconds != request['seconds']:
+                raise RuntimeError('Voice duration does not match')
+            win = window(request['remark'])
+            x,y = message_point(int(win),bounds,request['outgoing'])
+            command('xdotool','mousemove',str(x),str(y),'click','3')
+            time.sleep(.1)
+            choices = [c for c in find_controls('语音转文字') if c['Visible'] and c['Role']=='menu item']
+            if len(choices) != 1:
+                command('xdotool','key','Escape')
+                raise RuntimeError('Voice conversion menu is unavailable')
+            x,y,width,height = choices[0]['Extents']
+            command('xdotool','mousemove',str(x+width//2),str(y+height//2),'click','1')
+        finally:
+            if previous:
+                try:
+                    subprocess.run(['xdotool','windowactivate',previous],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=3)
+                except (OSError,subprocess.TimeoutExpired):
+                    pass
     print(json.dumps({'ret':0}))
 
 

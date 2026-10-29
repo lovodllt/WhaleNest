@@ -12,6 +12,32 @@ import (
 	"time"
 )
 
+func TestImageLocationUsesExactMessageAndConversation(t *testing.T) {
+	db, err := sql.Open("sqlite3", ":memory:")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+	for i, room := range []string{"room-a", "room-b"} {
+		table := fmt.Sprintf("Msg_%x", md5.Sum([]byte(room)))
+		mustExec(t, db, fmt.Sprintf("CREATE TABLE [%s] (local_id INTEGER,create_time INTEGER,server_id INTEGER,local_type INTEGER)", table))
+		mustExec(t, db, fmt.Sprintf("INSERT INTO [%s] VALUES (?,100,10,3),(9,200,11,1)", table), i+1)
+	}
+	store := &Store{dbDir: t.TempDir(), keys: map[string]string{"message/message_0.db": "unused"}, dbs: map[string]*sql.DB{"message/message_0.db": db}}
+	for i, room := range []string{"room-a", "room-b"} {
+		local, created, err := store.ImageLocation(room, "10")
+		if err != nil || local != int64(i+1) || created != 100 {
+			t.Fatalf("wrong image location: %d %d %v", local, created, err)
+		}
+	}
+	if _, _, err := store.ImageLocation("room-a", "11"); err == nil {
+		t.Fatal("text message was accepted as an image")
+	}
+	if _, _, err := store.ImageLocation("another-room", "10"); err == nil {
+		t.Fatal("image from another conversation was accepted")
+	}
+}
+
 func TestPackedImageMD5UsesMessageLocalImageField(t *testing.T) {
 	fixtures := []struct{ packed, want string }{
 		{"080110021a22222065656236653430333532666462643566303865323263326338303364333464305800", "eeb6e40352fdbd5f08e22c2c803d34d0"},

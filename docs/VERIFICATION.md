@@ -74,4 +74,6 @@
 - Linux本机25项检查中19项通过，6项依赖容器OpenCV的界面检查跳过。新增5项覆盖实际单实例启停、陈旧PID不误伤另一进程、身份不符不采信、Windows锁与后台标志、中文空格路径和HTTP文字发送。追加隔离启停检查通过。
 - 在没有挂载私人状态、没有网络且未启动微信的独立镜像中，确认修正后的助手目录可由非root用户读取并复制模板。新增镜像源与Go代理参数，Debian源对noVNC和运行层一致生效；未因此重建现用微信容器。
 - Windows反馈方确认WCDB混淆密钥补丁更新后 `ready:true`，据此更新现场状态；维护者没有读取对方密钥或内存。
-- 增加Windows与Ubuntu的GitHub Actions检查，以及Windows PowerShell语法检查。完整原生Windows微信、多媒体与离线整合安装包仍不在上述验收范围，具体边界见 `WINDOWS.md`。
+- Windows CI发现打包路径分隔符导致模板遗漏，也会使私人配置排除规则失效；已统一使用POSIX归档路径，并补实际私人配置排除检查。
+- [GitHub Actions验证通过](https://github.com/lovodllt/WhaleNest/actions/runs/40910270563)：Windows共25项检查，18项通过、7项容器界面检查跳过；Ubuntu共25项，19项通过、6项跳过。两平台均完成干净源码打包、中文空格路径初始化及ZIP/TAR逐文件校验，Windows额外通过PowerShell语法检查。
+- 完整原生Windows微信、多媒体与离线整合安装包仍不在上述验收范围，具体边界见 `WINDOWS.md`。现用微信未重启，只读健康检查仍为 `ready:true`。

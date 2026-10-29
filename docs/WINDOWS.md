@@ -61,7 +61,19 @@ py -3.12 -m venv .venv
 | 重启后要求微信登录 | 停止桥接保留微信容器及数据；容器本身重启后仍可能需要在6860页面确认登录，不承诺自动登录 |
 | 4.1.13.26 只找到盐、没有明文密钥 | 已有 WCDB 混淆缓冲区补丁；反馈方确认更新后 `/healthz` 为 `ready:true`，这是容器内构建兼容问题 |
 
-旧版本升级前先用原来的停止入口退出服务，再更新程序和基础依赖。旧的整数 PID 记录不会被新版本当作可信进程身份，避免误杀；不要让新旧桥接同时运行。
+## 已配置机器更新
+
+旧版本升级前先用原来的停止入口退出服务。若旧版停止入口本身失效，在任务管理器核对命令行后结束本项目主控及子服务。旧的整数 PID 记录不会被新版本当作可信进程身份；不要让新旧桥接同时运行。
+
+保留 `data/`、`resources/` 和本机配置，更新源码后，原生测试路线执行：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r config/requirements.txt
+.\run-native.ps1 -Action build
+.\run-native.ps1 -Action start
+```
+
+WSL 路线在 Ubuntu 内更新基础依赖，再执行 `scripts/manage.py build` 和 `scripts/manage.py start`。模板目录权限修复需要重新构建镜像才能生效；替换微信容器后可能需要再次确认登录，不要删除已有微信数据。
 
 ## 安装权限与离线准备
 

@@ -108,19 +108,16 @@ class ConsoleBackend:
     def target_map(self, db, settings, contacts=()):
         binding = self.meta(db, 'binding', {})
         known = binding.get('known_chats', {})
-        rooms = {c['roomid']: c.get('remark') or c.get('nickname') or '未命名会话'
-                 for c in contacts if c.get('roomid') not in (*binding.get('self_ids', []), 'filehelper', 'weixin', 'newsapp')
+        contacts = contacts or binding.get('rooms', {}).values()
+        rooms = {c['roomid']: (c.get('remark') if not (c.get('remark') or '').startswith('webox.') else '') or c.get('nickname') or '未命名会话'
+                 for c in contacts if c.get('roomid') not in (*binding.get('self_ids', []), 'filehelper', 'weixin', 'newsapp', 'fmessage', 'medianote', 'floatbottle', 'notifymessage')
                  and not c.get('roomid', '').startswith('gh_')}
-        for key, room in known.items():
-            rooms.setdefault(room, settings.get('chats', {}).get(key, {}).get('label') or
-                             {'webox.owner':'主人私聊', 'webox.test':'测试群'}.get(key, '已绑定会话'))
-        for key, config in settings.get('chats', {}).items():
-            room = known.get(key, key)
-            if room.endswith('@chatroom') or room in known.values():
-                rooms.setdefault(room, config.get('label') or '已配置会话')
-        for row in db.execute('SELECT DISTINCT room FROM tasks'):
-            rooms.setdefault(row['room'], '已记录群聊' if row['room'].endswith('@chatroom') else '已记录私聊')
-        return {self.target_id(room): {'room':room, 'label':label, 'kind':'group' if room.endswith('@chatroom') else 'private'}
+        if not contacts:
+            for room in known.values():
+                rooms.setdefault(room, '已绑定群聊' if room.endswith('@chatroom') else '已绑定私聊')
+        keys = {room:key for key,room in known.items()}
+        return {self.target_id(room): {'room':room, 'label':label, 'kind':'group' if room.endswith('@chatroom') else 'private',
+                                     'configured':keys.get(room,room) in settings.get('chats',{})}
                 for room, label in rooms.items()}
 
     def schema(self, settings, voice, targets):
@@ -169,8 +166,10 @@ class ConsoleBackend:
             known = self.meta(db,'binding',{}).get('known_chats',{})
         for config_key, rule in settings.get('chats', {}).items():
             room = known.get(config_key,config_key)
+            if room not in by_room:
+                continue
             token = self.target_id(room)
-            section = '会话 · ' + (rule.get('label') or by_room.get(room,{}).get('label') or '已配置会话')
+            section = '会话 · ' + by_room[room]['label']
             if room.endswith('@chatroom'):
                 add(f'chat.{token}.natural_reply','允许自然参与','boolean',['chats',config_key,'natural_reply'],section,default=settings['defaults'].get('natural_reply',False),
                     description='仅最近10分钟出现唤醒词时，判断是否值得接话；不会句句回应')
@@ -296,7 +295,7 @@ class ConsoleBackend:
         return {'status':status,'config':{'revision':revision,'fields':fields,'values':values,
                 'notes':['保存后由运行中的机器人即时读取，无需重启微信','具体会话规则覆盖默认规则；主动发消息白名单和时段逐会话设置','定时任务按北京时间执行；取消使用可恢复的取消状态','记忆内容仅在记忆手账页按需读取；不展示密钥或原始聊天正文']},
                 'plugins':self.plugin_state(settings,voice,status,fields),'tasks':tasks,
-                'targets':[{'id':key,**{k:v[k] for k in ('label','kind')}} for key,v in targets.items()],
+                'targets':[{'id':key,**{k:v[k] for k in ('label','kind','configured')}} for key,v in targets.items()],
                 'csrf_token':self.csrf_token}
 
     def memories(self, selected='personality'):
@@ -384,8 +383,9 @@ class ConsoleBackend:
             if body.get('revision')!=self.revision():
                 raise APIError(409,'配置已被更新，请刷新后重新修改')
             settings, voice = self.settings()
+            contacts = self.probe()[1] if any(key.startswith('chat.') for key in values) else ()
             with self.db() as db:
-                targets = self.target_map(db,settings)
+                targets = self.target_map(db,settings,contacts)
             fields, paths, _ = self.schema(settings,voice,targets)
             definitions = {f['key']:f for f in fields}
             for key,value in values.items():
@@ -426,12 +426,28 @@ class ConsoleBackend:
             if 'voice' in changed:self.write_json(self.voice_path,voice)
         return self.state()
 
+    def configure_chat(self, body):
+        _, contacts = self.probe()
+        with self.lock, self.db() as db:
+            if body.get('revision') != self.revision():
+                raise APIError(409,'配置已被更新，请刷新后重新选择')
+            settings,_ = self.settings()
+            target = self.target_map(db,settings,contacts).get(body.get('target_id'))
+            if target is None:
+                raise APIError(400,'请从当前微信联系人中选择聊天')
+            known = self.meta(db,'binding',{}).get('known_chats',{})
+            key = next((key for key,room in known.items() if room == target['room']),target['room'])
+            settings.setdefault('chats',{}).setdefault(key,{})
+            self.write_json(self.settings_path,settings)
+        return self.state()
+
     def create_task(self, body):
         text = body.get('text')
         if not isinstance(text,str) or not 1<=len(text.strip())<=600:
             raise APIError(400,'请输入时间和提醒内容，最多600字')
+        _,contacts = self.probe()
         with self.lock, self.db() as db:
-            settings,_=self.settings();targets=self.target_map(db,settings)
+            settings,_=self.settings();targets=self.target_map(db,settings,contacts)
             target=targets.get(body.get('target_id'))
             if target is None:
                 raise APIError(400,'请选择已经绑定的聊天目标')
@@ -531,7 +547,7 @@ class Handler(SimpleHTTPRequestHandler):
                 '/api/resources/import-character':lambda body:self.server.backend.resources.import_character(body),
                 '/api/resources/activate-persona':lambda body:self.server.backend.resources.activate_persona(body.get('id')),
                 '/api/persona':lambda body:save_persona(self.server.backend.root,body),
-                '/api/config':self.server.backend.save_config,'/api/tasks':self.server.backend.create_task,
+                '/api/config':self.server.backend.save_config,'/api/chats/configure':self.server.backend.configure_chat,'/api/tasks':self.server.backend.create_task,
                 '/api/tasks/cancel':self.server.backend.cancel_task,'/api/memory':self.server.backend.save_memory,'/api/check':lambda body:self.server.backend.state()}
         action=routes.get(urlsplit(self.path).path)
         if action is None:return self.json_response(404,{'error':'没有这个接口'})

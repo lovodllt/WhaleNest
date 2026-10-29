@@ -122,6 +122,7 @@ def plugins():
     print('所需 DSH 插件已安装。模型权重仍按需下载')
 
 def check():
+    import importlib.util
     env=environment()
     checks={name:bool(shutil.which(env.get('DAFEIYU_'+name.upper(),name))) for name in ['node','dsh','docker','npm']}
     try:
@@ -130,6 +131,7 @@ def check():
     checks['configured']=RUNTIME.exists();checks['model_key']=bool(env.get('DAFEIYU_MODEL_API_KEY'))
     home=Path(env.get('DSH_HOME',str(Path.home()/'.dsh')))
     checks['memory_plugin']=(home/'profiles/dafeiyu-runtime/node_modules/dsh-mnemon-source-runtime').exists()
+    checks['qr_decoder']=importlib.util.find_spec('zxingcpp') is not None
     for key,ok in checks.items():print(('✓ ' if ok else '· ')+key)
     print('首次配置：setup；安装插件：plugins；模型、图片等：资源中心；微信官方安装包：wechat-package')
     return all(checks[k] for k in ['node','dsh','docker','docker_compose','configured','model_key'])

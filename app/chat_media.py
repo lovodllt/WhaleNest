@@ -146,6 +146,23 @@ def image_blocks(db, room, asset_id):
     return blocks
 
 
+def image_codes(db, room, asset_id):
+    row = db.execute('SELECT path,kind FROM assets WHERE room=? AND id=?',(room,asset_id)).fetchone()
+    if row is None:
+        raise ValueError('Image is not in this conversation')
+    if row[1] != 'image':
+        return None
+    try:
+        import zxingcpp
+    except ImportError:
+        return {'status':'unavailable','codes':[],'error':'本机尚未安装二维码解码依赖，不能靠看图猜码中内容'}
+    with Image.open(safe_path(room,row[0])) as image:
+        results = zxingcpp.read_barcodes(ImageOps.exif_transpose(image).convert('RGB'),
+                                        formats=zxingcpp.BarcodeFormat.QRCode)
+    codes = list(dict.fromkeys(result.text for result in results if result.valid and result.text))
+    return {'status':'decoded' if codes else 'not_found','codes':codes[:4]}
+
+
 def public_assets():
     return json.loads((PUBLIC/'index.json').read_text())['assets']
 

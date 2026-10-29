@@ -7,6 +7,7 @@
 - Webox：本机源文件标注 MIT，修改后仍保留原作者的版权与许可证。
 - Webox 的 `internal/wechatdb/wechatdb.go` 有来自 wx-cli 的 Apache-2.0 部分，见上游 `THIRD_PARTY_NOTICES.md` 和 `LICENSES/Apache-2.0.txt`；不能因 Webox 主许可证为 MIT 而省略该部分声明。来源仓库目前 HTTP 451，正式发布前单独核查，不通过镜像绕过访问限制。
 - DeepSeek Harness、Mnemon、modsearch 和 dsh-kaomoji：本机已安装包声明 MIT，实际分发时记录精确版本并保留声明。
+- ZXing-C++ Python 绑定：二维码解码依赖 `zxing-cpp==3.1.1`，按随包 Apache-2.0 许可证及版权声明处理；通过基础依赖安装，不复制其源文件。
 - GPT-SoVITS 与 Amphion：程序仓库声明 MIT，模型权重另按各模型来源处理。
 - Seed-VC：本机代码许可为 GPL-3.0。唱歌插件保留其来源和许可，不把第三方代码改标为本项目原创代码的许可证。
 - edge-tts、FFmpeg 及其他依赖以实际分发版本的随附许可证为准，不仅依据 GitHub 自动识别结果判断。

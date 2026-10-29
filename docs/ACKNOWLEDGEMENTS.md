@@ -10,6 +10,7 @@
 | [Webox](https://github.com/netcat-ai/webox) | Docker 内 Linux 微信及消息接口；本项目维护额外适配与辅助程序 |
 | [dsh-mnemon](https://github.com/omdsh-dev/dsh-mnemon) | Mnemon 记忆存储和 Runtime Source；本项目另做作用域、提炼与管理界面 |
 | [modsearch](https://github.com/liustack/modsearch) | 简单公开联网查询 |
+| [ZXing-C++](https://github.com/zxing-cpp/zxing-cpp) | 本机二维码解码，使用 Python 绑定 |
 | [dsh-kaomoji](https://github.com/TianJie52009/dsh-kaomoji) | 颜文字插件 |
 | [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) | 微信界面文字和目标定位辅助 |
 | [FFmpeg](https://github.com/FFmpeg/FFmpeg) | 媒体处理；具体构建所包含的组件另行列明 |

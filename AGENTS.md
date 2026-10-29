@@ -5,6 +5,7 @@
 ## 安装与配置
 
 - 支持 Linux x86_64；Windows 首版通过 Docker Desktop＋WSL2 Ubuntu 运行。使用 Python 3.12、Node.js 24 和本机 DSH `0.2.1-rc.2`。
+- Windows 原生主控有实验入口，边界见 `docs/WINDOWS.md`；不将启停检查通过描述成完整微信多媒体链路可用。宿主锁和进程查询统一复用 `app/runtime_support.py`，不使用 `os.kill(pid,0)` 探活。
 - 先运行 `python3 scripts/manage.py check` 查看环境，再按 `docs/QUICKSTART.md` 或 `docs/MANUAL.md` 补齐依赖。检查不通过时报告具体缺失项，不宣称安装完成。
 - 主程序和 DSH 在宿主机或 WSL 内运行；Docker 负责固定版本的 Linux 微信与 Webox。主聊天必须经过本机 DSH。
 - 基础聊天、消息队列、控制台和定时任务是同一套程序。可选依赖按能力安装，不把每个开关拆成独立软件。

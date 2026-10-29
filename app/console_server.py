@@ -19,6 +19,10 @@ from urllib.parse import urlsplit,parse_qs
 import urllib.request
 from zoneinfo import ZoneInfo
 
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from runtime_support import ensure_utf8,watch_stop
+ensure_utf8()
+
 import chat_tasks
 import person_memory
 from resource_center import Resources
@@ -33,7 +37,7 @@ class APIError(Exception):
 
 
 def read_json(path, default=None):
-    return json.loads(path.read_text()) if path.is_file() else default
+    return json.loads(path.read_text(encoding='utf-8')) if path.is_file() else default
 
 
 def at_path(data, path, default=None):
@@ -196,7 +200,9 @@ class ConsoleBackend:
     def probe(self):
         service_names = {'bridge':('dafeiyu-wechat-group.service','微信消息桥接'), 'tts':('microsoft-tts.service','微软语音'), 'clone':('gpt-sovits-local.service','本地音色克隆')}
         services = []
-        env = {**os.environ,'XDG_RUNTIME_DIR':f'/run/user/{os.getuid()}', 'DBUS_SESSION_BUS_ADDRESS':f'unix:path=/run/user/{os.getuid()}/bus'}
+        env = dict(os.environ)
+        if hasattr(os,'getuid'):
+            env.update(XDG_RUNTIME_DIR=f'/run/user/{os.getuid()}',DBUS_SESSION_BUS_ADDRESS=f'unix:path=/run/user/{os.getuid()}/bus')
         for key, (unit,label) in service_names.items():
             try:
                 result = subprocess.run([sys.executable,str(self.root/'scripts/service_status.py'),key],capture_output=True,text=True,timeout=2,env=env)
@@ -216,7 +222,7 @@ class ConsoleBackend:
             wechat['service_available'] = bool(health.get('ok'))
             wechat['detail'] = '微信登录会话不可用，请在登录页面确认' if not health.get('ready') else '等待核对登录账号'
             if health.get('ready'):
-                token = (self.webox_state/'weagent/api-token').read_text().strip()
+                token = (self.webox_state/'weagent/api-token').read_text(encoding='utf-8').strip()
                 headers = {'AuthorizationType':'ilink_bot_token','Authorization':'Bearer '+token,'X-WECHAT-UIN':'dafeiyu'}
                 info = self.http_json('http://127.0.0.1:48080/ilink/bot/userinfo',headers)
                 wechat['connected'] = info.get('ret')==0
@@ -307,7 +313,7 @@ class ConsoleBackend:
             queue={row['status']:row['n'] for row in db.execute('SELECT status,COUNT(*) n FROM person_memory_queue GROUP BY status')}
         labels={}
         try:
-            token=(self.webox_state/'weagent/api-token').read_text().strip()
+            token=(self.webox_state/'weagent/api-token').read_text(encoding='utf-8').strip()
             contacts=self.http_json('http://127.0.0.1:48080/ilink/bot/contacts',{'AuthorizationType':'ilink_bot_token','Authorization':'Bearer '+token,'X-WECHAT-UIN':'dafeiyu'})
             labels={c['roomid']:c.get('remark') or c.get('nickname') for c in contacts.get('contacts',[])}
         except (OSError,ValueError):pass
@@ -371,7 +377,7 @@ class ConsoleBackend:
             dest = backup/(str(time.time_ns())+'-'+path.name)
             shutil.copy2(path,dest);dest.chmod(0o600)
         temporary = path.with_name(path.name+'.console.tmp')
-        temporary.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+        temporary.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         temporary.chmod(0o600)
         temporary.replace(path)
 
@@ -486,7 +492,7 @@ def save_persona(root,body):
     if path.exists():
         backup=root/'data/persona-backups';backup.mkdir(parents=True,exist_ok=True)
         shutil.copy(path,backup/(str(time.time_ns())+'.md'))
-    temporary=path.with_suffix('.tmp');temporary.write_text(text);temporary.replace(path)
+    temporary=path.with_suffix('.tmp');temporary.write_text(text,encoding='utf-8');temporary.replace(path)
     return {'saved':True}
 
 
@@ -517,7 +523,7 @@ class Handler(SimpleHTTPRequestHandler):
         if not self.allowed_host():return self.json_response(403,{'error':'只允许本机控制台访问'})
         path=urlsplit(self.path).path
         if path=='/api/resources':return self.api_call(self.server.backend.resources.state)
-        if path=='/api/persona':return self.json_response(200,{'text':(self.server.backend.root/'resources/persona.md').read_text() if (self.server.backend.root/'resources/persona.md').exists() else ''})
+        if path=='/api/persona':return self.json_response(200,{'text':(self.server.backend.root/'resources/persona.md').read_text(encoding='utf-8') if (self.server.backend.root/'resources/persona.md').exists() else ''})
         if path=='/api/state':return self.api_call(self.server.backend.state)
         if path=='/api/memory':return self.api_call(lambda:self.server.backend.memories(parse_qs(urlsplit(self.path).query).get('scope',['personality'])[0]))
         if path=='/api/mobile-qr.svg':
@@ -589,8 +595,12 @@ def main():
     mobile=ThreadingHTTPServer(('127.0.0.1',args.mobile_port),Handler)
     mobile.backend=server.backend;mobile.remote_only=True
     threading.Thread(target=mobile.serve_forever,daemon=True).start()
+    watch_stop(server.backend.root/'data/run/stop.flag',server.shutdown)
     print(f'WhaleNest live console: http://127.0.0.1:{args.port}/',flush=True)
-    server.serve_forever()
+    try:
+        server.serve_forever()
+    finally:
+        mobile.shutdown();mobile.server_close();server.server_close()
 
 
 if __name__=='__main__':main()

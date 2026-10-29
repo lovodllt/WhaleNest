@@ -10,16 +10,16 @@ VIEW_LOCK = threading.Lock()
 
 
 def rules():
-    return json.loads((ROOT.parents[1]/'config/image-rules.json').read_text())
+    return json.loads((ROOT.parents[1]/'config/image-rules.json').read_text(encoding='utf-8'))
 
 
 def catalog():
     result = {}
     for path in sorted(ROOT.glob('*/设定.json')):
-        item = json.loads(path.read_text())
-        item['notes'] = '\n'.join(p.read_text() for p in sorted(path.parent.glob('*.md')) if p.name != 'D老师视角.md')
+        item = json.loads(path.read_text(encoding='utf-8'))
+        item['notes'] = '\n'.join(p.read_text(encoding='utf-8') for p in sorted(path.parent.glob('*.md')) if p.name != 'D老师视角.md')
         view = path.parent/'D老师视角.json'
-        item['ds_view'] = json.loads(view.read_text()) if view.exists() else {}
+        item['ds_view'] = json.loads(view.read_text(encoding='utf-8')) if view.exists() else {}
         item['folder'] = path.parent
         result[item['id']] = item
     return result
@@ -138,11 +138,11 @@ def update_views(updates, allowed, source):
             view.update(scope='虚构AI朋友日常与D老师的主观印象，非现实经历', updated_at=now)
             path = item['folder']/'D老师视角.json'
             temporary = path.with_suffix('.json.tmp')
-            temporary.write_text(json.dumps(view, ensure_ascii=False, indent=2)+'\n')
+            temporary.write_text(json.dumps(view, ensure_ascii=False, indent=2)+'\n',encoding='utf-8')
             temporary.replace(path)
             text = '# D老师眼里的'+item['name']+'\n\n'+view['scope']+'\n\n我的印象：'+view.get('impression', '还在慢慢了解')+'\n\n我们的关系：'+view.get('relationship', 'AI朋友')+'\n\n## 虚构日常记录\n\n'
             text += '\n'.join('- '+entry['time'][:10]+'｜'+entry['kind']+'｜'+entry['text'] for entry in view['events']) or '暂时还没有小故事记录'
-            (item['folder']/'D老师视角.md').write_text(text+'\n')
+            (item['folder']/'D老师视角.md').write_text(text+'\n',encoding='utf-8')
             changed += 1
         if changed:
             render_views()
@@ -157,4 +157,4 @@ def render_views():
         view = item['ds_view']
         text += '\n## '+item['name']+'\n\n'+view.get('impression', '还在慢慢了解')+'\n\n关系：'+view.get('relationship', 'AI朋友')+'\n'
         text += ''.join('\n- '+entry['time'][:10]+'｜'+entry['text'] for entry in view.get('events', [])[-3:])+'\n'
-    (ROOT/'D老师的AI朋友.md').write_text(text)
+    (ROOT/'D老师的AI朋友.md').write_text(text,encoding='utf-8')

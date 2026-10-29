@@ -1,6 +1,5 @@
 """Per-WeChat-account, per-conversation memory using Mnemon's local Source."""
 import hashlib
-import fcntl
 import json
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -11,6 +10,7 @@ import time
 import datetime
 from contextlib import contextmanager
 from dsh_chat import DshChat, NODE, STATE
+from runtime_support import file_lock
 
 ROOT=STATE/'person-memory'
 ADAPTER=Path(__file__).with_suffix('.mjs')
@@ -50,8 +50,7 @@ def policy(settings=None):
 @contextmanager
 def locked(root):
     root.mkdir(parents=True,exist_ok=True,mode=0o700)
-    with (root/'.management.lock').open('a') as lock:
-        fcntl.flock(lock,fcntl.LOCK_EX)
+    with file_lock(root/'.management.lock'):
         yield
 
 
@@ -162,7 +161,7 @@ def purge_history(db,room,actor,through=None,state=STATE):
         actor_hash=scope(room,actor)['person']
         for base in ('sessions','memory-sessions'):
             for path in (state/base).glob('*/*/session.v4.jsonl'):
-                if path.parent.name.startswith('webox-direct-'+short+'-') or (base=='memory-sessions' and actor_hash in path.read_text()):
+                if path.parent.name.startswith('webox-direct-'+short+'-') or (base=='memory-sessions' and actor_hash in path.read_text(encoding='utf-8')):
                     shutil.rmtree(path.parent)
 
 
@@ -171,7 +170,7 @@ def purge_text_logs(texts,state=STATE):
     with locked(state/'person-memory'):
         for base in ('sessions','memory-sessions'):
             for path in (state/base).glob('*/*/session.v4.jsonl'):
-                raw=path.read_text()
+                raw=path.read_text(encoding='utf-8')
                 if any(text in raw or json.dumps(text,ensure_ascii=True)[1:-1] in raw for text in texts):shutil.rmtree(path.parent)
 
 

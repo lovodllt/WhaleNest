@@ -9,11 +9,12 @@ import secrets
 import subprocess
 import threading
 import time
+from runtime_support import node_entry
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / 'data/chat'
 NODE = os.environ.get('DAFEIYU_NODE') or shutil.which('node') or 'node'
-DSH = os.environ.get('DAFEIYU_DSH') or shutil.which('dsh') or 'dsh'
+DSH = node_entry(os.environ.get('DAFEIYU_DSH') or shutil.which('dsh') or 'dsh','node_modules/@deepseek-ai/dsh/lib/bin.js')
 
 
 class DshChat:
@@ -36,7 +37,7 @@ class DshChat:
             env.update({
                 'DAFEIYU_TOOLS_MODULE': subprocess.check_output([NODE,'-e',
                     "console.log(require.resolve('@deepseek-ai/dsh-tools',{paths:[process.argv[1]]}))",
-                    str(Path(DSH).resolve().parent)],text=True).strip(),
+                    str(Path(DSH).resolve().parent)],text=True,encoding='utf-8').strip(),
                 'DAFEIYU_ACTION_URL': f'http://127.0.0.1:{self.action_server.server_port}/action',
                 'DAFEIYU_ACTION_TOKEN': self.action_token,
             })
@@ -48,7 +49,7 @@ class DshChat:
             self.proc = subprocess.Popen(
                 command, cwd=STATE, env=env,
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.stderr,
-                text=True, bufsize=1)
+                text=True, encoding='utf-8', bufsize=1)
             threading.Thread(target=self._read, daemon=True).start()
             self.rpc('initialize', {'cwd': str(STATE), 'provider': os.environ.get('DAFEIYU_PROVIDER','configured'),
                                    'model': os.environ.get('DAFEIYU_MODEL','deepseek-chat'), 'maxTokens': 4096}, 40)
@@ -183,7 +184,7 @@ class DshChat:
     def reply(self, session_id, prompt, resume=False, images=None, max_chars=1800, tools=None):
         persona = ROOT/'resources/persona.md'
         if self.use_persona and persona.is_file():
-            prompt = '使用者配置的人设：\n'+persona.read_text()[:32768]+'\n本轮输入：\n'+prompt
+            prompt = '使用者配置的人设：\n'+persona.read_text(encoding='utf-8')[:32768]+'\n本轮输入：\n'+prompt
         with self.tool_lock:
             self.tool_context = (session_id, tools) if self.owner_tools and tools is not None else None
             self.tool_calls = 0

@@ -164,7 +164,7 @@ def image_codes(db, room, asset_id):
 
 
 def public_assets():
-    return json.loads((PUBLIC/'index.json').read_text())['assets']
+    return json.loads((PUBLIC/'index.json').read_text(encoding='utf-8'))['assets']
 
 
 def describe_sticker(db, chat, room, asset_id):

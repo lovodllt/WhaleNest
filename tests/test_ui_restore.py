@@ -1,6 +1,7 @@
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import sys
 import types
@@ -8,6 +9,7 @@ import unittest
 from unittest.mock import Mock, mock_open, patch
 
 
+@unittest.skipIf(os.name=='nt','Linux 微信界面助手在容器内执行')
 class WindowRestoreTests(unittest.TestCase):
     def test_voice_conversion_restores_original_window_on_success_and_failure(self):
         helpers = Path(__file__).resolve().parents[1] / 'vendor/webox/docker/helpers'

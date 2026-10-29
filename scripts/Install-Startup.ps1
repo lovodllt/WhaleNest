@@ -1,4 +1,4 @@
-param([string]$Distro = "Ubuntu")
+﻿param([string]$Distro = "Ubuntu")
 $ErrorActionPreference = "Stop"
 $ProjectPath = Split-Path -Parent $PSScriptRoot
 $LinuxPath = (& wsl.exe --distribution $Distro wslpath -u $ProjectPath).Trim()

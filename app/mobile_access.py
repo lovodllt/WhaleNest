@@ -50,7 +50,7 @@ def main():
         raise SystemExit('未确认私有 HTTPS 入口，暂不保存手机地址')
     path = ROOT/'data/console-access.json'
     temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps({'origin':origin,'allowed_login':login},ensure_ascii=False,indent=2)+'\n')
+    temporary.write_text(json.dumps({'origin':origin,'allowed_login':login},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     temporary.chmod(0o600);temporary.replace(path)
     print('手机私有访问地址：'+origin)
     print('安卓手机连接同一账号的 Tailscale 后，用 Chrome 或 Edge 打开此地址')

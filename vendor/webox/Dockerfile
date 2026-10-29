@@ -2,6 +2,8 @@ ARG GO_BUILDER_IMAGE=golang:1.26-bookworm
 ARG DEBIAN_RUNTIME_IMAGE=debian:bookworm-slim
 
 FROM ${GO_BUILDER_IMAGE} AS build
+ARG GOPROXY=https://proxy.golang.org,direct
+ENV GOPROXY=${GOPROXY}
 WORKDIR /src
 COPY go.mod go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod go mod download
@@ -15,15 +17,23 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -extldflags=-s" -o /out/native-media ./cmd/native-media && \
     CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -extldflags=-s" -o /out/native-reply ./cmd/native-reply
 
-FROM ${DEBIAN_RUNTIME_IMAGE} AS novnc-assets
+FROM ${DEBIAN_RUNTIME_IMAGE} AS debian-base
+ARG APT_DEBIAN_MIRROR=
+ARG APT_DEBIAN_SECURITY_MIRROR=
+RUN set -eux; \
+    if [ -n "$APT_DEBIAN_MIRROR" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+      sed -i "s|http://deb.debian.org/debian\([[:space:]]\|$\)|$APT_DEBIAN_MIRROR\1|g" /etc/apt/sources.list.d/debian.sources; \
+    fi; \
+    if [ -n "$APT_DEBIAN_SECURITY_MIRROR" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
+      sed -i "s|http://deb.debian.org/debian-security|$APT_DEBIAN_SECURITY_MIRROR|g; s|http://security.debian.org/debian-security|$APT_DEBIAN_SECURITY_MIRROR|g" /etc/apt/sources.list.d/debian.sources; \
+    fi
+
+FROM debian-base AS novnc-assets
 RUN apt-get update && \
     apt-get install -y --no-install-recommends novnc && \
     mkdir -p /out && cp -a /usr/share/novnc/. /out/
 
-FROM ${DEBIAN_RUNTIME_IMAGE} AS runtime-base
-ARG APT_DEBIAN_MIRROR=
-ARG APT_DEBIAN_SECURITY_MIRROR=
-
+FROM debian-base AS runtime-base
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=zh_CN.UTF-8 \
     LC_ALL=zh_CN.UTF-8 \
@@ -31,12 +41,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LD_LIBRARY_PATH=/webox/weagent/lib
 
 RUN set -eux; \
-    if [ -n "$APT_DEBIAN_MIRROR" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
-      sed -i "s|http://deb.debian.org/debian|$APT_DEBIAN_MIRROR|g" /etc/apt/sources.list.d/debian.sources; \
-    fi; \
-    if [ -n "$APT_DEBIAN_SECURITY_MIRROR" ] && [ -f /etc/apt/sources.list.d/debian.sources ]; then \
-      sed -i "s|http://deb.debian.org/debian-security|$APT_DEBIAN_SECURITY_MIRROR|g; s|http://security.debian.org/debian-security|$APT_DEBIAN_SECURITY_MIRROR|g" /etc/apt/sources.list.d/debian.sources; \
-    fi; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
       ca-certificates dbus dpkg ffmpeg gosu libcap2-bin locales \
@@ -87,7 +91,8 @@ COPY --chmod=644 docker/helpers/ /webox/weagent/bin/
 COPY --from=build /out/native-media /webox/weagent/bin/native-media
 COPY docker/scripts/webox-identity.sh docker/scripts/entrypoint.sh /webox/weagent/bin/
 
-RUN chmod 755 /webox/weagent/bin/weagent /webox/weagent/bin/*.sh && \
+RUN find /webox/weagent/bin -type d -exec chmod 755 {} + && \
+    chmod 755 /webox/weagent/bin/weagent /webox/weagent/bin/*.sh && \
     setcap cap_sys_ptrace=ep /webox/weagent/bin/weagent
 
 ENV WEBOX_ALL_CHATS=1 WEBOX_DETACHED_CHAT=1 WEBOX_FAST_UI=1 WEBOX_SKIP_POSTLOGIN_ESCAPE=1

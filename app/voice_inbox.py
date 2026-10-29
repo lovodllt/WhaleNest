@@ -69,9 +69,12 @@ def message_xml(content, kind):
 
 
 def transcribe(room, msgid, contact):
-    from sqlcipher3 import dbapi2 as sql
+    try:
+        from sqlcipher3 import dbapi2 as sql
+    except ImportError as error:
+        raise RuntimeError('当前环境缺少语音读取所需的 SQLCipher，请使用 WSL2 部署') from error
     state = Path(os.environ['WEBOX_STATE_DIR'])
-    material = json.loads((state/'weagent/wechat.key').read_text())
+    material = json.loads((state/'weagent/wechat.key').read_text(encoding='utf-8'))
     directory = state/material['dbDir'].removeprefix('/webox/state/')
     table = 'Msg_'+hashlib.md5(room.encode()).hexdigest()
     for relative, key in material['keys'].items():

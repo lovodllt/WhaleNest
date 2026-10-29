@@ -7,7 +7,7 @@ SETTINGS = Path(__file__).resolve().parents[1]/'config/chat.json'
 
 
 def load_settings():
-    return json.loads(SETTINGS.read_text())
+    return json.loads(SETTINGS.read_text(encoding='utf-8'))
 
 
 def for_chat(settings, binding, room):

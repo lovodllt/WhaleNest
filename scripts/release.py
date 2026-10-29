@@ -13,7 +13,7 @@ import tempfile
 import zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
-VERSION=(ROOT/'VERSION').read_text().strip()
+VERSION=(ROOT/'VERSION').read_text(encoding='utf-8').strip()
 def included(path):
     rel=path.relative_to(ROOT)
     if not path.is_file() or path.is_symlink():return False
@@ -37,18 +37,18 @@ def main():
             if not included(path):continue
             rel=path.relative_to(ROOT);dest=stage/rel;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(path,dest)
             if path.suffix in {'.py','.mjs','.js','.yml','.yaml','.json','.md','.sh','.ps1','.html','.go'}:
-                text=path.read_text()
+                text=path.read_text(encoding='utf-8')
                 if re.search(r'/home/[A-Za-z0-9_.-]+/|wxid_[a-z0-9]{12,}',text) or any(v and v in text for v in os.environ.get('DAFEIYU_PRIVATE_MARKERS','').split(';')):raise ValueError('本机专属信息未清除：'+str(rel))
         smoke=Path(temp)/'解压校验 有空格'/name;shutil.copytree(stage,smoke)
-        subprocess.run([sys.executable,'scripts/manage.py','init'],cwd=smoke,check=True)
-        settings=json.loads((smoke/'config/chat.json').read_text())
+        subprocess.run([sys.executable,'-X','utf8','scripts/manage.py','init'],cwd=smoke,check=True)
+        settings=json.loads((smoke/'config/chat.json').read_text(encoding='utf-8'))
         assert settings['chats']=={} and settings['reply_paused'] and not (smoke/'resources/persona.md').exists()
         assert (smoke/'data/chat/bridge.sqlite3').is_file()
         checks={'clean_initialization':True,'path_with_spaces':True,'private_runtime_data_included':False,'bundled_models':False,'bundled_persona':False}
-        (stage/'docs/ARCHIVE_CHECK.json').write_text(json.dumps(checks,indent=2)+'\n')
+        (stage/'docs/ARCHIVE_CHECK.json').write_text(json.dumps(checks,indent=2)+'\n',encoding='utf-8')
         files=sorted(path for path in stage.rglob('*') if path.is_file())
         hashes={str(path.relative_to(stage)):hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
-        (stage/'MANIFEST.sha256').write_text(''.join(f'{digest}  {rel}\n' for rel,digest in hashes.items()))
+        (stage/'MANIFEST.sha256').write_text(''.join(f'{digest}  {rel}\n' for rel,digest in hashes.items()),encoding='utf-8')
         files.append(stage/'MANIFEST.sha256')
         zipped=output/(name+'.zip');compressed=output/(name+'.tar.gz')
         with zipfile.ZipFile(zipped,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as archive:
@@ -59,9 +59,9 @@ def main():
             for rel,digest in hashes.items():assert hashlib.sha256(archive.read(name+'/'+rel)).hexdigest()==digest
         with tarfile.open(compressed) as archive:
             for rel,digest in hashes.items():assert hashlib.sha256(archive.extractfile(name+'/'+rel).read()).hexdigest()==digest
-        (output/'SHA256SUMS.txt').write_text(''.join(f'{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n' for path in [zipped,compressed]))
+        (output/'SHA256SUMS.txt').write_text(''.join(f'{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n' for path in [zipped,compressed]),encoding='utf-8')
         summary={**checks,'archive_integrity':True,'source_files':len(files),'archives':[{'file':path.name,'bytes':path.stat().st_size} for path in [zipped,compressed]]}
-        (output/'打包校验.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+        (output/'打包校验.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         print(json.dumps(summary,ensure_ascii=False))
 
 if __name__=='__main__':main()

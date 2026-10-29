@@ -2,6 +2,11 @@ import asyncio
 import io
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'app'))
+from runtime_support import ensure_utf8,watch_stop
+ensure_utf8()
 
 import edge_tts
 import soundfile
@@ -33,13 +38,13 @@ class PreviewRequest(Profile, TextRequest):
 
 
 def settings():
-    return json.loads(SETTINGS.read_text())
+    return json.loads(SETTINGS.read_text(encoding='utf-8'))
 
 
 async def synthesize(text, profile):
     if not text.strip():
         raise HTTPException(400, '请先输入试听内容')
-    if profile.voice not in {v['voice'] for v in json.loads(VOICES.read_text())}:
+    if profile.voice not in {v['voice'] for v in json.loads(VOICES.read_text(encoding='utf-8'))}:
         raise HTTPException(400, '请选择列表中的声音')
     speech = edge_tts.Communicate(
         text, profile.voice, rate=f'{profile.rate:+d}%',
@@ -66,7 +71,7 @@ def page():
 
 @app.get('/voices')
 def voices():
-    return json.loads(VOICES.read_text())
+    return json.loads(VOICES.read_text(encoding='utf-8'))
 
 
 @app.get('/config')
@@ -81,7 +86,7 @@ def save_config(profile: Profile):
     data = settings()
     data['edge_tts'] = profile.model_dump()
     temporary = SETTINGS.with_suffix('.tmp')
-    temporary.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+    temporary.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n',encoding='utf-8')
     temporary.replace(SETTINGS)
     return profile
 
@@ -116,4 +121,6 @@ async def tts_wav(request: TextRequest):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=9981)
+    server=uvicorn.Server(uvicorn.Config(app,host='127.0.0.1',port=9981))
+    watch_stop(BASE.parents[1]/'data/run/stop.flag',lambda:setattr(server,'should_exit',True))
+    server.run()

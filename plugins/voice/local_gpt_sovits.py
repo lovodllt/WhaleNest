@@ -21,13 +21,13 @@ paths={'t2s_weights_path':models/'s1v3.ckpt','vits_weights_path':models/'v2Pro/s
     'bert_base_path':models/'chinese-roberta-wwm-ext-large','cnhuhbert_base_path':models/'chinese-hubert-base'}
 if not all(path.exists() for path in paths.values()):raise SystemExit('请先从资源中心下载 GPT-SoVITS 模型')
 config=root/'data/gpt-sovits.yaml';config.parent.mkdir(parents=True,exist_ok=True)
-config.write_text(yaml.safe_dump({'custom':{'device':args.device,'is_half':args.device=='cuda','version':'v2ProPlus',**{k:str(v) for k,v in paths.items()}}}))
+config.write_text(yaml.safe_dump({'custom':{'device':args.device,'is_half':args.device=='cuda','version':'v2ProPlus',**{k:str(v) for k,v in paths.items()}}}),encoding='utf-8')
 # V2ProPlus resolves its speaker encoder relative to the upstream checkout.
 speaker=source/'GPT_SoVITS/pretrained_models/sv/pretrained_eres2netv2w24s4ep4.ckpt';speaker.parent.mkdir(parents=True,exist_ok=True)
 if not speaker.exists():speaker.symlink_to(models/'sv'/speaker.name)
-voice_path=root/'config/voice.json';voice=json.loads(voice_path.read_text())
+voice_path=root/'config/voice.json';voice=json.loads(voice_path.read_text(encoding='utf-8'))
 voice['gpt_sovits']={'reference_audio':str(reference),'reference_text':args.reference_text}
-tmp=voice_path.with_suffix('.tmp');tmp.write_text(json.dumps(voice,ensure_ascii=False,indent=2)+'\n');tmp.replace(voice_path)
+tmp=voice_path.with_suffix('.tmp');tmp.write_text(json.dumps(voice,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');tmp.replace(voice_path)
 if args.device=='cuda':
     import torch
     torch.cuda.set_per_process_memory_fraction(.4)

@@ -76,7 +76,7 @@ def handle(db,room,source,text,name,event_id,now_ms,settings):
     if not cmd:return None
     kind,arg=cmd
     if kind=='help':
-        return HELP.read_text().strip() if settings.get('help_approved',False) else '帮助菜单还在整理，暂时可以用/task安排提醒、/list_task查看任务'
+        return HELP.read_text(encoding='utf-8').strip() if settings.get('help_approved',False) else '帮助菜单还在整理，暂时可以用/task安排提醒、/list_task查看任务'
     if kind=='list_task':
         rows=db.execute("SELECT id,due,repeat,body,status,last_status FROM tasks WHERE room=? AND status IN ('active','queued','failed') ORDER BY due",(room,)).fetchall()
         if not rows:return '当前聊天没有待执行任务'

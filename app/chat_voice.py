@@ -44,7 +44,7 @@ def send(target, text):
     payload={'text':spoken}
     endpoint='http://127.0.0.1:9981/tts.wav'
     if load_settings().get('voice_reply',{}).get('provider','edge')=='gpt-sovits':
-        profile=json.loads((ROOT/'config/voice.json').read_text()).get('gpt_sovits',{})
+        profile=json.loads((ROOT/'config/voice.json').read_text(encoding='utf-8')).get('gpt_sovits',{})
         if not Path(profile.get('reference_audio','')).is_file():raise VoiceSendError('本地音色尚未配置参考音频',True)
         endpoint='http://127.0.0.1:9980/tts'
         payload.update(text_lang='all_zh',ref_audio_path=profile['reference_audio'],prompt_text=profile.get('reference_text',''),

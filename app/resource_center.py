@@ -15,16 +15,16 @@ ROOT=Path(__file__).resolve().parents[1]
 class Resources:
     def __init__(self,root=ROOT):
         self.root=Path(root)
-        self.catalog=json.loads((self.root/'config/resources.json').read_text())
+        self.catalog=json.loads((self.root/'config/resources.json').read_text(encoding='utf-8'))
         self.path=self.root/'data/resource-jobs.json'
-        self.jobs=json.loads(self.path.read_text()) if self.path.exists() else {}
+        self.jobs=json.loads(self.path.read_text(encoding='utf-8')) if self.path.exists() else {}
         for job in self.jobs.values():
             if job['status']=='downloading':job.update(status='interrupted',error='上次下载中断，可重新下载；已校验文件会复用')
         self.lock=threading.RLock();self.pool=ThreadPoolExecutor(max_workers=1)
 
     def _save(self):
         self.path.parent.mkdir(parents=True,exist_ok=True)
-        tmp=self.path.with_suffix('.tmp');tmp.write_text(json.dumps(self.jobs,ensure_ascii=False,indent=2));tmp.replace(self.path)
+        tmp=self.path.with_suffix('.tmp');tmp.write_text(json.dumps(self.jobs,ensure_ascii=False,indent=2),encoding='utf-8');tmp.replace(self.path)
 
     def state(self):
         with self.lock:
@@ -80,7 +80,7 @@ class Resources:
             if item.get('character'):
                 char=item['character'];folder=self.root/'resources/characters'/char['name']
                 path=folder/'设定.json'
-                if not path.exists():path.write_text(json.dumps({**char,'appearance':'','reference_images':[]},ensure_ascii=False,indent=2)+'\n')
+                if not path.exists():path.write_text(json.dumps({**char,'appearance':'','reference_images':[]},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
             with self.lock:self.jobs[ident].update(status='ready',finished_at=int(time.time()));self._save()
         except Exception as error:
             with self.lock:self.jobs[ident].update(status='failed',error=str(error)[:300]);self._save()
@@ -88,10 +88,10 @@ class Resources:
     def activate_persona(self,ident):
         item=next((i for i in self.catalog if i['id']==ident and i['kind']=='persona'),None)
         if not item or self.jobs.get(ident,{}).get('status')!='ready':raise ValueError('请先下载人设')
-        text='\n\n'.join(self._target(f['target']).read_text() for f in item['files'] if '/dafeiyu/' in f['target'] and f['target'].endswith('.md'))
+        text='\n\n'.join(self._target(f['target']).read_text(encoding='utf-8') for f in item['files'] if '/dafeiyu/' in f['target'] and f['target'].endswith('.md'))
         path=self.root/'resources/persona.md'
         if path.exists():raise ValueError('已有自定义人设，未覆盖。可在资源页编辑，或先自行备份移走')
-        path.write_text(text)
+        path.write_text(text,encoding='utf-8')
         return self.state()
 
     def import_character(self,body):
@@ -109,5 +109,5 @@ class Resources:
         prefix='设定集-' if '设定集' in str(body.get('filename','')) else '参考-'
         (images/(prefix+hashlib.sha256(raw).hexdigest()[:16]+'.'+extension)).write_bytes(raw)
         config=folder/'设定.json'
-        if not config.exists():config.write_text(json.dumps({'id':'custom-'+hashlib.sha256(name.encode()).hexdigest()[:12],'name':name,'aliases':[name],'appearance':'','reference_images':[]},ensure_ascii=False,indent=2)+'\n')
+        if not config.exists():config.write_text(json.dumps({'id':'custom-'+hashlib.sha256(name.encode()).hexdigest()[:12],'name':name,'aliases':[name],'appearance':'','reference_images':[]},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         return {'saved':True,'name':name}

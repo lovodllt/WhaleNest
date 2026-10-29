@@ -146,7 +146,7 @@ def generate(job_id, description, context=None):
     identity_refs = [next(ref for ref in refs if ref['role'].startswith(character['name']+'：')) for character in characters]
     refs = (identity_refs + [ref for ref in refs if ref not in identity_refs])[:5]
     (folder/'brief.json').write_text(json.dumps({'original': description, **brief, 'characters_used': characters,
-                                               'references': refs}, ensure_ascii=False, indent=2)+'\n')
+                                               'references': refs}, ensure_ascii=False, indent=2)+'\n',encoding='utf-8')
     attachment_hint = ('参考图已作为本轮图片附件提供，直接调用image_gen并设置num_last_images_to_include='+str(len(refs))+'。'
                        '不要使用referenced_image_paths，不要调用view_image或重新读取参考图文件；附件顺序及分工见下文。'
                        if refs else '本次没有参考图，不设置num_last_images_to_include或referenced_image_paths。')
@@ -171,8 +171,8 @@ def generate(job_id, description, context=None):
         result = subprocess.run(command, input=prompt, text=True, stdout=out, stderr=err, timeout=240)
     if result.returncode:
         raise RuntimeError('Codex image generation failed')
-    source = Path(json.loads((folder/'result.json').read_text())['path']).resolve()
-    events = [json.loads(line) for line in (folder/'events.jsonl').read_text().splitlines()]
+    source = Path(json.loads((folder/'result.json').read_text(encoding='utf-8'))['path']).resolve()
+    events = [json.loads(line) for line in (folder/'events.jsonl').read_text(encoding='utf-8').splitlines()]
     thread = next(event['thread_id'] for event in events if event.get('type') == 'thread.started')
     if not source.is_relative_to(GENERATED/thread) or not source.is_file():
         raise ValueError('Codex did not return an image from this job')

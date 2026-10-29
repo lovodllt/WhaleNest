@@ -1,6 +1,5 @@
 """WeChat conversations with isolated DSH sessions and scoped image assets."""
 import argparse
-import fcntl
 import datetime
 from zoneinfo import ZoneInfo
 import hashlib
@@ -17,6 +16,10 @@ import time
 import urllib.parse
 import urllib.request
 import urllib.error
+
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from runtime_support import acquire_lock,ensure_utf8
+ensure_utf8()
 
 from dsh_chat import DshChat, ROOT, STATE
 from chat_rules import load_settings, for_chat, proactive_due, within_hours, natural_allowed
@@ -48,6 +51,7 @@ class Webox:
         self.token_path = Path(os.environ.get('WEBOX_STATE_DIR', ROOT/'data/wechat')) / 'weagent/api-token'
         self.http = urllib.request.build_opener(urllib.request.ProxyHandler({}))
         self.quote_process = None
+        self.host_helpers = os.name != 'nt'
 
     def quote_command(self, action, text='', items=None):
         proc = self.quote_process
@@ -61,7 +65,7 @@ class Webox:
         return result
 
     def call(self, endpoint, data=None):
-        if endpoint == '/ilink/bot/media':
+        if self.host_helpers and endpoint == '/ilink/bot/media':
             result = subprocess.run(['docker','exec','-i','-u','webox','dafeiyu-wechat',
                                      '/webox/state/weagent/native-media'],input=json.dumps(data),
                                     capture_output=True,text=True,timeout=20)
@@ -70,7 +74,7 @@ class Webox:
             return json.loads(result.stdout)
         if (endpoint.endswith('/sendmessage') or endpoint.endswith('/interaction') and data.get('action')!='cancel_reply') and load_settings().get('reply_paused',False):
             raise RuntimeError('WeChat replies are paused')
-        if endpoint.endswith('/interaction'):
+        if self.host_helpers and endpoint.endswith('/interaction'):
             if data['action'] == 'prepare_reply':
                 self.quote_process = subprocess.Popen(
                     ['docker','exec','-i','-u','webox','-e','HOME=/webox/state/home','-e','DISPLAY=:1','-e','WEBOX_SKIP_POSTLOGIN_ESCAPE=1',
@@ -88,7 +92,7 @@ class Webox:
                 return {'ret':0,**result}
             if data['action'] == 'cancel_reply' and self.quote_process:
                 return self.quote_command('cancel')
-        if endpoint.endswith('/sendmessage') and load_settings().get('fast_ui_send',False):
+        if self.host_helpers and endpoint.endswith('/sendmessage') and load_settings().get('fast_ui_send',False):
             target = data['msgs'][0]['roomid']
             items = []
             for message in data['msgs']:
@@ -114,7 +118,7 @@ class Webox:
             data = {'msgs':data['msgs'][1:]}
             if not data['msgs']:
                 return {'ret':0}
-        token = self.token_path.read_text().strip()
+        token = self.token_path.read_text(encoding='utf-8').strip()
         request = urllib.request.Request(BASE + endpoint,
             data=json.dumps(data, ensure_ascii=False).encode() if data is not None else None,
             headers={'AuthorizationType': 'ilink_bot_token',
@@ -1134,7 +1138,7 @@ def receive_loop(binding, stop):
 
 
 def run_loop(api,db,chats,binding,memories,images,watcher):
-    while not STOP:
+    while not STOP and not (STATE.parent/'run/stop.flag').exists():
         try:
             settings = load_settings()
             memories.tick(db,int(time.time()*1000),settings)
@@ -1161,9 +1165,9 @@ def main():
     parser.add_argument('action', choices=['run','status'])
     action = parser.parse_args().action
     STATE.mkdir(mode=0o700, parents=True, exist_ok=True)
-    lock = open(STATE/'bridge.lock','a')
+    lock = open(STATE/'bridge.lock','a+b')
     if action != 'status':
-        fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
+        acquire_lock(lock,False)
     db = connect_db()
     if action == 'status':
         binding = get_meta(db,'binding')

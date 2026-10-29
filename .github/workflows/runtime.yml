@@ -24,6 +24,7 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r config/requirements.txt
       - run: python -X utf8 -m unittest discover -s tests -v
+      - run: python -X utf8 scripts/release.py --output ../whalenest-ci-release
       - if: runner.os == 'Windows'
         shell: pwsh
         run: |

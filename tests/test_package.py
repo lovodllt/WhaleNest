@@ -8,6 +8,7 @@ import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'app'))
@@ -56,6 +57,12 @@ class PackageTests(unittest.TestCase):
         templates=list((ROOT/'vendor/webox/docker/helpers/ui_templates').glob('*.png'))
         self.assertEqual(len(templates),7)
         self.assertTrue(all(included(path) for path in templates))
+        self.assertTrue(included(ROOT/'web/assets/whale-workroom.png'))
+        with tempfile.TemporaryDirectory() as directory,patch.dict(included.__globals__,ROOT=Path(directory)):
+            for name in ('chat','voice','runtime','secrets'):
+                path=Path(directory)/'config'/f'{name}.json'
+                path.parent.mkdir(exist_ok=True);path.write_text('{}',encoding='utf-8')
+                self.assertFalse(included(path))
 
     def test_public_console_omits_dormant_capabilities(self):
         settings=json.loads((ROOT/'config/chat.example.json').read_text())

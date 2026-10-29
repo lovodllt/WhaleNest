@@ -16,13 +16,14 @@ ROOT=Path(__file__).resolve().parents[1]
 VERSION=(ROOT/'VERSION').read_text(encoding='utf-8').strip()
 def included(path):
     rel=path.relative_to(ROOT)
+    name=rel.as_posix()
     if not path.is_file() or path.is_symlink():return False
     if any(part in {'data','.venv','__pycache__','.git','node_modules','dist'} for part in rel.parts):return False
     if rel.parts[0]=='resources':return False
-    if str(rel) in {'config/chat.json','config/voice.json','config/runtime.json','config/secrets.json'}:return False
-    if any(str(rel).startswith(prefix) for prefix in ['plugins/singing/models/','plugins/singing/seed-vc-main/','plugins/singing/converted','plugins/singing/vevo2/models/','plugins/singing/vevo2/Amphion/']):return False
-    if str(rel) in {'docs/assets/whalenest-hero.png','docs/assets/workspace-preview.png','web/assets/whale-workroom.png','web/assets/whale-clock.png','web/assets/whale-tokens.png','web/icons/icon-192.png','web/icons/icon-512.png','web/icons/apple-touch-icon.png'}:return True
-    if str(rel.parent)=='vendor/webox/docker/helpers/ui_templates' and path.suffix=='.png':return True
+    if name in {'config/chat.json','config/voice.json','config/runtime.json','config/secrets.json'}:return False
+    if any(name.startswith(prefix) for prefix in ['plugins/singing/models/','plugins/singing/seed-vc-main/','plugins/singing/converted','plugins/singing/vevo2/models/','plugins/singing/vevo2/Amphion/']):return False
+    if name in {'docs/assets/whalenest-hero.png','docs/assets/workspace-preview.png','web/assets/whale-workroom.png','web/assets/whale-clock.png','web/assets/whale-tokens.png','web/icons/icon-192.png','web/icons/icon-512.png','web/icons/apple-touch-icon.png'}:return True
+    if rel.parent.as_posix()=='vendor/webox/docker/helpers/ui_templates' and path.suffix=='.png':return True
     if path.suffix.lower() in {'.deb','.pyc','.partial','.pth','.ckpt','.safetensors','.bin','.db','.sqlite3','.wav','.mp3','.png','.jpg','.jpeg','.webp','.gif'}:return False
     if rel.name.startswith('.') and rel.name not in {'.gitignore','.gitattributes'}:return False
     return rel.name!='MANIFEST.sha256'
@@ -47,12 +48,12 @@ def main():
         checks={'clean_initialization':True,'path_with_spaces':True,'private_runtime_data_included':False,'bundled_models':False,'bundled_persona':False}
         (stage/'docs/ARCHIVE_CHECK.json').write_text(json.dumps(checks,indent=2)+'\n',encoding='utf-8')
         files=sorted(path for path in stage.rglob('*') if path.is_file())
-        hashes={str(path.relative_to(stage)):hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
+        hashes={path.relative_to(stage).as_posix():hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
         (stage/'MANIFEST.sha256').write_text(''.join(f'{digest}  {rel}\n' for rel,digest in hashes.items()),encoding='utf-8')
         files.append(stage/'MANIFEST.sha256')
         zipped=output/(name+'.zip');compressed=output/(name+'.tar.gz')
         with zipfile.ZipFile(zipped,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as archive:
-            for path in files:archive.write(path,name+'/'+str(path.relative_to(stage)))
+            for path in files:archive.write(path,name+'/'+path.relative_to(stage).as_posix())
         with tarfile.open(compressed,'w:gz',compresslevel=9) as archive:archive.add(stage,arcname=name)
         with zipfile.ZipFile(zipped) as archive:
             assert archive.testzip() is None

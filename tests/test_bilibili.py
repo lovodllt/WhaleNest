@@ -242,6 +242,29 @@ class BilibiliTests(unittest.TestCase):
         self.assertFalse((self.root/'config/chat.json').exists())
 
     @unittest.skipUnless(shutil.which('node'),'Node is required for the DSH tool bridge')
+    def test_subtitle_adapter_keeps_last_cue_when_duration_metadata_is_short(self):
+        (self.root/'app').mkdir()
+        shutil.copy(ROOT/'app/bilibili-content.mjs',self.root/'app/bilibili-content.mjs')
+        modules=self.root/'data/bilibili/provider/node_modules'
+        for name in ('dsh-bilibili','dsh-plugin-bilibili'):
+            (modules/name/'lib').mkdir(parents=True)
+            (modules/name/'package.json').write_text('{"type":"module"}',encoding='utf-8')
+        (modules/'dsh-bilibili/lib/login.js').write_text('export const loadStoredSessdata=async()=>null;',encoding='utf-8')
+        (modules/'dsh-plugin-bilibili/lib/provider.js').write_text('''
+export const mapSearchData=value=>value;
+export class BilibiliOfficialProvider {
+  async video(){return {title:'fixture',author:'fixture',pages:[{duration:20}]}}
+  async subtitles(){return {language:'zh',cues:[{from:0,to:1,content:'first'},{from:19,to:21,content:'last'}]}}
+}
+''',encoding='utf-8')
+        result=subprocess.run(['node',str(self.root/'app/bilibili-content.mjs')],input=json.dumps({'operation':'open','resource_id':RESOURCE}),
+            capture_output=True,text=True,encoding='utf-8',timeout=10)
+        self.assertEqual(0,result.returncode,result.stderr)
+        resource=json.loads(result.stdout)['resource']
+        self.assertEqual(['first','last'],[cue['text'] for cue in resource['subtitles']])
+        self.assertEqual(21000,resource['subtitles'][-1]['end_ms'])
+
+    @unittest.skipUnless(shutil.which('node'),'Node is required for the DSH tool bridge')
     def test_dsh_tools_are_registered_and_bound_to_current_agent(self):
         module=self.root/'tools.mjs';module.write_text('export const defineTool=value=>value;',encoding='utf-8')
         script=r'''

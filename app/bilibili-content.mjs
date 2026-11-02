@@ -60,7 +60,7 @@ async function main(input) {
     subtitleAccess=error.code==='BILIBILI_LOGIN_REQUIRED'?'login_required':'unavailable';
   }
   const subtitles=(transcript?.cues ?? []).map(v=>({start_ms:duration(v.from),end_ms:duration(v.to),text:clean(v.content)}))
-    .filter(v=>v.text && Number.isFinite(v.start_ms) && Number.isFinite(v.end_ms) && v.start_ms>=0 && v.end_ms>v.start_ms && v.end_ms<=length)
+    .filter(v=>v.text && Number.isFinite(v.start_ms) && Number.isFinite(v.end_ms) && v.start_ms>=0 && v.end_ms>v.start_ms)
     .sort((a,b)=>a.end_ms-b.end_ms);
   return {access:'available',resource:{resource_id:input.resource_id,url:'https://www.bilibili.com/zh-Hans/video/'+bvid,
     title:clean(detail.title),uploader:clean(detail.author),duration_ms:length,

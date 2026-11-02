@@ -198,7 +198,7 @@ class Bilibili:
 
     def enqueue(self, ident, operation, resource, text, recipient='', mention=None):
         cfg = settings(self.root)
-        if not cfg['enabled'] or not cfg['account_uid']:
+        if not cfg['enabled'] or operation!='wechat_share' and not cfg['account_uid']:
             raise ValueError('B站互动未启用或账号尚未绑定')
         if operation=='direct_share' and recipient not in cfg['share_recipient_uids']:
             raise ValueError('接收UID不在当前名单中')
@@ -426,7 +426,10 @@ def deliver_wechat(bridge_db, api, binding, event_id, current, validate, root=RO
     with database(root) as db:
         row=db.execute('SELECT * FROM actions WHERE id=?',(ident,)).fetchone()
         allowed=(row is not None and row['status']=='queued_wechat' and row['operation']=='wechat_share'
-                 and service.permitted(row) and row['recipient']==current['_room'] and row['text']==current['发言'])
+                 and now_ms()-row['created']<=86_400_000 and service.permitted(row)
+                 and row['recipient']==current['_room'] and row['text']==current['发言'])
+        if row is not None and row['status']=='queued_wechat' and now_ms()-row['created']>86_400_000:
+            db.execute("UPDATE actions SET status='expired' WHERE id=?",(ident,))
     if not allowed:
         with bridge_db:
             bridge_db.execute("UPDATE inbox SET status='bilibili_cancelled',prompt='' WHERE id=?",(event_id,))

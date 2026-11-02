@@ -161,6 +161,7 @@ class BilibiliTests(unittest.TestCase):
         self.service.recover();self.assertEqual('uncertain',self.row('actions')['status'])
 
     def test_wechat_uses_existing_queue_bubbles_receipt_and_disable_cancels_pending(self):
+        self.service.write_config(dict(self.cfg,account_uid=''))
         bridge=self.bridge();url=bili.video_url(RESOURCE)
         self.service.enqueue('wx','wechat_share',RESOURCE,'这个挺有趣\n想到你啦\n'+url,'fixture-room')
         self.service.dispatch(bridge,None,500000)
@@ -177,6 +178,15 @@ class BilibiliTests(unittest.TestCase):
         self.service.dispatch(bridge,None,600000)
         row=bridge.execute("SELECT id,prompt FROM inbox WHERE status='pending'").fetchone()
         self.service.save({'revision':self.service.revision(),'enabled':False,'share_recipient_uids':['123']})
+        with patch.object(bili,'Bilibili',return_value=self.service):
+            bili.deliver_wechat(bridge,api,{'rooms':{}},row[0],json.loads(row[1]),lambda *_:None,self.root)
+        self.assertEqual(1,api.call.call_count)
+        self.service.write_config(self.cfg)
+        self.service.enqueue('expired','wechat_share',RESOURCE,'看看\n'+url,'fixture-room')
+        self.service.dispatch(bridge,None,bili.now_ms())
+        with bili.database(self.root) as db:
+            db.execute("UPDATE actions SET created=? WHERE id='expired'",(bili.now_ms()-86_400_001,))
+        row=bridge.execute("SELECT id,prompt FROM inbox WHERE status='pending'").fetchone()
         with patch.object(bili,'Bilibili',return_value=self.service):
             bili.deliver_wechat(bridge,api,{'rooms':{}},row[0],json.loads(row[1]),lambda *_:None,self.root)
         self.assertEqual(1,api.call.call_count)

@@ -131,6 +131,24 @@ def plugins():
         shell([*npm,'ci','--prefix',str(home/'profiles'/('dafeiyu-'+name)),'--no-audit','--no-fund'])
     print('所需 DSH 插件已安装。模型权重仍按需下载')
 
+def bilibili_plugins():
+    initialize()
+    target=DATA/'bilibili/provider';target.mkdir(parents=True,exist_ok=True)
+    shutil.copy(ROOT/'config/bilibili-provider.package.json',target/'package.json')
+    shutil.copy(ROOT/'config/npm-locks/bilibili.json',target/'package-lock.json')
+    npm=([environment().get('DAFEIYU_NODE','node'),node_entry('npm','node_modules/npm/bin/npm-cli.js')]
+         if os.name=='nt' else ['npm'])
+    credential=target/'node_modules/dsh-bilibili/.sessdata.json'
+    backup=DATA/'bilibili/provider-credentials.backup'
+    if credential.is_file():
+        shutil.copyfile(credential,backup);backup.chmod(0o600)
+    try:
+        shell([*npm,'ci','--prefix',str(target),'--ignore-scripts','--legacy-peer-deps','--no-audit','--no-fund'])
+    finally:
+        if backup.is_file() and credential.parent.is_dir():
+            shutil.copyfile(backup,credential);credential.chmod(0o600);backup.unlink()
+    print('B站提供方已安装；在插件中心开启并按需扫码，不导入其他项目账号')
+
 def check():
     import importlib.util
     env=environment()
@@ -142,6 +160,8 @@ def check():
     home=Path(env.get('DSH_HOME',str(Path.home()/'.dsh')))
     checks['memory_plugin']=(home/'profiles/dafeiyu-runtime/node_modules/dsh-mnemon-source-runtime').exists()
     checks['qr_decoder']=importlib.util.find_spec('zxingcpp') is not None
+    from chat_bilibili import Bilibili,settings
+    if settings(ROOT)['enabled']:checks['bilibili_provider']=Bilibili(ROOT).installed()
     for key,ok in checks.items():print(('✓ ' if ok else '· ')+key)
     print('首次配置：setup；安装插件：plugins；模型、图片等：资源中心；微信官方安装包：wechat-package')
     return all(checks[k] for k in ['node','dsh','docker','docker_compose','configured','model_key'])
@@ -264,12 +284,13 @@ def stop():
 
 def main():
     p=argparse.ArgumentParser(description='鲸栖 WhaleNest 本机配置与启动工具')
-    p.add_argument('action',choices=['init','setup','profiles','plugins','check','wechat-package','build','start','stop','supervise','contacts','bind','mobile'])
+    p.add_argument('action',choices=['init','setup','profiles','plugins','bilibili-plugins','check','wechat-package','build','start','stop','supervise','contacts','bind','mobile'])
     p.add_argument('--owner');p.add_argument('--file');p.add_argument('--console-only',action='store_true');args=p.parse_args()
     if args.action=='init':initialize()
     elif args.action=='setup':setup()
     elif args.action=='profiles':profiles()
     elif args.action=='plugins':plugins()
+    elif args.action=='bilibili-plugins':bilibili_plugins()
     elif args.action=='check':sys.exit(0 if check() else 1)
     elif args.action=='wechat-package':wechat_package(args.file)
     elif args.action=='build':

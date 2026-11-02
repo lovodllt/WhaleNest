@@ -1,0 +1,9 @@
+{
+  "name": "whalenest-bilibili-provider",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "dsh-bilibili": "https://github.com/CZX2244/dsh-bilibili/archive/c53af9dee30cf04ee759ac6857d5803196fb2a95.tar.gz",
+    "dsh-plugin-bilibili": "https://github.com/moxingovo/dsh-bilibili/archive/42cd1c9e7d975fc46cf62bd86024a134c37501d7.tar.gz"
+  }
+}

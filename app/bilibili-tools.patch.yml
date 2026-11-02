@@ -1,0 +1,3 @@
+- insert:
+    - id: whalenest-bilibili-tools
+      name: ./bilibili_tools.mjs

@@ -25,6 +25,7 @@ ensure_utf8()
 
 import chat_tasks
 import person_memory
+from chat_bilibili import Bilibili,ConfigConflict,settings as bilibili_settings
 from resource_center import Resources
 from dsh_chat import ROOT, NODE, DSH
 
@@ -64,6 +65,7 @@ class ConsoleBackend:
     def __init__(self, root=ROOT):
         self.root = Path(root)
         self.resources = Resources(self.root)
+        self.bilibili = Bilibili(self.root)
         self.settings_path = self.root / 'config/chat.json'
         self.voice_path = self.root / 'config/voice.json'
         self.db_path = self.root / 'data/chat/bridge.sqlite3'
@@ -272,10 +274,15 @@ class ConsoleBackend:
             ('monitor','重置预告监测',None,True,[], '内置任务中的 Codex 重置监测，每小时检查；任意 URL 监测未接入','reset_watch.py'),
         ]
         keys = {f['key'] for f in fields}
-        return [{'id':ident,'name':name,'enabled':enabled,'available':bool(ok and (not file or (mods/file).is_file())),
+        result = [{'id':ident,'name':name,'enabled':enabled,'available':bool(ok and (not file or (mods/file).is_file())),
                  'configurable':bool(config_keys),'detail':detail,'config_keys':[k for k in config_keys if k in keys],
                  'dependencies':[{'name':file or name,'available':bool(ok and (not file or (mods/file).is_file())), 'detail':'当前适配模块与依赖检查'}]}
                 for ident,name,enabled,ok,config_keys,detail,file in definitions]
+        cfg=bilibili_settings(self.root)
+        result.append({'id':'bilibili','name':'B站互动 · WhaleNest','enabled':cfg['enabled'],
+                       'available':self.bilibili.installed(),'configurable':True,'config_keys':[],
+                       'detail':'按题材找视频、读首P字幕、回复新@、名单内私信分享；配置和数据仅属本项目','dependencies':[]})
+        return result
 
     def state(self):
         with self.lock:
@@ -525,6 +532,14 @@ class Handler(SimpleHTTPRequestHandler):
         if path=='/api/resources':return self.api_call(self.server.backend.resources.state)
         if path=='/api/persona':return self.json_response(200,{'text':(self.server.backend.root/'resources/persona.md').read_text(encoding='utf-8') if (self.server.backend.root/'resources/persona.md').exists() else ''})
         if path=='/api/state':return self.api_call(self.server.backend.state)
+        if path=='/api/bilibili/state':return self.api_call(self.server.backend.bilibili.state)
+        if path=='/api/bilibili/qr.png':
+            qr=self.server.backend.root/'data/bilibili/provider/node_modules/dsh-bilibili/.qr-login.png'
+            if not qr.is_file():return self.json_response(404,{'error':'尚未生成登录二维码，请刷新'})
+            data=qr.read_bytes()
+            self.send_response(200);self.send_header('Content-Type','image/png')
+            self.send_header('Content-Length',str(len(data)));self.send_header('Cache-Control','no-store')
+            self.end_headers();self.wfile.write(data);return
         if path=='/api/memory':return self.api_call(lambda:self.server.backend.memories(parse_qs(urlsplit(self.path).query).get('scope',['personality'])[0]))
         if path=='/api/mobile-qr.svg':
             access = self.server.backend.access_config()
@@ -539,7 +554,7 @@ class Handler(SimpleHTTPRequestHandler):
             self.end_headers();self.wfile.write(data)
             return
         if path.startswith('/api/'):return self.json_response(404,{'error':'没有这个接口'})
-        if path not in ('/','/index.html','/live.js','/resources.js','/resources.css','/manifest.webmanifest','/favicon.ico') and not path.startswith(('/assets/','/icons/')):
+        if path not in ('/','/index.html','/live.js','/bilibili.js','/resources.js','/resources.css','/manifest.webmanifest','/favicon.ico') and not path.startswith(('/assets/','/icons/')):
             return self.send_error(404)
         if '..' in path:return self.send_error(404)
         return super().do_GET()
@@ -550,6 +565,9 @@ class Handler(SimpleHTTPRequestHandler):
                 not secrets.compare_digest(self.headers.get('X-CSRF-Token',''),self.server.backend.csrf_token)):
             return self.json_response(403,{'error':'控制台验证已过期，请刷新页面'})
         routes={'/api/resources/download':lambda body:self.server.backend.resources.start(body.get('id')),
+                '/api/bilibili/config':self.server.backend.bilibili.save,
+                '/api/bilibili/login/start':lambda body:self.server.backend.bilibili.login('start'),
+                '/api/bilibili/login/poll':lambda body:self.server.backend.bilibili.login('poll'),
                 '/api/resources/import-character':lambda body:self.server.backend.resources.import_character(body),
                 '/api/resources/activate-persona':lambda body:self.server.backend.resources.activate_persona(body.get('id')),
                 '/api/persona':lambda body:save_persona(self.server.backend.root,body),
@@ -573,6 +591,7 @@ class Handler(SimpleHTTPRequestHandler):
                 result['status']['access'].update(origin=self.request_origin(), remote=self.request_origin().startswith('https://'))
             return self.json_response(200,result)
         except APIError as exc:return self.json_response(exc.status,{'error':exc.message})
+        except ConfigConflict as exc:return self.json_response(409,{'error':str(exc)})
         except (OSError,sqlite3.Error,ValueError,KeyError,TypeError,RuntimeError) as exc:
             print('Console request failed:',type(exc).__name__,flush=True)
             return self.json_response(503,{'error':'当前服务或配置暂时不可读取，请稍后刷新'})

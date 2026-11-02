@@ -20,7 +20,7 @@ def included(path):
     if not path.is_file() or path.is_symlink():return False
     if any(part in {'data','.venv','__pycache__','.git','node_modules','dist'} for part in rel.parts):return False
     if rel.parts[0]=='resources':return False
-    if name in {'config/chat.json','config/voice.json','config/runtime.json','config/secrets.json'}:return False
+    if name in {'config/chat.json','config/voice.json','config/runtime.json','config/secrets.json','config/bilibili-social.json'}:return False
     if any(name.startswith(prefix) for prefix in ['plugins/singing/models/','plugins/singing/seed-vc-main/','plugins/singing/converted','plugins/singing/vevo2/models/','plugins/singing/vevo2/Amphion/']):return False
     if name in {'docs/assets/whalenest-hero.png','docs/assets/workspace-preview.png','web/assets/whale-workroom.png','web/assets/whale-clock.png','web/assets/whale-tokens.png','web/icons/icon-192.png','web/icons/icon-512.png','web/icons/apple-touch-icon.png'}:return True
     if rel.parent.as_posix()=='vendor/webox/docker/helpers/ui_templates' and path.suffix=='.png':return True

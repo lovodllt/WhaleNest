@@ -42,3 +42,9 @@
 - [wechat-ai](https://github.com/ChisBread/wechat-ai)、[wcdb-key-tool](https://github.com/TANGandXUE/wcdb-key-tool)：参考 WCDB 混淆密钥的公开技术说明，Go 兼容实现独立编写，候选使用现有 SQLCipher 驱动验证；两者不是运行依赖。
 
 主要上游来源的核对记录见 [来源核对记录](upstream-sources.json)，第三方许可处理见 [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md)。正式发布时随实际分发内容补齐对应许可证全文、版权声明、修改说明和依赖版本。
+
+### B站可选能力
+
+- [dsh-plugin-bilibili 0.2.4](https://github.com/moxingovo/dsh-bilibili/tree/42cd1c9e7d975fc46cf62bd86024a134c37501d7)：按关键词检索、视频资料和首P字幕，固定来源安装其已构建提供方，不挂载完整agent。
+- [dsh-bilibili 0.8.0](https://github.com/CZX2244/dsh-bilibili/tree/c53af9dee30cf04ee759ac6857d5803196fb2a95)：扫码登录与本机凭据存储；其登录模块另注明参考MIT的 Tsuk1ko/bilibili-qr-login，随安装依赖保留原声明。
+- [dsh-bili-subagent](https://github.com/Yuuyuko-uu/dsh-bili-subagent/tree/7769b0acdebe883572fc87130b45e82449b92199) 与 [dsh-bili-whale](https://github.com/Alterssss/dsh-bili-whale/tree/8b0009f8ce2ebdc421afcb2e727b19ac18912ec6)：通知字段、评论及私信协议参考；未复制完整agent、作息、人设或作为运行依赖。WhaleNest薄适配参考同一维护者的Dworld实现，两个项目的配置和数据独立。

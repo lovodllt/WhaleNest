@@ -1,5 +1,5 @@
 ﻿param(
-    [ValidateSet("init", "setup", "plugins", "start", "stop", "check", "build", "contacts")]
+    [ValidateSet("init", "setup", "plugins", "start", "stop", "check", "build", "contacts", "bilibili-plugins")]
     [string]$Action = "check",
     [switch]$ConsoleOnly
 )

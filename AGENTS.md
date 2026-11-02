@@ -10,6 +10,7 @@
 - 主程序和 DSH 在宿主机或 WSL 内运行；Docker 负责固定版本的 Linux 微信与 Webox。主聊天必须经过本机 DSH。
 - 基础聊天、消息队列、控制台和定时任务是同一套程序。可选依赖按能力安装，不把每个开关拆成独立软件。
 - 人设、角色图片、声音样本、歌曲和模型由使用者导入或下载。下载入口与固定版本、大小及校验值见 `config/resources.json`，运行方法见 `docs/FEATURES.md`。
+- B站为可选模块，安装入口 `scripts/manage.py bilibili-plugins`，配置与验证边界见 `docs/BILIBILI.md`。不读取Dworld或其他实例的Cookie、名单、数据库，不为配置本项目重启共享Webox；未知外发结果不自动重发。
 - `setup` 创建项目专用 DSH profiles。现有 `dafeiyu-*`、`DAFEIYU_*` 是内部标识，不因品牌名变化批量重命名或迁移用户配置。
 
 ## 代码位置

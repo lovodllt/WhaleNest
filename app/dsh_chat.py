@@ -22,6 +22,7 @@ class DshChat:
         STATE.mkdir(mode=0o700, parents=True, exist_ok=True)
         self.use_persona = profile in ('dafeiyu-direct','dafeiyu-group','dafeiyu-owner')
         self.owner_tools = profile == 'dafeiyu-owner'
+        self.interactive = self.use_persona
         self.frames = queue.Queue()
         self.tool_lock = threading.Lock()
         self.tool_context = None
@@ -29,11 +30,13 @@ class DshChat:
         self.action_server = None
         env = {**os.environ, 'DSH_HOME': os.environ.get('DSH_HOME', str(Path.home()/'.dsh'))}
         command = [NODE, DSH, '--profile', 'dafeiyu-direct' if self.owner_tools else profile]
-        if self.owner_tools:
+        if self.interactive:
             self.action_token = secrets.token_urlsafe(32)
             self._start_actions()
             directory = Path(__file__).resolve().parent
-            command += ['--patch', str(directory / 'owner-tools.patch.yml')]
+            command += ['--patch', str(directory / 'bilibili-tools.patch.yml')]
+            if self.owner_tools:
+                command += ['--patch', str(directory / 'owner-tools.patch.yml')]
             env.update({
                 'DAFEIYU_TOOLS_MODULE': subprocess.check_output([NODE,'-e',
                     "console.log(require.resolve('@deepseek-ai/dsh-tools',{paths:[process.argv[1]]}))",
@@ -168,14 +171,14 @@ class DshChat:
             if frame.get('method') == 'session.event':
                 params_in = frame.get('params', {})
                 event = params_in.get('event', {})
-                if event.get('type') == 'tool/call' and not self.owner_tools:
+                if event.get('type') == 'tool/call' and not self.interactive:
                     raise RuntimeError('Unexpected tool invocation in text-only profile')
                 if event.get('type') == 'assistant/message':
                     data = event.get('data', {})
                     if not data.get('interrupted'):
                         blocks = data.get('message', {}).get('content', [])
                         text = ''.join(x.get('text', '') for x in blocks if x.get('type') == 'text')
-                        if self.owner_tools:
+                        if self.interactive:
                             completed = text.strip() and not any(x.get('type') == 'tool-call' for x in blocks)
                             self.messages[params_in['sessionId']] = [text.strip()] if completed else []
                         elif text.strip():
@@ -186,7 +189,7 @@ class DshChat:
         if self.use_persona and persona.is_file():
             prompt = '使用者配置的人设：\n'+persona.read_text(encoding='utf-8')[:32768]+'\n本轮输入：\n'+prompt
         with self.tool_lock:
-            self.tool_context = (session_id, tools) if self.owner_tools and tools is not None else None
+            self.tool_context = (session_id, tools) if self.interactive and tools is not None else None
             self.tool_calls = 0
         try:
             if resume and session_id not in self.resumed:
@@ -227,3 +230,9 @@ class DshChat:
             self.action_server.shutdown()
             self.action_server.server_close()
         self.stderr.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args):
+        self.close()

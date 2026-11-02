@@ -25,3 +25,9 @@
 - 无明确许可的素材只记录原始出处，不声称可自由商用或再分发。用户自行导入的素材不进入项目发布包。
 
 README 的鸣谢与本文件都不能代替实际分发代码所需的许可证全文。正式安装包、源码包与镜像应根据各自包含的文件分别保留相关声明。
+
+## B站提供方与协议参考
+
+可选依赖 `dsh-plugin-bilibili 0.2.4`（moxingovo/dsh-bilibili，提交42cd1c9e7d975fc46cf62bd86024a134c37501d7）与 `dsh-bilibili 0.8.0`（CZX2244/dsh-bilibili，提交c53af9dee30cf04ee759ac6857d5803196fb2a95）均在所核对package.json声明MIT。通过锁文件安装，不把其源文件、node_modules、凭据或原人设打进本项目源码包；安装后的库与qrcode等依赖保留随包许可证及声明。登录模块对Tsuk1ko/bilibili-qr-login的MIT来源说明也须保留。
+
+站内协议参考固定版本的dsh-bili-subagent与dsh-bili-whale，链接见docs/ACKNOWLEDGEMENTS.md；只参考通知/原评论/私信参数，不引入它们整套agent或依赖。聊天工具、持久队列与控制台沿本项目实现，移植时参考维护者自己的Dworld薄适配。

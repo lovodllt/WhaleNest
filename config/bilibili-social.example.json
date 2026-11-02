@@ -1,0 +1,7 @@
+{
+  "enabled": false,
+  "account_uid": "",
+  "share_recipient_uids": [],
+  "poll_interval_seconds": 300,
+  "write_interval_seconds": 60
+}

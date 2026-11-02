@@ -1,5 +1,5 @@
 ﻿param(
-    [ValidateSet("start", "stop", "check", "build", "contacts")]
+    [ValidateSet("start", "stop", "check", "build", "contacts", "bilibili-plugins")]
     [string]$Action = "start",
     [string]$Distro = "Ubuntu",
     [switch]$ConsoleOnly

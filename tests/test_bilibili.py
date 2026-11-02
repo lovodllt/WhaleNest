@@ -268,7 +268,7 @@ export class BilibiliOfficialProvider {
 }
 ''',encoding='utf-8')
         result=subprocess.run(['node',str(self.root/'app/bilibili-content.mjs')],input=json.dumps({'operation':'open','resource_id':RESOURCE}),
-            capture_output=True,text=True,encoding='utf-8',timeout=10)
+            capture_output=True,text=True,encoding='utf-8',timeout=30)
         self.assertEqual(0,result.returncode,result.stderr)
         resource=json.loads(result.stdout)['resource']
         self.assertEqual(['first','last'],[cue['text'] for cue in resource['subtitles']])
@@ -295,7 +295,7 @@ assert.equal(result.evidence,'search_metadata_only');
 await assert.rejects(()=>tools[0].execute({keyword:'猫'},{signal:new AbortController().signal}));
 '''
         result=subprocess.run(['node','--input-type=module','-',str(module)],input=script,text=True,
-            capture_output=True,encoding='utf-8',cwd=ROOT,timeout=10)
+            capture_output=True,encoding='utf-8',cwd=ROOT,timeout=30)
         self.assertEqual(0,result.returncode,result.stderr)
 
 

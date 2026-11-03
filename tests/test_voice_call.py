@@ -1,3 +1,4 @@
+from contextlib import closing
 import io
 import json
 from pathlib import Path
@@ -24,7 +25,7 @@ class VoiceCallTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         self.state = Path(temporary.name)
-        with sqlite3.connect(self.state/'bridge.sqlite3') as db:
+        with closing(sqlite3.connect(self.state/'bridge.sqlite3')) as db, db:
             db.execute('CREATE TABLE meta(key TEXT PRIMARY KEY,value TEXT NOT NULL)')
             db.execute('INSERT INTO meta VALUES(?,?)',('binding',json.dumps({'known_chats':{'webox.owner':'owner-private'}})))
         for target in (call,group_bridge):
@@ -94,7 +95,7 @@ class VoiceCallTests(unittest.TestCase):
         session.tick();session.worker.join(timeout=3)
         self.assertFalse(any(m['role']=='assistant' for m in session.history))
         self.assertEqual(session.events.get_nowait(),{'type':'playback','status':'uncertain'})
-        with sqlite3.connect(self.state/'bridge.sqlite3') as db:
+        with closing(sqlite3.connect(self.state/'bridge.sqlite3')) as db, db:
             recent=json.loads(db.execute("SELECT value FROM meta WHERE key LIKE 'recent:%'").fetchone()[0])
         self.assertEqual([m['发言'] for m in recent],['说句话'])
 
@@ -102,11 +103,11 @@ class VoiceCallTests(unittest.TestCase):
         session=self.session()
         self.assertTrue(session.current(0))
         key=group_bridge.room_key('owner-private')
-        with sqlite3.connect(self.state/'bridge.sqlite3') as db:
+        with closing(sqlite3.connect(self.state/'bridge.sqlite3')) as db, db:
             db.execute('INSERT INTO meta VALUES(?,?)',('memory_privacy_generation:'+key,'1'))
         self.assertFalse(session.current(0))
         self.assertFalse(session.record('不应写回的旧内容'))
-        with sqlite3.connect(self.state/'bridge.sqlite3') as db:
+        with closing(sqlite3.connect(self.state/'bridge.sqlite3')) as db, db:
             self.assertIsNone(db.execute("SELECT value FROM meta WHERE key LIKE 'recent:%'").fetchone())
         log=self.state/'call-sessions/2026'/(session.session_prefix+'1-1')/'session.v4.jsonl'
         log.parent.mkdir(parents=True);log.write_text('late model log',encoding='utf-8')
@@ -120,7 +121,7 @@ class VoiceCallTests(unittest.TestCase):
         for name in ('webox-call-'+short+'-one-1','webox-call-another-contact-one-1'):
             path=self.state/'call-sessions/2026'/name/'session.v4.jsonl'
             path.parent.mkdir(parents=True);path.write_text('test transcript',encoding='utf-8');logs.append(path)
-        with sqlite3.connect(self.state/'bridge.sqlite3') as db:
+        with closing(sqlite3.connect(self.state/'bridge.sqlite3')) as db, db:
             db.execute('CREATE TABLE inbox(id TEXT,prompt TEXT,time INTEGER,status TEXT)')
             person_memory.create_table(db)
             person_memory.purge_history(db,'owner-private','owner-private',state=self.state)

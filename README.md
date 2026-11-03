@@ -27,6 +27,7 @@
 - **角色与记忆**：自定义人设，自动提炼值得记住的内容；性格偏好和私聊记忆分开管理，可查看、纠正、置顶或忘记。
 - **图片与表情**：接收图片和表情包，使用多模态模型识图；通过本机 Codex 生图，按人物设定集保持形象，并管理自己的表情素材。
 - **声音**：接收微信语音，使用微软在线 TTS 或本地 GPT-SoVITS 回复；唱歌支持发送已经准备好的换声片段。
+- **语音通话（实验）**：可选接入主人的微信原生一对一通话，支持本地识别、短句回复与插话打断。默认关闭，[安装与使用](docs/VOICE_CALL.md)。
 - **联网与任务**：聊天时按需要查询公开资料；内置一次、每日和每周提醒，以及已接入的重置预告监测。
 - **可视化配置**：保留蓝色鲸鱼娘角色工作台，提供功能开关、依赖检查、素材导入与下载、记忆手账和任务列表；可选 Tailscale 手机私有访问。
 
@@ -161,6 +162,7 @@ D老师 /imageGen 画一张蓝色鲸鱼娘求投喂 token 的表情包
 | 项目 | 本项目中的用途 |
 | --- | --- |
 | [edge-tts](https://github.com/rany2/edge-tts) | 微软在线语音接入与音色参数调整 |
+| [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)、[SenseVoice](https://github.com/FunAudioLLM/SenseVoice)、[Silero VAD](https://github.com/snakers4/silero-vad) | 可选实时通话的CPU语音识别与活动检测 |
 | [GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) | 保留的本地语音与音色模仿方案 |
 | [Seed-VC](https://github.com/Plachtaa/seed-vc) | 当前首选唱歌换声方案 |
 | [Amphion](https://github.com/open-mmlab/Amphion) | Vevo2 实验换声方案 |

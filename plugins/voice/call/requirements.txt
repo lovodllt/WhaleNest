@@ -1,0 +1,3 @@
+numpy==2.5.4
+sherpa-onnx==1.12.40
+edge-tts==7.3.1

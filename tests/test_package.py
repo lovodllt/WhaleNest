@@ -59,7 +59,7 @@ class PackageTests(unittest.TestCase):
         self.assertTrue(all(included(path) for path in templates))
         self.assertTrue(included(ROOT/'web/assets/whale-workroom.png'))
         with tempfile.TemporaryDirectory() as directory,patch.dict(included.__globals__,ROOT=Path(directory)):
-            for name in ('chat','voice','runtime','secrets','bilibili-social'):
+            for name in ('chat','voice','runtime','secrets','bilibili-social','voice-call'):
                 path=Path(directory)/'config'/f'{name}.json'
                 path.parent.mkdir(exist_ok=True);path.write_text('{}',encoding='utf-8')
                 self.assertFalse(included(path))

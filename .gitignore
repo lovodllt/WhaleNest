@@ -5,6 +5,7 @@ config/secrets.json
 config/chat.json
 config/voice.json
 config/bilibili-social.json
+config/voice-call.json
 resources/
 plugins/singing/models/
 plugins/singing/seed-vc-main/

@@ -159,16 +159,16 @@ def purge_history(db,room,actor,through=None,state=STATE):
     if archive.exists():shutil.rmtree(archive)
     with locked(state/'person-memory'):
         actor_hash=scope(room,actor)['person']
-        for base in ('sessions','memory-sessions'):
+        for base in ('sessions','memory-sessions','call-sessions'):
             for path in (state/base).glob('*/*/session.v4.jsonl'):
-                if path.parent.name.startswith('webox-direct-'+short+'-') or (base=='memory-sessions' and actor_hash in path.read_text(encoding='utf-8')):
+                if path.parent.name.startswith(('webox-direct-'+short+'-','webox-call-'+short+'-')) or (base=='memory-sessions' and actor_hash in path.read_text(encoding='utf-8')):
                     shutil.rmtree(path.parent)
 
 
 def purge_text_logs(texts,state=STATE):
     if not texts:return
     with locked(state/'person-memory'):
-        for base in ('sessions','memory-sessions'):
+        for base in ('sessions','memory-sessions','call-sessions'):
             for path in (state/base).glob('*/*/session.v4.jsonl'):
                 raw=path.read_text(encoding='utf-8')
                 if any(text in raw or json.dumps(text,ensure_ascii=True)[1:-1] in raw for text in texts):shutil.rmtree(path.parent)
@@ -195,7 +195,7 @@ def maintenance(scopes,config,now_ms):
     cutoff=now_ms/1000-config['log_days']*86400
     removed=0
     with locked(ROOT):
-        for base in ('sessions','memory-sessions'):
+        for base in ('sessions','memory-sessions','call-sessions'):
             for path in (STATE/base).glob('*/*/session.v4.jsonl'):
                 if path.stat().st_mtime<cutoff:shutil.rmtree(path.parent);removed+=1
         for path in (STATE.parents[0]/'config-backups').glob('*'):

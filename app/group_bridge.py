@@ -18,7 +18,7 @@ import urllib.request
 import urllib.error
 
 sys.path.insert(0,str(Path(__file__).resolve().parent))
-from runtime_support import acquire_lock,ensure_utf8
+from runtime_support import acquire_lock,ensure_utf8,file_lock
 ensure_utf8()
 
 from dsh_chat import DshChat, ROOT, STATE
@@ -347,6 +347,14 @@ def text_context(messages, direct, now, excluded=()):
 
 
 def process_one(db, api, binding, chat_factory=DshChat, settings=None, chats=None):
+    try:
+        with file_lock(STATE/'conversation.lock',False):
+            return _process_one(db,api,binding,chat_factory,settings,chats)
+    except BlockingIOError:
+        return False
+
+
+def _process_one(db, api, binding, chat_factory=DshChat, settings=None, chats=None):
     row = db.execute("SELECT id,prompt,time FROM inbox WHERE status='pending' ORDER BY time,rowid LIMIT 1").fetchone()
     if row is None:
         return False

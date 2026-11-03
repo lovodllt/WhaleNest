@@ -23,6 +23,7 @@
 | 项目 | 本项目中的用途 |
 | --- | --- |
 | [edge-tts](https://github.com/rany2/edge-tts) | 微软在线语音接入与音色参数调整 |
+| [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)、[SenseVoice](https://github.com/FunAudioLLM/SenseVoice)、[Silero VAD](https://github.com/snakers4/silero-vad) | 可选微信实时通话的CPU识别与语音活动检测；转换模型来源及校验见资源清单 |
 | [GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) | 保留的本地语音与音色模仿方案 |
 | [Seed-VC](https://github.com/Plachtaa/seed-vc) | 当前首选唱歌换声方案 |
 | [Amphion](https://github.com/open-mmlab/Amphion) | Vevo2 实验换声方案 |

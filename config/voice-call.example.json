@@ -1,0 +1,9 @@
+{
+  "enabled": false,
+  "container": "dafeiyu-wechat",
+  "caller_names": [],
+  "python": "",
+  "ffmpeg": "ffmpeg",
+  "models": "resources/models/voice-call",
+  "fast_mode": true
+}

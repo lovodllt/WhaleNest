@@ -12,6 +12,7 @@
 - GPT-SoVITS 与 Amphion：程序仓库声明 MIT，模型权重另按各模型来源处理。
 - Seed-VC：本机代码许可为 GPL-3.0。唱歌插件保留其来源和许可，不把第三方代码改标为本项目原创代码的许可证。
 - edge-tts、FFmpeg 及其他依赖以实际分发版本的随附许可证为准，不仅依据 GitHub 自动识别结果判断。
+- 实时通话可选依赖 sherpa-onnx `1.12.40`（Apache-2.0）、NumPy `2.5.4`（BSD-3-Clause）与既有 edge-tts `7.3.1`。SenseVoice与Silero VAD模型由资源中心从固定来源单独下载，不随源码包分发；SenseVoice转换仓库的LICENSE指向FunASR许可说明，不将其等同于sherpa-onnx程序许可。文件版本、大小和校验值见config/resources.json。
 - Kirara、export-wechat-emoji 与 wechat-emoticon 作为实现参考列明，不表示已复制这些项目的源代码；若后续引入代码，应另核对与保留对应声明。
 - WCDB 密钥缓冲区的公开技术说明参考 ChisBread/wechat-ai（GPL-3.0）与 TANGandXUE/wcdb-key-tool（MIT）。本项目的 Go 扫描和验证实现独立编写，没有引入这两个项目的源文件、程序或依赖，不将其许可改标为本项目许可。
 

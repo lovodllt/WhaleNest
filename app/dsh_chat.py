@@ -18,11 +18,11 @@ DSH = node_entry(os.environ.get('DAFEIYU_DSH') or shutil.which('dsh') or 'dsh','
 
 
 class DshChat:
-    def __init__(self, profile='dafeiyu-group'):
+    def __init__(self, profile='dafeiyu-group', max_tokens=4096):
         STATE.mkdir(mode=0o700, parents=True, exist_ok=True)
-        self.use_persona = profile in ('dafeiyu-direct','dafeiyu-group','dafeiyu-owner')
+        self.use_persona = profile in ('dafeiyu-direct','dafeiyu-group','dafeiyu-owner','dafeiyu-call')
         self.owner_tools = profile == 'dafeiyu-owner'
-        self.interactive = self.use_persona
+        self.interactive = self.use_persona and profile != 'dafeiyu-call'
         self.frames = queue.Queue()
         self.tool_lock = threading.Lock()
         self.tool_context = None
@@ -55,7 +55,7 @@ class DshChat:
                 text=True, encoding='utf-8', bufsize=1)
             threading.Thread(target=self._read, daemon=True).start()
             self.rpc('initialize', {'cwd': str(STATE), 'provider': os.environ.get('DAFEIYU_PROVIDER','configured'),
-                                   'model': os.environ.get('DAFEIYU_MODEL','deepseek-chat'), 'maxTokens': 4096}, 40)
+                                   'model': os.environ.get('DAFEIYU_MODEL','deepseek-chat'), 'maxTokens': max_tokens}, 40)
         except Exception:
             self.close()
             raise

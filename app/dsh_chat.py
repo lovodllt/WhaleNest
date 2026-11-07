@@ -47,6 +47,7 @@ class DshChat:
         self.stderr = open(STATE / 'dsh-diagnostics.log', 'a', encoding='utf-8')
         self.counter = 0
         self.messages = {}
+        self.last_usage = []
         self.resumed = set()
         try:
             self.proc = subprocess.Popen(
@@ -162,7 +163,9 @@ class DshChat:
             if frame is None:
                 raise RuntimeError('DSH runtime disconnected')
             if isinstance(frame, tuple):
+                action_started = time.monotonic()
                 self._run_action(frame)
+                deadline += time.monotonic()-action_started
                 continue
             if frame.get('id') == request_id:
                 if 'error' in frame:
@@ -175,6 +178,8 @@ class DshChat:
                     raise RuntimeError('Unexpected tool invocation in text-only profile')
                 if event.get('type') == 'assistant/message':
                     data = event.get('data', {})
+                    if data.get('usage') is not None:
+                        self.last_usage.append(data['usage'])
                     if not data.get('interrupted'):
                         blocks = data.get('message', {}).get('content', [])
                         text = ''.join(x.get('text', '') for x in blocks if x.get('type') == 'text')
@@ -184,7 +189,7 @@ class DshChat:
                         elif text.strip():
                             self.messages.setdefault(params_in['sessionId'], []).append(text.strip())
 
-    def reply(self, session_id, prompt, resume=False, images=None, max_chars=1800, tools=None):
+    def reply(self, session_id, prompt, resume=False, images=None, max_chars=1800, tools=None, timeout=180):
         persona = ROOT/'resources/persona.md'
         if self.use_persona and persona.is_file():
             prompt = '使用者配置的人设：\n'+persona.read_text(encoding='utf-8')[:32768]+'\n本轮输入：\n'+prompt
@@ -196,9 +201,10 @@ class DshChat:
                 self.rpc('session/resume', {'sessionId': session_id}, 40)
             self.resumed.add(session_id)
             self.messages[session_id] = []
+            self.last_usage = []
             self.rpc('session/prompt', {'sessionId': session_id,
                      'contentBlocks': [{'type': 'text', 'text': prompt}] + (images or [])}, 40)
-            self.rpc('session/wait', {'sessionId': session_id})
+            self.rpc('session/wait', {'sessionId': session_id}, timeout)
         finally:
             with self.tool_lock:
                 self.tool_context = None

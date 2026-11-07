@@ -5,7 +5,7 @@ const navItems=[['overview','whale','海边工作台'],['plugins','plug','插件
 const catalog=[
 {id:'daily_agent',name:'主人私聊行动',cat:'聊天增强',icon:'plug',color:'sky',desc:'按意思处理表情、提醒和日常设置，真实执行后再确认'},
 {id:'memory',name:'长期记忆',cat:'聊天增强',icon:'book',color:'',desc:'记住值得留下的事，慢慢养出熟悉的性格'},
-{id:'bilibili',name:'B站互动 · WhaleNest',cat:'日常工具',icon:'globe',color:'sky',desc:'按题材找视频、读字幕，聊聊想分享的片段'},
+{id:'bilibili',name:'B站互动 · WhaleNest',cat:'日常工具',icon:'globe',color:'sky',desc:'按题材找视频、读字幕和画面，聊聊想分享的片段'},
 {id:'web',name:'联网聊天',cat:'聊天增强',icon:'globe',color:'sky',desc:'查查陌生的梗，看看天气，再接着聊下去'},
 {id:'vision',name:'识图',cat:'图片创作',icon:'image',color:'sky',desc:'看看图片里有什么，也读懂朋友发来的表情'},
 {id:'image',name:'图片生成',cat:'图片创作',icon:'spark',color:'lilac',desc:'画一张小鲸鱼表情，或是 AI 朋友们的日常'},

@@ -155,11 +155,13 @@ def purge_history(db,room,actor,through=None,state=STATE):
     short=hashlib.sha256(room.encode()).hexdigest()[:24]
     db.executemany('DELETE FROM meta WHERE key=?',[(key,) for key in ('recent:'+short,'incoming_recent:'+short,'speaker_recent:'+short+':'+hashlib.sha256(actor.encode()).hexdigest()[:24])])
     db.execute('INSERT OR REPLACE INTO meta VALUES(?,?)',('memory_privacy_generation:'+short,json.dumps(time.time_ns())))
+    from chat_bilibili import purge_scope
+    purge_scope(room,root=state.parent.parent)
     archive=(state/'person-memory'/scope(room,actor)['person']/scope(room,actor)['room']/'runtime/archive')
     if archive.exists():shutil.rmtree(archive)
     with locked(state/'person-memory'):
         actor_hash=scope(room,actor)['person']
-        for base in ('sessions','memory-sessions','call-sessions'):
+        for base in ('sessions','memory-sessions','call-sessions','bilibili-vision-sessions'):
             for path in (state/base).glob('*/*/session.v4.jsonl'):
                 if path.parent.name.startswith(('webox-direct-'+short+'-','webox-call-'+short+'-')) or (base=='memory-sessions' and actor_hash in path.read_text(encoding='utf-8')):
                     shutil.rmtree(path.parent)
@@ -168,7 +170,7 @@ def purge_history(db,room,actor,through=None,state=STATE):
 def purge_text_logs(texts,state=STATE):
     if not texts:return
     with locked(state/'person-memory'):
-        for base in ('sessions','memory-sessions','call-sessions'):
+        for base in ('sessions','memory-sessions','call-sessions','bilibili-vision-sessions'):
             for path in (state/base).glob('*/*/session.v4.jsonl'):
                 raw=path.read_text(encoding='utf-8')
                 if any(text in raw or json.dumps(text,ensure_ascii=True)[1:-1] in raw for text in texts):shutil.rmtree(path.parent)
@@ -195,7 +197,7 @@ def maintenance(scopes,config,now_ms):
     cutoff=now_ms/1000-config['log_days']*86400
     removed=0
     with locked(ROOT):
-        for base in ('sessions','memory-sessions','call-sessions'):
+        for base in ('sessions','memory-sessions','call-sessions','bilibili-vision-sessions'):
             for path in (STATE/base).glob('*/*/session.v4.jsonl'):
                 if path.stat().st_mtime<cutoff:shutil.rmtree(path.parent);removed+=1
         for path in (STATE.parents[0]/'config-backups').glob('*'):

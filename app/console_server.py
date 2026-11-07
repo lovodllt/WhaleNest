@@ -281,7 +281,7 @@ class ConsoleBackend:
         cfg=bilibili_settings(self.root)
         result.append({'id':'bilibili','name':'B站互动 · WhaleNest','enabled':cfg['enabled'],
                        'available':self.bilibili.installed(),'configurable':True,'config_keys':[],
-                       'detail':'按题材找视频、读首P字幕、回复新@、名单内私信分享；配置和数据仅属本项目','dependencies':[]})
+                       'detail':'按题材找视频、读首P字幕与可选画面、回复新@、名单内私信分享；配置和数据仅属本项目','dependencies':[]})
         return result
 
     def state(self):

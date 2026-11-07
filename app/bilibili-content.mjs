@@ -50,9 +50,18 @@ async function main(input) {
       uploader:clean(v.author ?? v.owner?.name),duration_ms:duration(v.duration),description:clean(v.description ?? v.desc).slice(0,1000)}));
     return {access:'available',items};
   }
-  if(operation!=='open' || !/^bilibili:BV[0-9A-Za-z]{10}$/.test(input.resource_id ?? '')) throw new Error('InvalidResource');
+  if(!['open','visual_source'].includes(operation) || !/^bilibili:BV[0-9A-Za-z]{10}$/.test(input.resource_id ?? '')) throw new Error('InvalidResource');
   const bvid=input.resource_id.slice('bilibili:'.length);
   const detail=await provider.video({bvid},signal);
+  if(operation==='visual_source') {
+    if(input.cover_only) return {access:'available',cover_url:detail.coverUrl};
+    try {
+      const play=await provider.playurl({bvid,qn:32},signal);
+      return {access:'available',cover_url:detail.coverUrl,stream_url:play.url};
+    } catch(error) {
+      return {access:'available',cover_url:detail.coverUrl,error_type:error.code ?? error.name};
+    }
+  }
   const length=duration(detail.pages[0]?.duration ?? detail.duration);
   let transcript=null,subtitleAccess='available';
   try {transcript=await provider.subtitles({bvid},signal);} catch(error) {
@@ -65,6 +74,7 @@ async function main(input) {
   return {access:'available',resource:{resource_id:input.resource_id,url:'https://www.bilibili.com/zh-Hans/video/'+bvid,
     title:clean(detail.title),uploader:clean(detail.author),duration_ms:length,
     description:clean(detail.description).slice(0,2000),subtitles,subtitle_language:transcript?.language,
+    cover_url:detail.coverUrl,
     subtitle_access:subtitles.length?'available':subtitleAccess==='available'?'unavailable':subtitleAccess,
     evidence:subtitles.length?'subtitle':'metadata_only',fetched_at_real_ms:Date.now(),part:1,parts:detail.pages.length}};
 }

@@ -1,4 +1,6 @@
 import copy
+from contextlib import closing
+import io
 import json
 from pathlib import Path
 import shutil
@@ -14,9 +16,12 @@ import unittest
 from unittest.mock import Mock,patch
 import urllib.error
 import urllib.request
+from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'app'))
+import bilibili_media
+from bilibili_visual import Reader
 import chat_bilibili as bili
 from bilibili_client import BilibiliSocialClient
 from console_server import ConsoleBackend,Handler
@@ -241,15 +246,160 @@ class BilibiliTests(unittest.TestCase):
             return json.load(urllib.request.urlopen(req,timeout=3))
         state=request('/api/bilibili/state')
         self.assertNotIn('sessdata',json.dumps(state))
-        body={'revision':state['revision'],'enabled':True,'share_recipient_uids':['456']}
+        body={'revision':state['revision'],'enabled':True,'share_recipient_uids':['456'],'visual_enabled':True}
         with self.assertRaises(urllib.error.HTTPError) as error:request('/api/bilibili/config',body)
         self.assertEqual(403,error.exception.code)
         headers={'X-CSRF-Token':backend.csrf_token,'Content-Type':'application/json','Origin':url}
         result=request('/api/bilibili/config',body,headers)
         self.assertEqual(['456'],result['config']['share_recipient_uids'])
+        self.assertTrue(result['config']['visual']['enabled'])
         with self.assertRaises(urllib.error.HTTPError):request('/api/bilibili/config',body,headers)
         self.assertEqual('900',bili.settings(self.root)['account_uid'])
         self.assertFalse((self.root/'config/chat.json').exists())
+
+    def visual_fixture(self, subtitles=False, fail_batch=None, during=None):
+        self.service.write_config(dict(self.cfg,visual=dict(bili.VISUAL_DEFAULTS,enabled=True)))
+        video=dict(VIDEO,subtitles=VIDEO['subtitles'] if subtitles else [],duration_ms=64000,
+                   fetched_at_real_ms=1,cover_url='https://i0.hdslb.com/cover.jpg')
+        trace={'model':[],'source':[],'ffmpeg':[],'downloads':[]}
+        def content(request):
+            if request['operation']=='visual_source':
+                trace['source'].append(request)
+                return dict(access='available',cover_url=video['cover_url'],
+                    **({} if request['cover_only'] else {'stream_url':'https://media.bilivideo.com/video.mp4'}))
+            return {'access':'available','resource':copy.deepcopy(video)}
+        self.service.content=content
+        class Chat:
+            last_usage=[{'inputTokens':12,'outputTokens':3}]
+            def __init__(self,*args,**kwargs):pass
+            def __enter__(self):return self
+            def __exit__(self,*args):pass
+            def reply(self,session,prompt,**kwargs):
+                trace['model'].append((session,prompt,kwargs))
+                if during:during()
+                if len(trace['model'])==fail_batch:raise RuntimeError('fixture failed batch')
+                return json.dumps({'summary':'本批能看到蓝色图形','uncertainties':'声音未知'})
+        def download(url,target,maximum):
+            trace['downloads'].append(url)
+            output=io.BytesIO();Image.new('RGB',(16,10),'blue').save(output,format='JPEG')
+            target.write_bytes(output.getvalue());return target
+        def ffmpeg(args,**kwargs):
+            trace['ffmpeg'].append(args)
+            for index in range(32):
+                Image.new('RGB',(16,10),'blue').save(str(args[-1]).replace('%04d',f'{index:04d}'))
+            return SimpleNamespace(returncode=0)
+        for context in (patch.object(bili,'Reader',side_effect=lambda root,content:Reader(root,content,Chat)),
+                        patch.object(bilibili_media,'download',side_effect=download),
+                        patch.object(bilibili_media.subprocess,'run',side_effect=ffmpeg)):
+            context.start();self.addCleanup(context.stop)
+        return video,trace
+
+    def test_subtitles_only_fetch_cover_and_cache_ignores_fetch_time(self):
+        video,trace=self.visual_fixture(subtitles=True)
+        tool=bili.Tools(self.service,'room','event')
+        result=tool('bilibili_read',{'resource_id':RESOURCE})
+        self.assertEqual('subtitles_and_cover',result['evidence'])
+        self.assertEqual(0,result['reading_scope']['frame_count'])
+        self.assertTrue(result['reading_scope']['cover_read'])
+        self.assertTrue(trace['source'][0]['cover_only'])
+        self.assertEqual([],trace['ffmpeg'])
+        self.assertEqual([video['cover_url']],trace['downloads'])
+        self.assertNotIn('usage',result['visual'])
+        video['fetched_at_real_ms']=999
+        cached=tool('bilibili_read',{'resource_id':RESOURCE})
+        self.assertTrue(cached['visual']['cached']);self.assertEqual(1,len(trace['model']))
+        video['title']='视频来源版本已变化'
+        tool('bilibili_read',{'resource_id':RESOURCE})
+        self.assertEqual(2,len(trace['model']))
+        self.assertFalse(list((self.root/'data/bilibili/vision-work').iterdir()))
+
+    def test_no_subtitles_sample_two_seconds_and_scope_only_verified_batches(self):
+        _,trace=self.visual_fixture(fail_batch=2)
+        result=bili.Tools(self.service,'room','event')('bilibili_read',{'resource_id':RESOURCE})
+        self.assertTrue(result['readable'])
+        self.assertEqual('partial',result['visual']['status'])
+        self.assertEqual(16,result['reading_scope']['frame_count'])
+        self.assertEqual(32000,result['reading_scope']['to_ms'])
+        self.assertFalse(result['reading_scope']['continuous_video_watched'])
+        self.assertFalse(trace['source'][0]['cover_only'])
+        command=trace['ffmpeg'][0]
+        self.assertIn('fps=1/2:',command[command.index('-vf')+1])
+        self.assertEqual('file,pipe',command[command.index('-protocol_whitelist')+1])
+        for _session,prompt,args in trace['model']:
+            self.assertNotIn('最近对话',prompt)
+            self.assertLessEqual(sum(b['type']=='image' for b in args['images']),16)
+        with bili.database(self.root) as db:
+            self.assertEqual(0,db.execute('SELECT COUNT(*) FROM visual_cache').fetchone()[0])
+            attempt=json.loads(db.execute('SELECT payload FROM visual_reads').fetchone()[0])
+            self.assertEqual('partial',attempt['status'])
+            self.assertEqual(2,len(attempt['usage']))
+        complete=bili.Tools(self.service,'room','retry')('bilibili_read',{'resource_id':RESOURCE})
+        self.assertEqual('available',complete['visual']['status'])
+        self.assertEqual(32,complete['reading_scope']['frame_count'])
+        self.assertEqual(64000,complete['reading_scope']['to_ms'])
+        self.assertTrue(complete['reading_scope']['cover_read'])
+
+    def test_forgetting_while_pixels_are_read_discards_late_result(self):
+        self.visual_fixture(subtitles=True,during=lambda:bili.purge_scope('room',self.root))
+        result=bili.Tools(self.service,'room','event')('bilibili_read',{'resource_id':RESOURCE})
+        self.assertFalse(result['readable']);self.assertEqual('cancelled',result['access'])
+        with bili.database(self.root) as db:
+            self.assertEqual(0,db.execute('SELECT COUNT(*) FROM visual_cache').fetchone()[0])
+            self.assertEqual(0,db.execute('SELECT COUNT(*) FROM link_sources').fetchone()[0])
+
+    def test_cover_without_frames_is_not_readable_or_shareable(self):
+        self.visual_fixture()
+        base=self.service.content
+        self.service.content=lambda request:dict(access='available',cover_url='https://i0.hdslb.com/cover.jpg') if request['operation']=='visual_source' else base(request)
+        tool=bili.Tools(self.service,'room','event')
+        result=tool('bilibili_read',{'resource_id':RESOURCE})
+        self.assertFalse(result['readable'])
+        self.assertEqual('metadata_only',result['evidence'])
+        with self.assertRaises(ValueError):tool('bilibili_share',{'resource_id':RESOURCE,'channel':'wechat','recipient_uid':'','text':'看看这个'})
+
+    def test_link_handoff_is_by_current_bv_and_conversation_and_forgetting_cancels_shares(self):
+        tool=bili.Tools(self.service,'room','event')
+        tool('bilibili_search',{'keyword':'测试'})
+        context=tool.context({'发言':'刚才那个讲的什么'},[{'发言':bili.video_url(RESOURCE)}])
+        self.assertEqual('测试视频',context[0]['title'])
+        self.assertEqual('search_metadata_only',context[0]['evidence'])
+        self.assertEqual([],tool.context({'发言':'新的 BV0987654321'},[{'发言':bili.video_url(RESOURCE)}]))
+        self.assertEqual([],bili.Tools(self.service,'other-room','x').context({'发言':bili.video_url(RESOURCE)},[]))
+        tool('bilibili_read',{'resource_id':RESOURCE})
+        tool('bilibili_share',{'resource_id':RESOURCE,'channel':'wechat','recipient_uid':'','text':'看看这个'})
+        tool.commit()
+        bili.purge_scope('room',self.root)
+        self.assertEqual('cancelled',self.row('actions')['status'])
+        self.assertEqual([],bili.Tools(self.service,'room','new').context({'发言':bili.video_url(RESOURCE)},[]))
+        with self.assertRaises(ValueError):tool.commit()
+
+    def test_existing_action_database_is_upgraded_without_losing_rows(self):
+        path=self.root/'data/bilibili/state.sqlite3';path.parent.mkdir(parents=True)
+        with closing(sqlite3.connect(path)) as db, db:
+            db.execute('CREATE TABLE actions(id TEXT PRIMARY KEY,operation TEXT,account TEXT,activation TEXT,resource TEXT,text TEXT,recipient TEXT,mention TEXT,status TEXT,created INTEGER,attempted INTEGER,receipt TEXT)')
+            db.execute("INSERT INTO actions(id,status) VALUES('existing','pending')")
+        with bili.database(self.root) as db:
+            row=db.execute('SELECT * FROM actions').fetchone()
+            self.assertEqual('existing',row['id']);self.assertEqual('pending',row['status'])
+            self.assertEqual('',row['source_scope']);self.assertEqual(0,row['source_epoch'])
+
+    def test_video_download_restricts_destinations(self):
+        self.assertTrue(bilibili_media.allowed_url('https://media.bilivideo.com/video.mp4'))
+        for url in ('file:///tmp/video','https://127.0.0.1/video','https://bilivideo.com.evil.example/v',
+                    'https://user:password@i0.hdslb.com/image','https://media.bilivideo.com:8080/v'):
+            self.assertFalse(bilibili_media.allowed_url(url))
+        with self.assertRaises(ValueError):
+            bilibili_media.MediaRedirect().redirect_request(None,None,302,'redirect',{},'https://127.0.0.1/')
+
+    def test_host_tool_processing_does_not_consume_model_wait_deadline(self):
+        import dsh_chat
+        chat=dsh_chat.DshChat.__new__(dsh_chat.DshChat)
+        chat.counter=0;chat.proc=SimpleNamespace(stdin=io.StringIO())
+        chat.frames=Mock();chat.frames.get.side_effect=[('host-tool',),{'id':1,'result':'done'}]
+        chat._run_action=Mock()
+        with patch.object(dsh_chat.time,'monotonic',side_effect=[0,0,0,10,10]):
+            self.assertEqual('done',chat.rpc('session/wait',timeout=5))
+        chat._run_action.assert_called_once()
 
     @unittest.skipUnless(shutil.which('node'),'Node is required for the DSH tool bridge')
     def test_subtitle_adapter_keeps_last_cue_when_duration_metadata_is_short(self):
@@ -263,8 +413,9 @@ class BilibiliTests(unittest.TestCase):
         (modules/'dsh-plugin-bilibili/lib/provider.js').write_text('''
 export const mapSearchData=value=>value;
 export class BilibiliOfficialProvider {
-  async video(){return {title:'fixture',author:'fixture',pages:[{duration:20}]}}
+  async video(){return {title:'fixture',author:'fixture',pages:[{duration:20}],coverUrl:'https://i0.hdslb.com/fixture.jpg'}}
   async subtitles(){return {language:'zh',cues:[{from:0,to:1,content:'first'},{from:19,to:21,content:'last'}]}}
+  async playurl(){throw new Error('must not request video stream for cover_only')}
 }
 ''',encoding='utf-8')
         result=subprocess.run(['node',str(self.root/'app/bilibili-content.mjs')],input=json.dumps({'operation':'open','resource_id':RESOURCE}),
@@ -273,6 +424,10 @@ export class BilibiliOfficialProvider {
         resource=json.loads(result.stdout)['resource']
         self.assertEqual(['first','last'],[cue['text'] for cue in resource['subtitles']])
         self.assertEqual(21000,resource['subtitles'][-1]['end_ms'])
+        cover=subprocess.run(['node',str(self.root/'app/bilibili-content.mjs')],
+            input=json.dumps({'operation':'visual_source','resource_id':RESOURCE,'cover_only':True}),
+            capture_output=True,text=True,encoding='utf-8',timeout=30)
+        self.assertEqual({'access':'available','cover_url':'https://i0.hdslb.com/fixture.jpg'},json.loads(cover.stdout))
 
     @unittest.skipUnless(shutil.which('node'),'Node is required for the DSH tool bridge')
     def test_dsh_tools_are_registered_and_bound_to_current_agent(self):

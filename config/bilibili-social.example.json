@@ -3,5 +3,13 @@
   "account_uid": "",
   "share_recipient_uids": [],
   "poll_interval_seconds": 300,
-  "write_interval_seconds": 60
+  "write_interval_seconds": 60,
+  "visual": {
+    "enabled": false,
+    "frame_interval_seconds": 2,
+    "max_video_seconds": 600,
+    "max_frames": 300,
+    "max_video_bytes": 268435456,
+    "ffmpeg": "ffmpeg"
+  }
 }
